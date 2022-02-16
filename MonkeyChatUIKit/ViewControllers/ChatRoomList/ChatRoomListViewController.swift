@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class ChatRoomsViewController: UIViewController {
+class ChatRoomListViewController: UIViewController {
 
     private let emptyLabel: UILabel = {
         let emptyLabel = UILabel()
@@ -22,14 +22,14 @@ class ChatRoomsViewController: UIViewController {
 
     private let tableView: UITableView = {
         let tableView = UITableView()
-        tableView.register(ChatRoomListTableViewCell.self, forCellReuseIdentifier: "chatroom")
+        tableView.register(ChatRoomListTableViewCell.self, forCellReuseIdentifier: "ChatRoomListTableViewCell")
         tableView.tableFooterView = UIView()
         tableView.rowHeight = UITableView.automaticDimension
         return tableView
     }()
 
     // MARK: - Private Properties
-    private var viewModel = ChatRoomsViewModel()
+    private var viewModel = ChatRoomListViewModel()
     let currentUserString = UserDefaults.standard.string(forKey: "currentUser")
 
     // MARK: - Lifecycle
@@ -86,7 +86,10 @@ class ChatRoomsViewController: UIViewController {
         let userSessionLabel : UILabel = {
             let label = UILabel()
             label.text = "Logged as: \(currentUserString ?? "Guest")"
+            label.numberOfLines = 0
+            label.lineBreakMode = .byWordWrapping
             label.font = .systemFont(ofSize: 10)
+            label.frame = CGRect(x: 0, y: 0, width: 100, height: 50)
             return label
         }()
 
@@ -123,18 +126,17 @@ class ChatRoomsViewController: UIViewController {
     }
 
     // MARK: - Actions
-    
     @objc func createChatRoomAction() {
         viewModel.createRoomOrEnterRoomAction { roomCode in
-            self.navigationController?.pushViewController(ChatRoomsViewController(), animated: true)
+            self.navigationController?.pushViewController(ChatRoomListViewController(), animated: true)
         }
     }
 }
 
-//MARK: & UITableViewDataSource
-extension ChatRoomsViewController: UITableViewDataSource {
+// MARK: UITableViewDataSource
+extension ChatRoomListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "chatroom", for: indexPath) as? ChatRoomListTableViewCell else { return UITableViewCell() }
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "ChatRoomListTableViewCell", for: indexPath) as? ChatRoomListTableViewCell else { return UITableViewCell() }
         cell.configureCell(chatRoom: viewModel.chatRooms[indexPath.row])
         return cell
     }
@@ -144,10 +146,12 @@ extension ChatRoomsViewController: UITableViewDataSource {
     }
 }
 
-extension ChatRoomsViewController: UITableViewDelegate {
+// MARK: UITableViewDelegate
+extension ChatRoomListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-
+        let viewController = ChatRoomViewController(chatRoom: viewModel.chatRooms[indexPath.row])
+        self.navigationController?.pushViewController(viewController, animated: true)
     }
 }
 

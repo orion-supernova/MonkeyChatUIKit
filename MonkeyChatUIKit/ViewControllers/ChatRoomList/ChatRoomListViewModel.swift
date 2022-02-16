@@ -9,7 +9,7 @@ import UIKit
 import Firebase
 import FirebaseFirestoreSwift
 
-class ChatRoomsViewModel {
+class ChatRoomListViewModel {
     typealias AlertCompletion = ((Bool) -> Void)?
 
     var chatRooms = [ChatRoom]()

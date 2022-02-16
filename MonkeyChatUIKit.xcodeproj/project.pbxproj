@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		545FFC6F27BC4C17008CC1ED /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545FFC6E27BC4C17008CC1ED /* AppDelegate.swift */; };
 		545FFC7127BC4C17008CC1ED /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545FFC7027BC4C17008CC1ED /* SceneDelegate.swift */; };
-		545FFC7327BC4C17008CC1ED /* ChatRoomsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545FFC7227BC4C17008CC1ED /* ChatRoomsViewController.swift */; };
+		545FFC7327BC4C17008CC1ED /* ChatRoomListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545FFC7227BC4C17008CC1ED /* ChatRoomListViewController.swift */; };
 		545FFC7627BC4C17008CC1ED /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 545FFC7427BC4C17008CC1ED /* Main.storyboard */; };
 		545FFC7827BC4C18008CC1ED /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 545FFC7727BC4C18008CC1ED /* Assets.xcassets */; };
 		545FFC7B27BC4C18008CC1ED /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 545FFC7927BC4C18008CC1ED /* LaunchScreen.storyboard */; };
@@ -25,17 +25,20 @@
 		545FFC9C27BCDEDB008CC1ED /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545FFC9B27BCDEDB008CC1ED /* User.swift */; };
 		545FFC9E27BCFB05008CC1ED /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545FFC9D27BCFB05008CC1ED /* Message.swift */; };
 		545FFCA027BCFF9F008CC1ED /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545FFC9F27BCFF9F008CC1ED /* Constants.swift */; };
-		545FFCA327BD007F008CC1ED /* ChatRoomsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545FFCA227BD007F008CC1ED /* ChatRoomsViewModel.swift */; };
+		545FFCA327BD007F008CC1ED /* ChatRoomListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545FFCA227BD007F008CC1ED /* ChatRoomListViewModel.swift */; };
 		54F2336427BD337100E9FD28 /* ChatRoomListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F2336327BD337100E9FD28 /* ChatRoomListTableViewCell.swift */; };
 		54F2336A27BD3C7500E9FD28 /* ChatRoomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F2336927BD3C7500E9FD28 /* ChatRoomViewController.swift */; };
 		54F2336C27BD44F900E9FD28 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F2336B27BD44F900E9FD28 /* SettingsViewController.swift */; };
+		54F2336F27BD635900E9FD28 /* ChatRoomViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F2336E27BD635900E9FD28 /* ChatRoomViewModel.swift */; };
+		54F2337227BD68C400E9FD28 /* MessageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F2337127BD68C400E9FD28 /* MessageTableViewCell.swift */; };
+		54F2337427BD7BB000E9FD28 /* TextEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F2337327BD7BB000E9FD28 /* TextEntryView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		545FFC6B27BC4C17008CC1ED /* MonkeyChatUIKit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MonkeyChatUIKit.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		545FFC6E27BC4C17008CC1ED /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		545FFC7027BC4C17008CC1ED /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		545FFC7227BC4C17008CC1ED /* ChatRoomsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomsViewController.swift; sourceTree = "<group>"; };
+		545FFC7227BC4C17008CC1ED /* ChatRoomListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomListViewController.swift; sourceTree = "<group>"; };
 		545FFC7527BC4C17008CC1ED /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		545FFC7727BC4C18008CC1ED /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		545FFC7A27BC4C18008CC1ED /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -46,10 +49,13 @@
 		545FFC9B27BCDEDB008CC1ED /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		545FFC9D27BCFB05008CC1ED /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		545FFC9F27BCFF9F008CC1ED /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
-		545FFCA227BD007F008CC1ED /* ChatRoomsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomsViewModel.swift; sourceTree = "<group>"; };
+		545FFCA227BD007F008CC1ED /* ChatRoomListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomListViewModel.swift; sourceTree = "<group>"; };
 		54F2336327BD337100E9FD28 /* ChatRoomListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomListTableViewCell.swift; sourceTree = "<group>"; };
 		54F2336927BD3C7500E9FD28 /* ChatRoomViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomViewController.swift; sourceTree = "<group>"; };
 		54F2336B27BD44F900E9FD28 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		54F2336E27BD635900E9FD28 /* ChatRoomViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomViewModel.swift; sourceTree = "<group>"; };
+		54F2337127BD68C400E9FD28 /* MessageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageTableViewCell.swift; sourceTree = "<group>"; };
+		54F2337327BD7BB000E9FD28 /* TextEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextEntryView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -150,8 +156,8 @@
 		545FFCA127BD0073008CC1ED /* ChatRoomList */ = {
 			isa = PBXGroup;
 			children = (
-				545FFC7227BC4C17008CC1ED /* ChatRoomsViewController.swift */,
-				545FFCA227BD007F008CC1ED /* ChatRoomsViewModel.swift */,
+				545FFC7227BC4C17008CC1ED /* ChatRoomListViewController.swift */,
+				545FFCA227BD007F008CC1ED /* ChatRoomListViewModel.swift */,
 				545FFCA427BD3240008CC1ED /* Cell */,
 			);
 			path = ChatRoomList;
@@ -169,6 +175,9 @@
 			isa = PBXGroup;
 			children = (
 				54F2336927BD3C7500E9FD28 /* ChatRoomViewController.swift */,
+				54F2336E27BD635900E9FD28 /* ChatRoomViewModel.swift */,
+				54F2337327BD7BB000E9FD28 /* TextEntryView.swift */,
+				54F2337027BD68B200E9FD28 /* MessageCell */,
 			);
 			path = ChatRoom;
 			sourceTree = "<group>";
@@ -179,6 +188,14 @@
 				54F2336B27BD44F900E9FD28 /* SettingsViewController.swift */,
 			);
 			path = Settings;
+			sourceTree = "<group>";
+		};
+		54F2337027BD68B200E9FD28 /* MessageCell */ = {
+			isa = PBXGroup;
+			children = (
+				54F2337127BD68C400E9FD28 /* MessageTableViewCell.swift */,
+			);
+			path = MessageCell;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -265,12 +282,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				545FFC7327BC4C17008CC1ED /* ChatRoomsViewController.swift in Sources */,
-				545FFCA327BD007F008CC1ED /* ChatRoomsViewModel.swift in Sources */,
+				545FFC7327BC4C17008CC1ED /* ChatRoomListViewController.swift in Sources */,
+				54F2337427BD7BB000E9FD28 /* TextEntryView.swift in Sources */,
+				545FFCA327BD007F008CC1ED /* ChatRoomListViewModel.swift in Sources */,
 				545FFC6F27BC4C17008CC1ED /* AppDelegate.swift in Sources */,
 				545FFC9C27BCDEDB008CC1ED /* User.swift in Sources */,
 				54F2336427BD337100E9FD28 /* ChatRoomListTableViewCell.swift in Sources */,
+				54F2336F27BD635900E9FD28 /* ChatRoomViewModel.swift in Sources */,
 				545FFC8A27BC5149008CC1ED /* ChatRoom.swift in Sources */,
+				54F2337227BD68C400E9FD28 /* MessageTableViewCell.swift in Sources */,
 				545FFC8D27BC5B72008CC1ED /* AlertHelper.swift in Sources */,
 				545FFC7127BC4C17008CC1ED /* SceneDelegate.swift in Sources */,
 				545FFC9E27BCFB05008CC1ED /* Message.swift in Sources */,

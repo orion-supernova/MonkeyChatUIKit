@@ -18,7 +18,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         guard let _ = (scene as? UIWindowScene) else { return }
         let tabController = UITabBarController()
-        let vc1 = UINavigationController(rootViewController: ChatRoomsViewController())
+        let vc1 = UINavigationController(rootViewController: ChatRoomListViewController())
         let vc2 = UINavigationController(rootViewController: SettingsViewController())
         tabController.viewControllers = [vc1, vc2]
 

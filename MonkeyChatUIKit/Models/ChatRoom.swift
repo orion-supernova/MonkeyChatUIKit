@@ -14,4 +14,5 @@ struct ChatRoom: Identifiable, Decodable {
     var password: String?
     let timestamp: Timestamp
     var roomCode: UUID?
+    var messages: [Message]?
 }
