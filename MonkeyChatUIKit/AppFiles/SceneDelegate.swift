@@ -21,6 +21,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let vc1 = UINavigationController(rootViewController: ChatRoomListViewController())
         let vc2 = UINavigationController(rootViewController: SettingsViewController())
         tabController.viewControllers = [vc1, vc2]
+        tabController.tabBar.tintColor = .systemPink
 
         vc1.tabBarItem.image = UIImage(systemName: "list.bullet")
         vc2.tabBarItem.image = UIImage(systemName: "gear")

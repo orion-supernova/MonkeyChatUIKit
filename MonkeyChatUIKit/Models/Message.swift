@@ -11,10 +11,10 @@ import FirebaseFirestoreSwift
 struct Message: Identifiable, Decodable {
 
     @DocumentID var id: String?
-    let username: String
-    let profileImageURL: String?
+    let message: String
+    var profileImageURL: String?
     let timestamp: Timestamp
-    let uid: String
+    var senderName: String?
 
     var timestampString: String? {
         let formatter = DateComponentsFormatter()

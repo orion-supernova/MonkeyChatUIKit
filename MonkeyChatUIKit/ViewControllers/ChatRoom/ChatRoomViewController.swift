@@ -17,26 +17,25 @@ class ChatRoomViewController: UIViewController {
         return tableView
     }()
 
-//    private let textInputView: UITextView = {
-//        let textView = UITextView()
-//        textView.textColor = .red
-//        textView.font = UIFont.systemFont(ofSize: 17)
-//        textView.isScrollEnabled = false
-//        textView.autocorrectionType = .no
-//        textView.autocapitalizationType = .none
-//        textView.layer.cornerRadius = 10
-//        textView.layer.zPosition = 1
-//        return textView
-//    }()
+    private let textInputView: UITextView = {
+        let textView = UITextView()
+        textView.textColor = .red
+        textView.font = UIFont.systemFont(ofSize: 17)
+        textView.isScrollEnabled = false
+        textView.autocorrectionType = .no
+        textView.autocapitalizationType = .none
+        textView.layer.cornerRadius = 10
+        textView.layer.zPosition = 1
+        return textView
+    }()
 
     private let textfield: UITextField = {
         let textfield = UITextField()
-        textfield.textColor = .red
         textfield.font = UIFont.systemFont(ofSize: 17)
         textfield.autocorrectionType = .no
         textfield.autocapitalizationType = .none
         textfield.layer.cornerRadius = 10
-        textfield.layer.zPosition = 1
+        textfield.backgroundColor = .systemBackground
         return textfield
     }()
 
@@ -45,7 +44,7 @@ class ChatRoomViewController: UIViewController {
         button.setTitle("Send", for: .normal)
         button.titleLabel?.font =  UIFont(name: "Comic Sans MS", size: 10)
         button.tintColor = .systemPink
-        button.layer.zPosition = 1
+        button.addTarget(self, action: #selector(sendButtonAction), for: .touchUpInside)
         return button
     }()
 
@@ -59,6 +58,8 @@ class ChatRoomViewController: UIViewController {
     var chatRoom: ChatRoom?
     var activeTextField : UITextField? = nil
     var navigationBarHeight: CGFloat = 0
+    var viewmodel: ChatRoomViewModel?
+
 
     // MARK: - Lifecycle
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?)   {
@@ -72,6 +73,7 @@ class ChatRoomViewController: UIViewController {
     init(chatRoom: ChatRoom) {
         self.chatRoom = chatRoom
         super.init(nibName: nil, bundle: nil)
+        self.viewmodel = ChatRoomViewModel(chatroom: chatRoom)
     }
     deinit {
         NotificationCenter.default.removeObserver(UIResponder.keyboardWillHideNotification)
@@ -84,17 +86,23 @@ class ChatRoomViewController: UIViewController {
         setTableViewDelegates()
         layout()
         addObservers()
+        fetchMessagesAndObserve()
     }
 
     override func viewDidLayoutSubviews() {
         self.title = "Chat Room: \(chatRoom?.name ?? "")"
+        self.navigationController?.navigationBar.tintColor = .systemPink
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+
     }
 
     //MARK: - Setup
     private func setTableViewDelegates() {
         tableView.delegate = self
         tableView.dataSource = self
-//        textInputView.delegate = self
+        textInputView.delegate = self
         textfield.delegate = self
     }
 
@@ -120,6 +128,13 @@ class ChatRoomViewController: UIViewController {
             make.height.equalTo(50)
         }
 
+//        textInputView.snp.makeConstraints { make in
+//            make.left.equalTo(30)
+//            make.right.equalTo(sendButton.snp.left).offset(-30)
+//            make.height.greaterThanOrEqualTo(40)
+//            make.bottom.equalTo(-5)
+//        }
+
         textfield.snp.makeConstraints { make in
             make.left.equalTo(30)
             make.right.equalTo(sendButton.snp.left).offset(-30)
@@ -143,9 +158,20 @@ class ChatRoomViewController: UIViewController {
         self.view.addGestureRecognizer(tapGestureRecognizer)
     }
 
+    func fetchMessagesAndObserve() {
+        viewmodel?.fetchMessages(completion: {
+            self.tableView.reloadData()
+            print("DEBUG: messages reloaded from didload")
+        })
+    }
+
 
 
     // MARK: - Actions
+    @objc func sendButtonAction() {
+        guard let viewmodel = viewmodel else { return }
+        viewmodel.uploadMessage(message: textfield.text ?? "")
+    }
     @objc func keyboardWillShow(notification: NSNotification) {
         guard let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else {
 
@@ -189,14 +215,14 @@ class ChatRoomViewController: UIViewController {
 extension ChatRoomViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "MessageTableViewCell", for: indexPath) as? MessageTableViewCell else { return UITableViewCell() }
-        cell.textLabel?.text = "lorem ipsum dolor amet"
+        cell.textLabel?.text = viewmodel?.messages[indexPath.row].message
         cell.textLabel?.numberOfLines = 0
         return cell
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 50
-//        return chatRoom?.messages?.count ?? 0
+//        return 50
+        return viewmodel?.messages.count ?? 0
     }
 }
 
@@ -214,5 +240,11 @@ extension ChatRoomViewController: UITextViewDelegate, UITextFieldDelegate {
 
     func textFieldDidEndEditing(_ textField: UITextField) {
         self.activeTextField = nil
+    }
+}
+// MARK: - ChatRoomViewModelDelegate
+extension ChatRoomViewController: ChatRoomViewModelDelegate {
+    func didChangeDataSource() {
+        //
     }
 }
