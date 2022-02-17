@@ -19,7 +19,7 @@ class ChatRoomListTableViewCell: UITableViewCell {
 
     private let chatRoomLastMessageLabel: UILabel = {
         let label = UILabel()
-        label.text = "Naber lan"
+        label.text = ""
         label.font = .systemFont(ofSize: 13, weight: .regular)
         label.textColor = .secondaryLabel
         return label
@@ -60,6 +60,10 @@ class ChatRoomListTableViewCell: UITableViewCell {
 
     // MARK: - Functions
     func configureCell(chatRoom: ChatRoom) {
+        let viewmodel = ChatRoomViewModel(chatroom: chatRoom)
         self.chatRoomNameLabel.text = chatRoom.name
+        viewmodel.getLastMessage {
+            self.chatRoomLastMessageLabel.text = viewmodel.lastMessage?.message
+        }
     }
 }

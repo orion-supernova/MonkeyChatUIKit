@@ -41,11 +41,16 @@ class ChatRoomListViewController: UIViewController {
         fetchAndObserveChatRooms()
     }
 
+    deinit {
+    }
+
     override func viewWillAppear(_ animated: Bool) {
         configureNavigationBar()
+        updateLastMessages()
     }
 
     override func viewDidLayoutSubviews() {
+        navigationItem.backButtonTitle = ""
     }
 
     // MARK: - Setup
@@ -125,10 +130,14 @@ class ChatRoomListViewController: UIViewController {
         }
     }
 
+    private func updateLastMessages() {
+        //
+    }
+
     // MARK: - Actions
     @objc func createChatRoomAction() {
         viewModel.createRoomOrEnterRoomAction { roomCode in
-            self.navigationController?.pushViewController(ChatRoomListViewController(), animated: true)
+            //
         }
     }
 }

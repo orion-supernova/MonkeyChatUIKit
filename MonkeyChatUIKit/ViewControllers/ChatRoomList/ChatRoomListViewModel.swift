@@ -13,6 +13,7 @@ class ChatRoomListViewModel {
     typealias AlertCompletion = ((Bool) -> Void)?
 
     var chatRooms = [ChatRoom]()
+    static var lastMessageInChatRoom: Message?
 
     func fetchChatRooms(completion: @escaping () -> Void) {
         COLLECTION_CHATROOMS.order(by: "timestamp", descending: true).addSnapshotListener { snapshot, error in
@@ -102,5 +103,10 @@ class ChatRoomListViewModel {
 
         let viewController = UIApplication.shared.windows.first!.rootViewController!
         viewController.present(alertController, animated: true, completion: nil)
+    }
+
+    func removeListeners() {
+//        COLLECTION_CHATROOMS.order(by: "timestamp", descending: true).remo
+//        }
     }
 }
