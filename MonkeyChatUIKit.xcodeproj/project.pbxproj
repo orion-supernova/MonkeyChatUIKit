@@ -56,6 +56,7 @@
 		54F2336E27BD635900E9FD28 /* ChatRoomViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomViewModel.swift; sourceTree = "<group>"; };
 		54F2337127BD68C400E9FD28 /* MessageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageTableViewCell.swift; sourceTree = "<group>"; };
 		54F2337327BD7BB000E9FD28 /* TextEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextEntryView.swift; sourceTree = "<group>"; };
+		54F2337527BE588200E9FD28 /* MonkeyChatUIKit.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MonkeyChatUIKit.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -94,6 +95,7 @@
 		545FFC6D27BC4C17008CC1ED /* MonkeyChatUIKit */ = {
 			isa = PBXGroup;
 			children = (
+				54F2337527BE588200E9FD28 /* MonkeyChatUIKit.entitlements */,
 				545FFC8227BC4C4A008CC1ED /* AppFiles */,
 				545FFC8827BC5124008CC1ED /* Models */,
 				545FFC8327BC4C5A008CC1ED /* ViewControllers */,
@@ -445,6 +447,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = MonkeyChatUIKit/MonkeyChatUIKit.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 37TC2VKVJ6;
@@ -476,6 +479,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = MonkeyChatUIKit/MonkeyChatUIKit.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 37TC2VKVJ6;
