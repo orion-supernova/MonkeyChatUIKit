@@ -58,6 +58,7 @@ class ChatRoomViewController: UIViewController {
     var chatRoom: ChatRoom?
     var activeTextField : UITextField? = nil
     var navigationBarHeight: CGFloat = 0
+    var tabbarHeight: CGFloat = 0
     var viewmodel: ChatRoomViewModel?
 
 
@@ -95,7 +96,7 @@ class ChatRoomViewController: UIViewController {
     }
 
     override func viewDidAppear(_ animated: Bool) {
-
+        self.scrollToBottom()
     }
 
     //MARK: - Setup
@@ -116,15 +117,19 @@ class ChatRoomViewController: UIViewController {
 
     // MARK: - Layout
     func layout() {
-        navigationBarHeight = navigationController?.navigationBar.frame.maxY ?? 100
+        navigationBarHeight = (navigationController?.navigationBar.frame.size.height)!
+        tabbarHeight = (tabBarController?.tabBar.frame.size.height)!
+
 
         tableView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+            make.top.equalTo(navigationBarHeight)
+            make.right.left.equalToSuperview()
+            make.bottom.equalTo(bottomView.snp.top)
         }
 
         bottomView.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
-            make.bottom.equalTo(-navigationBarHeight+10)
+            make.bottom.equalTo(-tabbarHeight)
             make.height.equalTo(50)
         }
 
@@ -161,8 +166,18 @@ class ChatRoomViewController: UIViewController {
     func fetchMessagesAndObserve() {
         viewmodel?.fetchMessages(completion: {
             self.tableView.reloadData()
+            self.scrollToBottom()
             print("DEBUG: messages reloaded from didload")
         })
+    }
+
+    func scrollToBottom() {
+//        let bottomOffset = CGPoint(x: 0, y: tableView.contentSize.height - tableView.bounds.size.height)
+//        tableView.setContentOffset(bottomOffset, animated: false)
+        if viewmodel?.messages.isEmpty == false {
+            let indexPath = IndexPath(row: (viewmodel?.messages.count ?? 0) - 1, section: 0)
+            tableView.scrollToRow(at: indexPath, at: .bottom, animated: false)
+        }
     }
 
 
@@ -171,6 +186,7 @@ class ChatRoomViewController: UIViewController {
     @objc func sendButtonAction() {
         guard let viewmodel = viewmodel else { return }
         viewmodel.uploadMessage(message: textfield.text ?? "")
+        self.textfield.text = ""
     }
     @objc func keyboardWillShow(notification: NSNotification) {
         guard let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else {
@@ -193,7 +209,7 @@ class ChatRoomViewController: UIViewController {
         }
 
         if(shouldMoveViewUp) {
-            self.view.frame.origin.y = 0 - keyboardSize.height + navigationBarHeight-10
+            self.view.frame.origin.y = 0 - keyboardSize.height + tabbarHeight
         }
     }
 
@@ -207,7 +223,7 @@ class ChatRoomViewController: UIViewController {
         self.view.endEditing(true)
     }
 
-    
+
 
 }
 
