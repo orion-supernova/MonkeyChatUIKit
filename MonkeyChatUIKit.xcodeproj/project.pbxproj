@@ -26,6 +26,12 @@
 		545FFC9E27BCFB05008CC1ED /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545FFC9D27BCFB05008CC1ED /* Message.swift */; };
 		545FFCA027BCFF9F008CC1ED /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545FFC9F27BCFF9F008CC1ED /* Constants.swift */; };
 		545FFCA327BD007F008CC1ED /* ChatRoomListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545FFCA227BD007F008CC1ED /* ChatRoomListViewModel.swift */; };
+		54664F4D27C2D98200F94482 /* SensitiveData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54664F4C27C2D98200F94482 /* SensitiveData.swift */; };
+		548BC3B127C0120100CBC6EA /* PushNotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 548BC3B027C0120100CBC6EA /* PushNotificationManager.swift */; };
+		548BC3B327C042A500CBC6EA /* PushNotificationSender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 548BC3B227C042A500CBC6EA /* PushNotificationSender.swift */; };
+		548BC3B527C04F8400CBC6EA /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 548BC3B427C04F8400CBC6EA /* SettingsViewModel.swift */; };
+		548BC3B727C054D500CBC6EA /* Checkbox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 548BC3B627C054D500CBC6EA /* Checkbox.swift */; };
+		548BC3B927C069D400CBC6EA /* apns-sound.wav in Resources */ = {isa = PBXBuildFile; fileRef = 548BC3B827C069D400CBC6EA /* apns-sound.wav */; };
 		54F2336427BD337100E9FD28 /* ChatRoomListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F2336327BD337100E9FD28 /* ChatRoomListTableViewCell.swift */; };
 		54F2336A27BD3C7500E9FD28 /* ChatRoomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F2336927BD3C7500E9FD28 /* ChatRoomViewController.swift */; };
 		54F2336C27BD44F900E9FD28 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F2336B27BD44F900E9FD28 /* SettingsViewController.swift */; };
@@ -50,6 +56,12 @@
 		545FFC9D27BCFB05008CC1ED /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		545FFC9F27BCFF9F008CC1ED /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		545FFCA227BD007F008CC1ED /* ChatRoomListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomListViewModel.swift; sourceTree = "<group>"; };
+		54664F4C27C2D98200F94482 /* SensitiveData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensitiveData.swift; sourceTree = "<group>"; };
+		548BC3B027C0120100CBC6EA /* PushNotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushNotificationManager.swift; sourceTree = "<group>"; };
+		548BC3B227C042A500CBC6EA /* PushNotificationSender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushNotificationSender.swift; sourceTree = "<group>"; };
+		548BC3B427C04F8400CBC6EA /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
+		548BC3B627C054D500CBC6EA /* Checkbox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Checkbox.swift; sourceTree = "<group>"; };
+		548BC3B827C069D400CBC6EA /* apns-sound.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "apns-sound.wav"; sourceTree = "<group>"; };
 		54F2336327BD337100E9FD28 /* ChatRoomListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomListTableViewCell.swift; sourceTree = "<group>"; };
 		54F2336927BD3C7500E9FD28 /* ChatRoomViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomViewController.swift; sourceTree = "<group>"; };
 		54F2336B27BD44F900E9FD28 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
@@ -95,8 +107,10 @@
 		545FFC6D27BC4C17008CC1ED /* MonkeyChatUIKit */ = {
 			isa = PBXGroup;
 			children = (
+				548BC3B827C069D400CBC6EA /* apns-sound.wav */,
 				54F2337527BE588200E9FD28 /* MonkeyChatUIKit.entitlements */,
 				545FFC8227BC4C4A008CC1ED /* AppFiles */,
+				548BC3AF27C011ED00CBC6EA /* Managers */,
 				545FFC8827BC5124008CC1ED /* Models */,
 				545FFC8327BC4C5A008CC1ED /* ViewControllers */,
 				54F2336D27BD450B00E9FD28 /* Settings */,
@@ -151,6 +165,8 @@
 			children = (
 				545FFC8C27BC5B72008CC1ED /* AlertHelper.swift */,
 				545FFC9F27BCFF9F008CC1ED /* Constants.swift */,
+				548BC3B627C054D500CBC6EA /* Checkbox.swift */,
+				54664F4C27C2D98200F94482 /* SensitiveData.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -173,6 +189,15 @@
 			path = Cell;
 			sourceTree = "<group>";
 		};
+		548BC3AF27C011ED00CBC6EA /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				548BC3B027C0120100CBC6EA /* PushNotificationManager.swift */,
+				548BC3B227C042A500CBC6EA /* PushNotificationSender.swift */,
+			);
+			path = Managers;
+			sourceTree = "<group>";
+		};
 		54F2336627BD3C0400E9FD28 /* ChatRoom */ = {
 			isa = PBXGroup;
 			children = (
@@ -188,6 +213,7 @@
 			isa = PBXGroup;
 			children = (
 				54F2336B27BD44F900E9FD28 /* SettingsViewController.swift */,
+				548BC3B427C04F8400CBC6EA /* SettingsViewModel.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -271,6 +297,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				545FFC7B27BC4C18008CC1ED /* LaunchScreen.storyboard in Resources */,
+				548BC3B927C069D400CBC6EA /* apns-sound.wav in Resources */,
 				545FFC9A27BCDDA1008CC1ED /* GoogleService-Info.plist in Resources */,
 				545FFC7827BC4C18008CC1ED /* Assets.xcassets in Resources */,
 				545FFC7627BC4C17008CC1ED /* Main.storyboard in Resources */,
@@ -285,20 +312,25 @@
 			buildActionMask = 2147483647;
 			files = (
 				545FFC7327BC4C17008CC1ED /* ChatRoomListViewController.swift in Sources */,
+				548BC3B327C042A500CBC6EA /* PushNotificationSender.swift in Sources */,
 				54F2337427BD7BB000E9FD28 /* TextEntryView.swift in Sources */,
 				545FFCA327BD007F008CC1ED /* ChatRoomListViewModel.swift in Sources */,
 				545FFC6F27BC4C17008CC1ED /* AppDelegate.swift in Sources */,
 				545FFC9C27BCDEDB008CC1ED /* User.swift in Sources */,
 				54F2336427BD337100E9FD28 /* ChatRoomListTableViewCell.swift in Sources */,
 				54F2336F27BD635900E9FD28 /* ChatRoomViewModel.swift in Sources */,
+				548BC3B727C054D500CBC6EA /* Checkbox.swift in Sources */,
 				545FFC8A27BC5149008CC1ED /* ChatRoom.swift in Sources */,
 				54F2337227BD68C400E9FD28 /* MessageTableViewCell.swift in Sources */,
 				545FFC8D27BC5B72008CC1ED /* AlertHelper.swift in Sources */,
+				548BC3B127C0120100CBC6EA /* PushNotificationManager.swift in Sources */,
 				545FFC7127BC4C17008CC1ED /* SceneDelegate.swift in Sources */,
+				54664F4D27C2D98200F94482 /* SensitiveData.swift in Sources */,
 				545FFC9E27BCFB05008CC1ED /* Message.swift in Sources */,
 				545FFCA027BCFF9F008CC1ED /* Constants.swift in Sources */,
 				54F2336A27BD3C7500E9FD28 /* ChatRoomViewController.swift in Sources */,
 				54F2336C27BD44F900E9FD28 /* SettingsViewController.swift in Sources */,
+				548BC3B527C04F8400CBC6EA /* SettingsViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SafariServices
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -17,6 +18,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         guard let _ = (scene as? UIWindowScene) else { return }
+        UNUserNotificationCenter.current().delegate = self
+
         let tabController = UITabBarController()
         let vc1 = UINavigationController(rootViewController: ChatRoomListViewController())
         let vc2 = UINavigationController(rootViewController: SettingsViewController())
@@ -61,5 +64,27 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 
 
+}
+
+// MARK: - UNUserNotificationCenterDelegate
+
+extension SceneDelegate: UNUserNotificationCenterDelegate {
+    func userNotificationCenter(_ center: UNUserNotificationCenter,didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+
+        let userInfo = response.notification.request.content.userInfo
+
+        if
+            let aps = userInfo["aps"] as? [String: AnyObject] {
+//            (window?.rootViewController as? UITabBarController)?.selectedIndex = 1
+
+            if response.actionIdentifier == Identifiers.viewAction,
+               let url = URL(string: aps["link_url"] as! String) {
+                let safari = SFSafariViewController(url: url)
+                window?.rootViewController?.present(safari, animated: true, completion: nil)
+            }
+        }
+
+        completionHandler()
+    }
 }
 
