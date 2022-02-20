@@ -62,6 +62,8 @@ class ChatRoomViewModel {
                 AlertHelper.alertMessage(title: "Failed to send message!", message: error?.localizedDescription ?? "", okButtonText: "OK")
                 print("Failed to upload message. \(error!.localizedDescription)")
             }
+            let sender = PushNotificationSender()
+            sender.sendPushNotification(to: "/topics/newMessages", title: "New Message", body: "Click me to see!")
         }
     }
 }
