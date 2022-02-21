@@ -80,7 +80,6 @@ class ChatRoomListViewController: UIViewController {
 
     // MARK: - Functions
     func configureNavigationBar() {
-        // MARK: - Configure Navigation Bar
         let createChatRoomButton = UIBarButtonItem(barButtonSystemItem: .compose,
                                                    target: self,
                                                    action: #selector(createChatRoomAction))

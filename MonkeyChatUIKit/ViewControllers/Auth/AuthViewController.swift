@@ -33,6 +33,7 @@ class AuthViewController: UIViewController {
         textField.keyboardType = .phonePad
         textField.placeholder = "+1 234 567 890"
         textField.textAlignment = .center
+        textField.addTarget(self, action: #selector(signIn), for: .editingChanged)
         return textField
     }()
 
@@ -41,13 +42,12 @@ class AuthViewController: UIViewController {
         super.viewDidLoad()
         setup()
         layout()
+        setDelegates()
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         view.backgroundColor = .systemBackground
-        phoneTextField.delegate = self
-        phoneTextField.addTarget(self, action: #selector(signIn), for: .editingChanged)
 
         let gesture = UITapGestureRecognizer(target: self, action: #selector(endEditing))
         view.addGestureRecognizer(gesture)
@@ -80,6 +80,10 @@ class AuthViewController: UIViewController {
         }
     }
 
+    func setDelegates() {
+        phoneTextField.delegate = self
+    }
+
     // MARK: - Actions
     @objc func endEditing() {
         phoneTextField.endEditing(true)
@@ -88,17 +92,27 @@ class AuthViewController: UIViewController {
     // MARK: - Private Methods
     @objc func signIn() {
         if phoneTextField.text?.count == 13 {
-            AlertHelper.alertMessage(title: "Check Your Number", message: "Your number is \(phoneTextField.text ?? ""). Continue?") {
-                print("oldu")
+            AlertHelper.alertMessage(viewController: self,title: "Check Your Number", message: "Your number is \(phoneTextField.text ?? ""). Continue?") {
+                LottieHUD.shared.show()
+                guard let phoneNumber = self.phoneTextField.text else { return }
+                AuthManager.shared.startAuth(phoneNumber: phoneNumber) { [weak self] success in
+                    guard success else { return }
+                    guard let self = self else { return }
+                    let viewController = VerificationCodeViewController()
+                    viewController.modalPresentationStyle = .fullScreen
+                    self.present(viewController, animated: true, completion: nil)
+                    LottieHUD.shared.dismiss()
+                }
             }
         }
     }
 }
 
+//MARK: - UITextFieldDelegate
 extension AuthViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         if textField == phoneTextField {
-            print("hmm")
+            //
         }
         return true
     }

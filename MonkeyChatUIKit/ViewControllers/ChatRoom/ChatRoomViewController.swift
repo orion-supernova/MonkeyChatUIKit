@@ -91,7 +91,7 @@ class ChatRoomViewController: UIViewController {
     }
 
     override func viewDidLayoutSubviews() {
-        self.title = "Chat Room: \(chatRoom?.name ?? "")"
+        self.title = chatRoom?.name ?? ""
         self.navigationController?.navigationBar.tintColor = .systemPink
     }
 

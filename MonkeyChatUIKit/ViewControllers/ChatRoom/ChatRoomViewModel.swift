@@ -57,13 +57,13 @@ class ChatRoomViewModel {
         let data = ["message": message,
                     "timestamp": Timestamp(date: Date())] as [String: Any]
 
-        COLLECTION_CHATROOMS.document(chatroomID).collection("chatroom-messages").addDocument(data: data) { error in
+        COLLECTION_CHATROOMS.document(chatroomID).collection("chatroom-messages").addDocument(data: data) { [weak self] error in
             if error != nil {
                 AlertHelper.alertMessage(title: "Failed to send message!", message: error?.localizedDescription ?? "", okButtonText: "OK")
                 print("Failed to upload message. \(error!.localizedDescription)")
             }
             let sender = PushNotificationSender()
-            sender.sendPushNotification(to: "/topics/newMessages", title: "New Message", body: "Click me to see!")
+            sender.sendPushNotification(to: "/topics/newMessages", title: "\(self?.chatroom.name ?? "")", body: "\(message)")
         }
     }
 }
