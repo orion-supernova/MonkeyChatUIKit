@@ -30,7 +30,6 @@ class ChatRoomListViewController: UIViewController {
 
     // MARK: - Private Properties
     private var viewModel = ChatRoomListViewModel()
-    let currentUserString = UserDefaults.standard.string(forKey: "currentUser")
 
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -86,10 +85,9 @@ class ChatRoomListViewController: UIViewController {
         navigationItem.rightBarButtonItems = [createChatRoomButton]
         navigationItem.rightBarButtonItem?.tintColor = .systemPink
 
-        let currentUserString = UserDefaults.standard.string(forKey: "currentUser")
         let userSessionLabel : UILabel = {
             let label = UILabel()
-            label.text = "Logged as: \(currentUserString ?? "Guest")"
+            label.text = "Your username: \(AppGlobal.shared.username ?? "")"
             label.numberOfLines = 0
             label.lineBreakMode = .byWordWrapping
             label.font = .systemFont(ofSize: 10)
@@ -97,12 +95,7 @@ class ChatRoomListViewController: UIViewController {
             return label
         }()
 
-        if currentUserString == nil {
-            navigationItem.leftBarButtonItem = UIBarButtonItem(customView: userSessionLabel)
-        } else {
-            userSessionLabel.text = "Logged as Guest"
-            navigationItem.leftBarButtonItem = UIBarButtonItem(customView: userSessionLabel)
-        }
+        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: userSessionLabel)
 
         let titleViewLabel : UILabel = {
             let label = UILabel()

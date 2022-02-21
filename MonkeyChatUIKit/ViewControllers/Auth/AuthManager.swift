@@ -27,6 +27,7 @@ class AuthManager {
         let credential = PhoneAuthProvider.provider().credential(withVerificationID: verificationID, verificationCode: smsCode)
         Auth.auth().signIn(with: credential) { result, error in
             guard result != nil, error == nil else { completion(false); return}
+            AppGlobal.shared.userID = Auth.auth().currentUser?.uid
             completion(true)
         }
     }
