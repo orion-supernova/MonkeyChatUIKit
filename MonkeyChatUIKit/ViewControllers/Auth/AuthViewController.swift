@@ -92,6 +92,7 @@ class AuthViewController: UIViewController {
     // MARK: - Private Methods
     @objc func signIn() {
         if phoneTextField.text?.count == 13 {
+            self.endEditing()
             AlertHelper.alertMessage(viewController: self,title: "Check Your Number", message: "Your number is \(phoneTextField.text ?? ""). Continue?") {
                 LottieHUD.shared.show()
                 guard let phoneNumber = self.phoneTextField.text else { return }

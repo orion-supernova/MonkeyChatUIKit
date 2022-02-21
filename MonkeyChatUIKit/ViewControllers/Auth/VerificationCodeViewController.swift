@@ -31,6 +31,10 @@ class VerificationCodeViewController: UIViewController {
         super.viewDidLayoutSubviews()
         view.backgroundColor = .systemBackground
     }
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(true)
+        verificationCodeTextField.becomeFirstResponder()
+    }
 
     //MARK: - Setup
     func setup() {
@@ -52,6 +56,7 @@ class VerificationCodeViewController: UIViewController {
     //MARK: - Actions
     @objc func verifyCode() {
         if verificationCodeTextField.text?.count == 6 {
+            verificationCodeTextField.endEditing(true)
             LottieHUD.shared.show()
             guard let smsCode = self.verificationCodeTextField.text else { return }
             AuthManager.shared.verifyCodeAndSignIn(smsCode: smsCode) { [weak self] success in

@@ -6,11 +6,21 @@
 //
 
 import UIKit
-import FirebaseAuth
+import Firebase
 
 class SettingsViewController: UIViewController {
 
     // MARK: - UI Elements
+    private let tableView: UITableView = {
+        let tableView = UITableView()
+        tableView.tableFooterView = UIView()
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Username")
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Logout")
+        tableView.rowHeight = UITableView.automaticDimension
+        tableView.estimatedRowHeight = 44
+        return tableView
+    }()
+
     private let profilePictureView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(systemName: "person")
@@ -41,7 +51,6 @@ class SettingsViewController: UIViewController {
     }()
 
     // MARK: - Private Properties
-    let currentUserString = UserDefaults.standard.string(forKey: "currentUser")
     let viewmodel = SettingsViewModel()
     var isChecked: Bool = true {
         didSet {
@@ -59,6 +68,8 @@ class SettingsViewController: UIViewController {
 
         setup()
         layout()
+        setDelegates()
+        addObservers()
     }
 
     override func viewDidLayoutSubviews() {
@@ -66,36 +77,19 @@ class SettingsViewController: UIViewController {
         view.backgroundColor = .systemBackground
     }
 
-    // MARK: - Lifecycle
+    // MARK: - Setup
     func setup() {
-        view.addSubview(profilePictureView)
-        view.addSubview(usernameTextField)
-        view.addSubview(notificationsCheckbox)
-        view.addSubview(logoutButton)
+        view.addSubview(tableView)
     }
 
     func layout() {
-        let navigationBarHeight = (navigationController?.navigationBar.frame.size.height)!
-
-        profilePictureView.snp.makeConstraints { make in
-            make.top.equalTo(navigationBarHeight*2)
-            make.centerX.equalToSuperview()
-            make.height.width.equalTo(80)
+        tableView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
         }
+    }
 
-        usernameTextField.snp.makeConstraints { make in
-            make.top.equalTo(profilePictureView.snp.bottom).offset(5)
-            make.centerX.equalToSuperview()
-            make.width.equalToSuperview()
-            make.height.equalTo(30)
-        }
-
-        logoutButton.snp.makeConstraints { make in
-            make.top.equalTo(usernameTextField.snp.bottom).offset(5)
-            make.centerX.equalToSuperview()
-            make.width.equalTo(180)
-            make.height.equalTo(30)
-        }
+    func addObservers() {
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadTableView), name: NSNotification.Name("reloadTableView"), object: nil)
     }
 
     // MARK: - Actions
@@ -117,6 +111,16 @@ class SettingsViewController: UIViewController {
             self.present(viewController, animated: true, completion: nil)
             LottieHUD.shared.dismiss()
         }
+    }
+
+    @objc func reloadTableView() {
+        tableView.reloadData()
+    }
+
+    //MARK: - Functions
+    func setDelegates() {
+        tableView.delegate = self
+        tableView.dataSource = self
     }
 }
 
@@ -144,4 +148,49 @@ extension SettingsViewController: UITextFieldDelegate {
         return updatedText.count <= 13
     }
 
+}
+
+// MARK: - UITableViewDelegate
+extension SettingsViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+
+        if indexPath.row == 0 {
+            let vc = UsernameViewController()
+            vc.title = "Edit Profile"
+            vc.navigationItem.largeTitleDisplayMode = .never
+            navigationController?.pushViewController(vc, animated: true)
+        } else if indexPath.row == 1 {
+            logoutAction()
+        }
+    }
+}
+
+
+// MARK: - UITableViewDelegate
+extension SettingsViewController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 2
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if indexPath.row  == 0 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "Username", for: indexPath)
+            cell.textLabel?.text = "Username: \(AppGlobal.shared.username ?? "")"
+            cell.textLabel?.textAlignment = .center
+            cell.textLabel?.textColor = .systemGray
+            return cell
+
+        } else if indexPath.row == 1 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "Logout", for: indexPath)
+            cell.textLabel?.text = "Logout"
+            cell.textLabel?.textAlignment = .center
+            cell.textLabel?.textColor = .red
+            return cell
+        } else {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "Logout", for: indexPath)
+            return cell
+        }
+
+    }
 }
