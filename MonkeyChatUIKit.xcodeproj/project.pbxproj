@@ -34,6 +34,8 @@
 		547D253427C3EF4D005D98B8 /* LottieHUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 547D253327C3EF4D005D98B8 /* LottieHUD.swift */; };
 		547D253727C3F20A005D98B8 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 547D253627C3F20A005D98B8 /* Lottie */; };
 		547D253B27C40206005D98B8 /* loading.json in Resources */ = {isa = PBXBuildFile; fileRef = 547D253A27C40206005D98B8 /* loading.json */; };
+		547D253D27C42F2D005D98B8 /* AppGlobal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 547D253C27C42F2D005D98B8 /* AppGlobal.swift */; };
+		547D253F27C43459005D98B8 /* UsernameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 547D253E27C43459005D98B8 /* UsernameViewController.swift */; };
 		548BC3B127C0120100CBC6EA /* PushNotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 548BC3B027C0120100CBC6EA /* PushNotificationManager.swift */; };
 		548BC3B327C042A500CBC6EA /* PushNotificationSender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 548BC3B227C042A500CBC6EA /* PushNotificationSender.swift */; };
 		548BC3B527C04F8400CBC6EA /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 548BC3B427C04F8400CBC6EA /* SettingsViewModel.swift */; };
@@ -69,6 +71,8 @@
 		547D253127C3E786005D98B8 /* VerificationCodeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerificationCodeViewController.swift; sourceTree = "<group>"; };
 		547D253327C3EF4D005D98B8 /* LottieHUD.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottieHUD.swift; sourceTree = "<group>"; };
 		547D253A27C40206005D98B8 /* loading.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = loading.json; sourceTree = "<group>"; };
+		547D253C27C42F2D005D98B8 /* AppGlobal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppGlobal.swift; sourceTree = "<group>"; };
+		547D253E27C43459005D98B8 /* UsernameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsernameViewController.swift; sourceTree = "<group>"; };
 		548BC3B027C0120100CBC6EA /* PushNotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushNotificationManager.swift; sourceTree = "<group>"; };
 		548BC3B227C042A500CBC6EA /* PushNotificationSender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushNotificationSender.swift; sourceTree = "<group>"; };
 		548BC3B427C04F8400CBC6EA /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
@@ -124,6 +128,7 @@
 			children = (
 				548BC3B827C069D400CBC6EA /* apns-sound.wav */,
 				54F2337527BE588200E9FD28 /* MonkeyChatUIKit.entitlements */,
+				547D253C27C42F2D005D98B8 /* AppGlobal.swift */,
 				545FFC8227BC4C4A008CC1ED /* AppFiles */,
 				548BC3AF27C011ED00CBC6EA /* Managers */,
 				545FFC8827BC5124008CC1ED /* Models */,
@@ -248,6 +253,7 @@
 			isa = PBXGroup;
 			children = (
 				54F2336B27BD44F900E9FD28 /* SettingsViewController.swift */,
+				547D253E27C43459005D98B8 /* UsernameViewController.swift */,
 				548BC3B427C04F8400CBC6EA /* SettingsViewModel.swift */,
 			);
 			path = Settings;
@@ -369,6 +375,8 @@
 				54664F4F27C2DC8300F94482 /* SensitiveData.swift in Sources */,
 				545FFC9E27BCFB05008CC1ED /* Message.swift in Sources */,
 				545FFCA027BCFF9F008CC1ED /* Constants.swift in Sources */,
+				547D253D27C42F2D005D98B8 /* AppGlobal.swift in Sources */,
+				547D253F27C43459005D98B8 /* UsernameViewController.swift in Sources */,
 				54F2336A27BD3C7500E9FD28 /* ChatRoomViewController.swift in Sources */,
 				547D253427C3EF4D005D98B8 /* LottieHUD.swift in Sources */,
 				547D253027C3DD92005D98B8 /* AuthManager.swift in Sources */,
