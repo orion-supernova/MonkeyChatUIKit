@@ -34,5 +34,13 @@ class SettingsViewModel {
         }
     }
 
+    func changeUsername(username: String) {
+        if username == "" {
+            AlertHelper.alertMessage(title: "Error", message: "Username can not be empty.", okButtonText: "OK")
+        } else {
+            AlertHelper.alertMessage(title: "In Progress", message: "Your username will be \(username), when I fix this :)", okButtonText: "oke")
+        }
+    }
+
 
 }
