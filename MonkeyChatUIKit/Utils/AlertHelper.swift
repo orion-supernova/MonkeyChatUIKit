@@ -18,4 +18,17 @@ class AlertHelper {
         let viewController = UIApplication.shared.windows.first!.rootViewController!
         viewController.present(alertVC, animated: true, completion: nil)
     }
+
+    static func alertMessage(title: String, message: String, completion: @escaping () -> Void ) {
+        let alertVC = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        let okAction = UIAlertAction(title: "OK", style: .default) { (action: UIAlertAction) in
+            completion()
+        }
+        alertVC.addAction(cancelAction)
+        alertVC.addAction(okAction)
+
+        let viewController = UIApplication.shared.windows.first!.rootViewController!
+        viewController.present(alertVC, animated: true, completion: nil)
+    }
 }

@@ -7,6 +7,7 @@
 
 import UIKit
 import SafariServices
+import Firebase
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -32,7 +33,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         vc1.title = "MonkeyList"
         vc2.title = "Settings"
 
-        window?.rootViewController = tabController
+//        let currentUser = Auth.auth().currentUser
+//
+//        if currentUser != nil {
+            window?.rootViewController = tabController
+//        } else {
+//            window?.rootViewController = AuthViewController()
+//        }
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
