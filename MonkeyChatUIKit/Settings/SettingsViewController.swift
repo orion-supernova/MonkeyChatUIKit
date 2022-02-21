@@ -6,32 +6,37 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 class SettingsViewController: UIViewController {
 
     // MARK: - UI Elements
-    private let mainLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Daha yapamadım mk"
-        label.textAlignment = .center
-        label.font = .systemFont(ofSize: 20)
-        label.textColor = .secondaryLabel
-        return label
+    private let profilePictureView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = UIImage(systemName: "person")
+        return imageView
     }()
 
-    private let notificationsLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Notifications:"
-        label.numberOfLines = 0
-        label.lineBreakMode = .byWordWrapping
-        label.font = .systemFont(ofSize: 10)
-        return label
+    private let usernameTextField: UITextField = {
+        let textField = UITextField()
+        textField.placeholder = "Username"
+        textField.textAlignment = .center
+        textField.returnKeyType = .done
+        return textField
     }()
 
     var notificationsCheckbox: UIButton = {
         let button = NotificationsCheckBox(type: .system)
         button.setImage(UIImage(systemName: "bell"), for: .normal)
         button.addTarget(self, action: #selector(checkBoxAction), for: .touchUpInside)
+        return button
+    }()
+
+    private let logoutButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("Logout", for: .normal)
+        button.tintColor = .systemPink
+        button.addTarget(self, action: #selector(logoutAction), for: .touchUpInside)
         return button
     }()
 
@@ -63,27 +68,33 @@ class SettingsViewController: UIViewController {
 
     // MARK: - Lifecycle
     func setup() {
-        view.addSubview(mainLabel)
-        view.addSubview(notificationsLabel)
+        view.addSubview(profilePictureView)
+        view.addSubview(usernameTextField)
         view.addSubview(notificationsCheckbox)
+        view.addSubview(logoutButton)
     }
 
     func layout() {
         let navigationBarHeight = (navigationController?.navigationBar.frame.size.height)!
 
-        mainLabel.snp.makeConstraints { make in
-            make.center.equalTo(view.snp.center)
-        }
-        notificationsLabel.snp.makeConstraints { make in
+        profilePictureView.snp.makeConstraints { make in
             make.top.equalTo(navigationBarHeight*2)
-            make.left.equalToSuperview()
-            make.height.equalTo(40)
-            make.width.equalTo(70)
+            make.centerX.equalToSuperview()
+            make.height.width.equalTo(80)
         }
-        notificationsCheckbox.snp.makeConstraints { make in
-            make.centerY.equalTo(notificationsLabel.snp.centerY)
-            make.left.equalTo(notificationsLabel.snp.right)
-            make.width.height.equalTo(40)
+
+        usernameTextField.snp.makeConstraints { make in
+            make.top.equalTo(profilePictureView.snp.bottom).offset(5)
+            make.centerX.equalToSuperview()
+            make.width.equalToSuperview()
+            make.height.equalTo(30)
+        }
+
+        logoutButton.snp.makeConstraints { make in
+            make.top.equalTo(usernameTextField.snp.bottom).offset(5)
+            make.centerX.equalToSuperview()
+            make.width.equalTo(180)
+            make.height.equalTo(30)
         }
     }
 
@@ -96,6 +107,41 @@ class SettingsViewController: UIViewController {
             viewmodel.subscribeForNewMessages(showAlert: true)
         }
         isChecked = !isChecked
+    }
+
+    @objc func logoutAction() {
+        LottieHUD.shared.show()
+        AuthManager.shared.signOut {
+            let viewController = AuthViewController()
+            viewController.modalPresentationStyle = .fullScreen
+            self.present(viewController, animated: true, completion: nil)
+            LottieHUD.shared.dismiss()
+        }
+    }
+}
+
+//MARK: - UITextFieldDelegate
+extension SettingsViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if textField == usernameTextField {
+            guard let username = textField.text else { return false }
+            viewmodel.changeUsername(username: username)
+        }
+        return true
+    }
+
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        // get the current text, or use an empty string if that failed
+        let currentText = textField.text ?? ""
+
+        // attempt to read the range they are trying to change, or exit if we can't
+        guard let stringRange = Range(range, in: currentText) else { return false }
+
+        // add their new text to the existing text
+        let updatedText = currentText.replacingCharacters(in: stringRange, with: string)
+
+        // make sure the result is under 16 characters
+        return updatedText.count <= 13
     }
 
 }
