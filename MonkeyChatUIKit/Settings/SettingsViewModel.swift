@@ -12,12 +12,14 @@ class SettingsViewModel {
 
     // MARK: - Stored Properties
     let defaults = UserDefaults.standard
+    let fcmToken = AppGlobal.shared.fcmToken
 
     // MARK: - Lifecycle
 
     // MARK: - Functions
-    func subscribeForNewMessages(showAlert: Bool, chatRoomName: String) {
-        Messaging.messaging().subscribe(toTopic: "newMessages") { [weak self] error in
+    func subscribeForNewMessages(showAlert: Bool, chatRoomID: String) {
+
+        Messaging.messaging().subscribe(toTopic: chatRoomID) { [weak self] error in
             guard error == nil else { return }
             self?.defaults.setValue(true, forKey: "isSubscribedForPushNotifications")
             if showAlert {
@@ -26,11 +28,10 @@ class SettingsViewModel {
         }
     }
 
-    func unsubscribeForNewMessages() {
-        Messaging.messaging().unsubscribe(fromTopic: "newMessage") { [weak self] error in
+    func unsubscribeForNewMessages(chatRoomID: String) {
+        Messaging.messaging().unsubscribe(fromTopic: chatRoomID) { [weak self] error in
             guard error == nil else { return }
             self?.defaults.setValue(false, forKey: "isSubscribedForPushNotifications")
-            AlertHelper.alertMessage(title: "Success", message: "You won't get push notifications from now on.", okButtonText: "OK")
         }
     }
 

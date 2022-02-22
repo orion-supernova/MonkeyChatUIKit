@@ -28,6 +28,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate {
 //        pushManager.registerForPushNotifications()
 
         registerForPushNotifications()
+        AppGlobal.shared.fcmToken = Messaging.messaging().fcmToken
+        let viewmodel = SettingsViewModel()
+        viewmodel.unsubscribeForNewMessages(chatRoomID: "newMessage")
+        viewmodel.unsubscribeForNewMessages(chatRoomID: "newMessages")
 
         // Check if launched from notification
         let notificationOption = launchOptions?[.remoteNotification]
