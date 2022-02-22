@@ -34,7 +34,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate {
         if  let notification = notificationOption as? [String: AnyObject], let aps = notification["aps"] as? [String: AnyObject] {
             //
         }
-        registerForNewMessages()
         return true
     }
 
@@ -97,11 +96,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate {
             guard let token = token else { return }
             print("DEBUG: APNS Token: " + token)
         }
-    }
-
-    func registerForNewMessages() {
-        let viewmodel = SettingsViewModel()
-        viewmodel.subscribeForNewMessages(showAlert: false)
     }
 
     // MARK: - Congirue Navbar and Tabbar Appearance

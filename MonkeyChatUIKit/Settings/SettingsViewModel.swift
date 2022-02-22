@@ -16,7 +16,7 @@ class SettingsViewModel {
     // MARK: - Lifecycle
 
     // MARK: - Functions
-    func subscribeForNewMessages(showAlert: Bool) {
+    func subscribeForNewMessages(showAlert: Bool, chatRoomName: String) {
         Messaging.messaging().subscribe(toTopic: "newMessages") { [weak self] error in
             guard error == nil else { return }
             self?.defaults.setValue(true, forKey: "isSubscribedForPushNotifications")

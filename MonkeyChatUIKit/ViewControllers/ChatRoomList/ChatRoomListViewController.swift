@@ -128,9 +128,7 @@ class ChatRoomListViewController: UIViewController {
 
     // MARK: - Actions
     @objc func createChatRoomAction() {
-        viewModel.createRoomOrEnterRoomAction { roomCode in
-            //
-        }
+        viewModel.createRoomOrEnterRoomAction(target: self)
     }
 }
 

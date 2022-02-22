@@ -10,4 +10,6 @@ import FirebaseFirestoreSwift
 struct User: Identifiable, Decodable {
     var username: String
     @DocumentID var id: String?
+    var uid: String?
+    var chatRooms = [String]()
 }

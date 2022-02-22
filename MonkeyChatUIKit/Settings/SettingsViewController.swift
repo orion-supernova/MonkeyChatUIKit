@@ -35,13 +35,6 @@ class SettingsViewController: UIViewController {
         return textField
     }()
 
-    var notificationsCheckbox: UIButton = {
-        let button = NotificationsCheckBox(type: .system)
-        button.setImage(UIImage(systemName: "bell"), for: .normal)
-        button.addTarget(self, action: #selector(checkBoxAction), for: .touchUpInside)
-        return button
-    }()
-
     private let logoutButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Logout", for: .normal)
@@ -52,15 +45,6 @@ class SettingsViewController: UIViewController {
 
     // MARK: - Private Properties
     let viewmodel = SettingsViewModel()
-    var isChecked: Bool = true {
-        didSet {
-            if isChecked == true {
-                notificationsCheckbox.setImage(UIImage(systemName: "bell"), for: .normal)
-            } else {
-                notificationsCheckbox.setImage(UIImage(systemName: "bell.slash"), for: .normal)
-            }
-        }
-    }
 
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -93,16 +77,6 @@ class SettingsViewController: UIViewController {
     }
 
     // MARK: - Actions
-    @objc func checkBoxAction() {
-        // If the user is registered, remove it and vice versa.
-        if isChecked {
-            viewmodel.unsubscribeForNewMessages()
-        } else {
-            viewmodel.subscribeForNewMessages(showAlert: true)
-        }
-        isChecked = !isChecked
-    }
-
     @objc func logoutAction() {
         LottieHUD.shared.show()
         AuthManager.shared.signOut {

@@ -93,6 +93,12 @@ class ChatRoomViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         self.title = chatRoom?.name ?? ""
         self.navigationController?.navigationBar.tintColor = .systemPink
+
+        let editRoomSettingsButton = UIBarButtonItem(barButtonSystemItem: .edit,
+                                                   target: self,
+                                                   action: #selector(editRoomSettings))
+        navigationItem.rightBarButtonItems = [editRoomSettingsButton]
+        navigationItem.rightBarButtonItem?.tintColor = .systemPink
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -153,6 +159,27 @@ class ChatRoomViewController: UIViewController {
             make.width.height.equalTo(40)
         }
 
+    }
+
+    // MARK: - Actions
+    @objc func editRoomSettings() {
+        guard let chatRoom = chatRoom else { return }
+        var alertMessage = ""
+        guard let tempPassword = chatRoom.password else { return }
+        if tempPassword != "" {
+            alertMessage = "Password: \(tempPassword)"
+        } else {
+            alertMessage = "Password: Not Configured"
+        }
+        guard let chatRoomID = chatRoom.id else { return }
+        UIPasteboard.general.string = chatRoomID
+        let alertController = UIAlertController(title: "Room ID copied to your clipboard", message: "Room ID: \(chatRoomID) \n" + alertMessage, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .default) { (action: UIAlertAction) in
+            //
+        }
+        alertController.addAction(okAction)
+
+        self.present(alertController, animated: true, completion: nil)
     }
 
     // MARK: - Functions
