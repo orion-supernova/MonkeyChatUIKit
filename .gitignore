@@ -1,2 +1,4 @@
 
 MonkeyChatUIKit/Utils/SensitiveData.swift
+
+*.xcbkptlist
