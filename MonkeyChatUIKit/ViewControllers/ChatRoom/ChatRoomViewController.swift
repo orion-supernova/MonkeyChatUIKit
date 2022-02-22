@@ -19,7 +19,6 @@ class ChatRoomViewController: UIViewController {
 
     private let textInputView: UITextView = {
         let textView = UITextView()
-        textView.textColor = .red
         textView.font = UIFont.systemFont(ofSize: 17)
         textView.isScrollEnabled = false
         textView.autocorrectionType = .no
@@ -29,22 +28,13 @@ class ChatRoomViewController: UIViewController {
         return textView
     }()
 
-    private let textfield: UITextField = {
-        let textfield = UITextField()
-        textfield.font = UIFont.systemFont(ofSize: 17)
-        textfield.autocorrectionType = .no
-        textfield.autocapitalizationType = .none
-        textfield.layer.cornerRadius = 10
-        textfield.backgroundColor = .systemBackground
-        return textfield
-    }()
-
     private let sendButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Send", for: .normal)
         button.titleLabel?.font =  UIFont(name: "Comic Sans MS", size: 10)
         button.tintColor = .systemPink
         button.addTarget(self, action: #selector(sendButtonAction), for: .touchUpInside)
+        button.isEnabled = false
         return button
     }()
 
@@ -56,11 +46,11 @@ class ChatRoomViewController: UIViewController {
 
     // MARK: - Private Properties
     var chatRoom: ChatRoom?
-    var activeTextField : UITextField? = nil
+    var activeTextView : UITextView? = nil
     var navigationBarHeight: CGFloat = 0
     var tabbarHeight: CGFloat = 0
     var viewmodel: ChatRoomViewModel?
-
+    var keyboardDispatchGroup: DispatchGroup?
 
     // MARK: - Lifecycle
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?)   {
@@ -110,14 +100,12 @@ class ChatRoomViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         textInputView.delegate = self
-        textfield.delegate = self
     }
 
     func setup() {
         view.addSubview(tableView)
         view.addSubview(bottomView)
-//        bottomView.addSubview(textInputView)
-        bottomView.addSubview(textfield)
+        bottomView.addSubview(textInputView)
         bottomView.addSubview(sendButton)
     }
 
@@ -139,22 +127,15 @@ class ChatRoomViewController: UIViewController {
             make.height.equalTo(50)
         }
 
-//        textInputView.snp.makeConstraints { make in
-//            make.left.equalTo(30)
-//            make.right.equalTo(sendButton.snp.left).offset(-30)
-//            make.height.greaterThanOrEqualTo(40)
-//            make.bottom.equalTo(-5)
-//        }
-
-        textfield.snp.makeConstraints { make in
+        textInputView.snp.makeConstraints { make in
             make.left.equalTo(30)
             make.right.equalTo(sendButton.snp.left).offset(-30)
-            make.height.greaterThanOrEqualTo(40)
+            make.height.equalTo(40)
             make.bottom.equalTo(-5)
         }
 
         sendButton.snp.makeConstraints { make in
-            make.right.equalTo(view.snp.right).offset(-12)
+            make.right.equalTo(-12)
             make.bottom.equalTo(-5)
             make.width.height.equalTo(40)
         }
@@ -188,6 +169,7 @@ class ChatRoomViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(backgroundTap))
         self.view.addGestureRecognizer(tapGestureRecognizer)
+        self.keyboardDispatchGroup = DispatchGroup()
     }
 
     func fetchMessagesAndObserve() {
@@ -199,49 +181,62 @@ class ChatRoomViewController: UIViewController {
     }
 
     func scrollToBottom() {
-//        let bottomOffset = CGPoint(x: 0, y: tableView.contentSize.height - tableView.bounds.size.height)
-//        tableView.setContentOffset(bottomOffset, animated: false)
         if viewmodel?.messages.isEmpty == false {
             let indexPath = IndexPath(row: (viewmodel?.messages.count ?? 0) - 1, section: 0)
             tableView.scrollToRow(at: indexPath, at: .bottom, animated: false)
         }
     }
 
-
-
     // MARK: - Actions
     @objc func sendButtonAction() {
         guard let viewmodel = viewmodel else { return }
-        viewmodel.uploadMessage(message: textfield.text ?? "")
-        self.textfield.text = ""
+        viewmodel.uploadMessage(message: textInputView.text ?? "")
+        self.textInputView.text = ""
     }
+
     @objc func keyboardWillShow(notification: NSNotification) {
-        guard let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else {
+        keyboardDispatchGroup?.notify(queue: .main, execute: { [weak self] in
+            guard let self = self else { return }
 
-            // if keyboard size is not available for some reason, dont do anything
-           return
-        }
-
-        var shouldMoveViewUp = false
-
-        // if active text field is not nil
-        if let activeTextField = activeTextField {
-
-            let bottomOfTextField = activeTextField.convert(activeTextField.bounds, to: self.view).maxY;
-            let topOfKeyboard = self.view.frame.height - keyboardSize.height
-
-            if bottomOfTextField > topOfKeyboard {
-                shouldMoveViewUp = true
+            guard let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else {
+                // if keyboard size is not available for some reason, dont do anything
+                return
             }
-        }
+            var shouldMoveViewUp = false
 
-        if(shouldMoveViewUp) {
-            self.view.frame.origin.y = 0 - keyboardSize.height + tabbarHeight
-        }
+            // if active text field is not nil
+            if let activeTextField = self.activeTextView {
+
+                let bottomOfTextField = activeTextField.convert(activeTextField.bounds, to: self.view).maxY;
+                let topOfKeyboard = self.view.frame.height - keyboardSize.height
+
+                if bottomOfTextField > topOfKeyboard {
+                    shouldMoveViewUp = true
+                }
+            }
+
+            if(shouldMoveViewUp) {
+                let contentInsets = UIEdgeInsets(top: keyboardSize.height - self.navigationBarHeight - self.textInputView.frame.size.height, left: 0.0, bottom: 0.0, right: 0.0)
+
+                // Getting Default Keyboard Animation Config
+                let duration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as! Double
+                let curve = notification.userInfo![UIResponder.keyboardAnimationCurveUserInfoKey] as! UInt
+
+                UIView.animate(withDuration: duration, delay: 0.0, options: UIView.AnimationOptions(rawValue: curve), animations: {
+                    self.view.frame.origin.y = 0 - keyboardSize.height + self.tabbarHeight
+                    self.tableView.contentInset = contentInsets
+                    self.tableView.scrollIndicatorInsets = contentInsets
+                })
+            }
+        })
     }
 
     @objc func keyboardWillHide(notification: NSNotification) {
         self.view.frame.origin.y = 0
+        let contentInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0 , right: 0.0)
+
+        self.tableView.contentInset = contentInsets
+        self.tableView.scrollIndicatorInsets = contentInsets
     }
 
     @objc func backgroundTap(_ sender: UITapGestureRecognizer) {
@@ -249,9 +244,6 @@ class ChatRoomViewController: UIViewController {
         // ie. it will trigger a keyboardWillHide notification
         self.view.endEditing(true)
     }
-
-
-
 }
 
 // MARK: UITableViewDataSource
@@ -264,7 +256,6 @@ extension ChatRoomViewController: UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        return 50
         return viewmodel?.messages.count ?? 0
     }
 }
@@ -276,15 +267,50 @@ extension ChatRoomViewController: UITableViewDelegate {
     }
 }
 
-extension ChatRoomViewController: UITextViewDelegate, UITextFieldDelegate {
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        self.activeTextField = textField
+// MARK: UITextViewDelegate
+extension ChatRoomViewController: UITextViewDelegate {
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        keyboardDispatchGroup?.enter()
+        self.activeTextView = textView
+        keyboardDispatchGroup?.leave()
+        textViewDidChange(textView)
     }
 
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        self.activeTextField = nil
+    func textViewDidEndEditing(_ textView: UITextView) {
+        self.activeTextView = nil
+    }
+
+    func textViewDidChange(_ textView: UITextView) {
+        var textInputViewWidth: CGFloat = 0
+
+        textView.constraints.forEach { constraint in
+            if constraint.firstAttribute == .width {
+                textInputViewWidth = constraint.constant
+            }
+        }
+        let size = CGSize(width: textInputViewWidth, height: .infinity)
+        let estimatedSize = textView.sizeThatFits(size)
+
+        textView.constraints.forEach { constraint in
+            if constraint.firstAttribute == .height {
+                constraint.constant = estimatedSize.height
+            }
+        }
+        self.bottomView.constraints.forEach { constraint in
+            if constraint.firstAttribute == .height {
+                constraint.constant = estimatedSize.height + 10
+            }
+        }
+        var notNullOrEmptyString = false
+        for item in textView.text {
+            if item != " " {
+                notNullOrEmptyString = true
+            }
+        }
+        sendButton.isEnabled = notNullOrEmptyString && textView.text != ""
     }
 }
+
 // MARK: - ChatRoomViewModelDelegate
 extension ChatRoomViewController: ChatRoomViewModelDelegate {
     func didChangeDataSource() {
