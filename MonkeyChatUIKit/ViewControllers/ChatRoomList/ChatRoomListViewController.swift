@@ -111,7 +111,7 @@ class ChatRoomListViewController: UIViewController {
         if viewModel.chatRooms.count == 0 {
             emptyLabel.isHidden = false
         } else {
-            emptyLabel.isHidden = false
+            emptyLabel.isHidden = true
         }
     }
 

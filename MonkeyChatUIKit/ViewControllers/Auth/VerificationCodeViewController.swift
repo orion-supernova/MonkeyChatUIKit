@@ -10,6 +10,13 @@ import UIKit
 class VerificationCodeViewController: UIViewController {
 
     //MARK: - UI Elements
+    private let verificationInfoLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Please Enter Your Verification Code"
+        label.textAlignment = .center
+        return label
+    }()
+
     private let verificationCodeTextField: UITextField = {
         let textField = UITextField()
         textField.placeholder = "Verification Code"
@@ -39,9 +46,16 @@ class VerificationCodeViewController: UIViewController {
     //MARK: - Setup
     func setup() {
         view.addSubview(verificationCodeTextField)
+        view.addSubview(verificationInfoLabel)
     }
 
     func layout() {
+        verificationInfoLabel.snp.makeConstraints { make in
+            make.centerY.equalToSuperview().offset(-200)
+            make.width.equalToSuperview()
+            make.height.equalTo(40)
+        }
+
         verificationCodeTextField.snp.makeConstraints { make in
             make.centerY.equalToSuperview().offset(-100)
             make.width.equalToSuperview()
@@ -60,11 +74,16 @@ class VerificationCodeViewController: UIViewController {
             LottieHUD.shared.show()
             guard let smsCode = self.verificationCodeTextField.text else { return }
             AuthManager.shared.verifyCodeAndSignIn(smsCode: smsCode) { [weak self] success in
+                guard let self = self else { return }
                 guard success else {
-                    AlertHelper.alertMessage(title: "Error", message: "Please try again later.", okButtonText: "OK")
+                    LottieHUD.shared.dismiss()
+                    DispatchQueue.main.async {
+                        AlertHelper.alertMessage(viewController: self, title: "Error", message: "Please check your code or try again later.") {
+                            //
+                        }
+                    }
                     return
                 }
-                guard let self = self else { return }
                 self.configureLoginView { tabBar in
                     let tabController = tabBar
                     tabController.modalPresentationStyle = .fullScreen
