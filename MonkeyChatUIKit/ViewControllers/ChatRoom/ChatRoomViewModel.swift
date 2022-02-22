@@ -43,7 +43,7 @@ class ChatRoomViewModel {
 
     func getLastMessage(completion: @escaping(() -> Void)) {
         guard let chatroomID = chatroom.id else { return }
-        COLLECTION_CHATROOMS.document(chatroomID).collection("chatroom-messages").order(by: "timestamp", descending: false).getDocuments { snapshot, error in
+        COLLECTION_CHATROOMS.document(chatroomID).collection("chatroom-messages").order(by: "timestamp", descending: false).addSnapshotListener { snapshot, error in
             guard error == nil else { print(error!.localizedDescription); return }
             guard let addedDocs = snapshot?.documentChanges.filter({ $0.type == .added }) else { return }
             self.lastMessage = addedDocs.compactMap({ try? $0.document.data(as: Message.self) }).last
@@ -52,6 +52,7 @@ class ChatRoomViewModel {
     }
 
     func uploadMessage(message: String) {
+        let sender = PushNotificationSender()
         guard let chatroomID = chatroom.id else { return }
 
         let data = ["message": message,
@@ -62,8 +63,16 @@ class ChatRoomViewModel {
                 AlertHelper.alertMessage(title: "Failed to send message!", message: error?.localizedDescription ?? "", okButtonText: "OK")
                 print("Failed to upload message. \(error!.localizedDescription)")
             }
-            let sender = PushNotificationSender()
-            sender.sendPushNotification(to: "/topics/newMessages", title: "\(self?.chatroom.name ?? "")", body: "\(message)")
+            COLLECTION_CHATROOMS.document(chatroomID).collection("userIDs").getDocuments { snapshot, error in
+                guard let documents = snapshot?.documents else { return }
+                var fcmTokenForThisChatRoom = [String]()
+                for document in documents {
+                    fcmTokenForThisChatRoom.append(document.get("fcmToken") as? String ?? "")
+                }
+                for token in fcmTokenForThisChatRoom {
+                    sender.sendPushNotification(to: token, title: "\(self?.chatroom.name ?? "")", body: "\(message)")
+                }
+            }
         }
     }
 }

@@ -81,9 +81,13 @@ class ChatRoomListViewModel {
                     return
                 }
                 guard let foundRoomID = foundRoom["roomID"] as? String else { return }
+                guard let fcmToken = AppGlobal.shared.fcmToken else { return }
+
+                let userDataWithFcmToken = ["userID": userID,
+                                            "fcmToken": fcmToken] as [String: Any]
 
                 if roomPassword == foundRoom["password"] as? String {
-                    COLLECTION_CHATROOMS.document(roomID).collection("userIDs").document(userID).setData([:], completion: { error in
+                    COLLECTION_CHATROOMS.document(roomID).collection("userIDs").document(userID).setData(userDataWithFcmToken) { error in
                         guard error == nil else { return }
 
                         let data = ["name": foundRoom["name"] ?? "",
@@ -98,7 +102,7 @@ class ChatRoomListViewModel {
                                 print("DEBUG: ENTERED ROOM \(foundRoomID)")
                             }
                         }
-                    })
+                    }
                 } else {
                     AlertHelper.alertMessage(title: "ERROR", message: "Invalid Room Password", okButtonText: "OK")
                 }
@@ -143,7 +147,11 @@ class ChatRoomListViewModel {
                 guard error == nil else { return }
 
                 guard let userID = AppGlobal.shared.userID else { return }
-                COLLECTION_CHATROOMS.document(roomID).collection("userIDs").document(userID).setData([:]) { error in
+                guard let fcmToken = AppGlobal.shared.fcmToken else { return }
+
+                let userDataWithFcmToken = ["userID": userID,
+                                            "fcmToken": fcmToken] as [String: Any]
+                COLLECTION_CHATROOMS.document(roomID).collection("userIDs").document(userID).setData(userDataWithFcmToken) { error in
                     guard error == nil else { return }
                     let chatRoomdataInUserList = data
                     COLLECTION_USERS.document(userID).collection("chatRooms").document(roomID).setData(chatRoomdataInUserList) { error in

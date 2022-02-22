@@ -28,4 +28,12 @@ class AppGlobal {
             UserDefaults.standard.set(newValue, forKey: "userID")
         }
     }
+    var fcmToken: String? {
+        get {
+            return UserDefaults.standard.value(forKey: "fcmToken") as? String
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: "fcmToken")
+        }
+    }
 }
