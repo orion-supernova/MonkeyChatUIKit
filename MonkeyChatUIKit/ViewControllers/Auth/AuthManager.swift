@@ -7,6 +7,7 @@
 
 import Foundation
 import FirebaseAuth
+import Firebase
 
 class AuthManager {
     static let shared = AuthManager()
@@ -28,6 +29,13 @@ class AuthManager {
         Auth.auth().signIn(with: credential) { result, error in
             guard result != nil, error == nil else { completion(false); return}
             AppGlobal.shared.userID = Auth.auth().currentUser?.uid
+            guard let id = AppGlobal.shared.userID else { return }
+
+            let data = ["username": "",
+                        "uid": id]
+            COLLECTION_USERS.document(id).setData(data) { error in
+                print("Sucessfully uploaded user data!")
+            }
             completion(true)
         }
     }
