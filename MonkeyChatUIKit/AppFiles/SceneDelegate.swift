@@ -96,5 +96,10 @@ extension SceneDelegate: UNUserNotificationCenterDelegate {
 
         completionHandler()
     }
+
+    //MARK: - Foreground Notifications
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification) async -> UNNotificationPresentationOptions {
+        return [.alert, .badge, .sound]
+    }
 }
 
