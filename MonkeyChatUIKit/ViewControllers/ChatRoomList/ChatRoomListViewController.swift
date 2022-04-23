@@ -12,7 +12,7 @@ class ChatRoomListViewController: UIViewController {
 
     private let emptyLabel: UILabel = {
         let emptyLabel = UILabel()
-        emptyLabel.text = "You don't have any private booth yet."
+        emptyLabel.text = "You don't have any private room yet."
         emptyLabel.textAlignment = .center
         emptyLabel.font = .systemFont(ofSize: 20)
         emptyLabel.textColor = .secondaryLabel
@@ -87,7 +87,13 @@ class ChatRoomListViewController: UIViewController {
 
         let userSessionLabel : UILabel = {
             let label = UILabel()
-            label.text = "Your username: \(AppGlobal.shared.username ?? "")"
+            var username = ""
+            if let usernameTemp = AppGlobal.shared.username {
+                username = (usernameTemp == "" ? "Anonymous" : usernameTemp)
+            } else {
+                username = "Anonymous"
+            }
+            label.text = "Your username: \(username)"
             label.numberOfLines = 0
             label.lineBreakMode = .byWordWrapping
             label.font = .systemFont(ofSize: 10)

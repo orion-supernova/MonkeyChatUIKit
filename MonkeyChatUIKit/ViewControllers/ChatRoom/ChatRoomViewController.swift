@@ -20,7 +20,7 @@ class ChatRoomViewController: UIViewController {
     private let textInputView: UITextView = {
         let textView = UITextView()
         textView.font = UIFont.systemFont(ofSize: 17)
-        textView.isScrollEnabled = false
+//        textView.isScrollEnabled = false
         textView.autocorrectionType = .no
         textView.autocapitalizationType = .none
         textView.layer.cornerRadius = 10
@@ -69,6 +69,7 @@ class ChatRoomViewController: UIViewController {
     deinit {
         NotificationCenter.default.removeObserver(UIResponder.keyboardWillHideNotification)
         NotificationCenter.default.removeObserver(UIResponder.keyboardWillChangeFrameNotification)
+        NotificationCenter.default.removeObserver(UIApplication.didEnterBackgroundNotification)
     }
 
     override func viewDidLoad() {
@@ -167,6 +168,7 @@ class ChatRoomViewController: UIViewController {
     func addObservers() {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(appEnteredBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(backgroundTap))
         self.view.addGestureRecognizer(tapGestureRecognizer)
         self.keyboardDispatchGroup = DispatchGroup()
@@ -244,14 +246,18 @@ class ChatRoomViewController: UIViewController {
         // ie. it will trigger a keyboardWillHide notification
         self.view.endEditing(true)
     }
+
+    @objc func appEnteredBackground() {
+        view.endEditing(true)
+    }
 }
 
 // MARK: UITableViewDataSource
 extension ChatRoomViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "MessageTableViewCell", for: indexPath) as? MessageTableViewCell else { return UITableViewCell() }
-        cell.textLabel?.text = viewmodel?.messages[indexPath.row].message
-        cell.textLabel?.numberOfLines = 0
+        guard let message = viewmodel?.messages[indexPath.row] else { return UITableViewCell() }
+        cell.configureCell(message: message)
         return cell
     }
 
@@ -281,26 +287,26 @@ extension ChatRoomViewController: UITextViewDelegate {
     }
 
     func textViewDidChange(_ textView: UITextView) {
-        var textInputViewWidth: CGFloat = 0
-
-        textView.constraints.forEach { constraint in
-            if constraint.firstAttribute == .width {
-                textInputViewWidth = constraint.constant
-            }
-        }
-        let size = CGSize(width: textInputViewWidth, height: .infinity)
-        let estimatedSize = textView.sizeThatFits(size)
-
-        textView.constraints.forEach { constraint in
-            if constraint.firstAttribute == .height {
-                constraint.constant = estimatedSize.height
-            }
-        }
-        self.bottomView.constraints.forEach { constraint in
-            if constraint.firstAttribute == .height {
-                constraint.constant = estimatedSize.height + 10
-            }
-        }
+//        var textInputViewWidth: CGFloat = 0
+//
+//        textView.constraints.forEach { constraint in
+//            if constraint.firstAttribute == .width {
+//                textInputViewWidth = constraint.constant
+//            }
+//        }
+//        let size = CGSize(width: textInputViewWidth, height: .infinity)
+//        let estimatedSize = textView.sizeThatFits(size)
+//
+//        textView.constraints.forEach { constraint in
+//            if constraint.firstAttribute == .height {
+//                constraint.constant = estimatedSize.height
+//            }
+//        }
+//        self.bottomView.constraints.forEach { constraint in
+//            if constraint.firstAttribute == .height {
+//                constraint.constant = estimatedSize.height + 10
+//            }
+//        }
         var notNullOrEmptyString = false
         for item in textView.text {
             if item != " " {

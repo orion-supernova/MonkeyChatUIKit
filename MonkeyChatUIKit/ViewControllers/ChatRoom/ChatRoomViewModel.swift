@@ -55,7 +55,8 @@ class ChatRoomViewModel {
         let sender = PushNotificationSender()
         guard let chatroomID = chatroom.id else { return }
 
-        let data = ["message": message,
+        let data = ["senderName": AppGlobal.shared.username ?? "",
+                    "message": message,
                     "timestamp": Timestamp(date: Date())] as [String: Any]
 
         COLLECTION_CHATROOMS.document(chatroomID).collection("chatroom-messages").addDocument(data: data) { [weak self] error in

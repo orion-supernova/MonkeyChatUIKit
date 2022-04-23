@@ -22,15 +22,19 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         //MARK: Setup Logged In UI
         let tabController = UITabBarController()
+//        let vc0 = UINavigationController(rootViewController: MonkeyListViewController())
         let vc1 = UINavigationController(rootViewController: ChatRoomListViewController())
         let vc2 = UINavigationController(rootViewController: SettingsViewController())
-        tabController.viewControllers = [vc1, vc2]
+        tabController.viewControllers = [/*vc0,*/ vc1, vc2]
+        tabController.selectedIndex = 0
         tabController.tabBar.tintColor = .systemPink
 
+//        vc0.tabBarItem.image = UIImage(systemName: "person.crop.circle")
         vc1.tabBarItem.image = UIImage(systemName: "list.bullet")
         vc2.tabBarItem.image = UIImage(systemName: "gear")
 
-        vc1.title = "MonkeyList"
+//        vc0.title = "MonkeyList"
+        vc1.title = "ChatList"
         vc2.title = "Settings"
 
         //MARK: Check For Auth & Navigate
@@ -99,7 +103,12 @@ extension SceneDelegate: UNUserNotificationCenterDelegate {
 
     //MARK: - Foreground Notifications
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification) async -> UNNotificationPresentationOptions {
-        return [.alert, .badge, .sound]
+        guard let apnsDict = notification.request.content.userInfo as? [String: Any] else { return [.badge] }
+        if apnsDict["user"] as? String != AppGlobal.shared.userID {
+            return [.alert, .badge, .sound]
+        } else {
+            return [.badge]
+        }
     }
 }
 

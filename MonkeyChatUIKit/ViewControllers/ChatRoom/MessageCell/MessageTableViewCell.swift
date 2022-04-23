@@ -6,21 +6,66 @@
 //
 
 import UIKit
+import SnapKit
 
 class MessageTableViewCell: UITableViewCell {
 
-    private let messageLabel: UILabel = {
+    private let usernameLabel: UILabel = {
         let label = UILabel()
-        label.text = ""
+        label.text = "username"
+        label.font = .systemFont(ofSize: 10, weight: .bold)
+        label.textColor = .secondaryLabel
         return label
     }()
 
-    override func awakeFromNib() {
-        super.awakeFromNib()
+    private let messageLabel: UILabel = {
+        let label = UILabel()
+        label.text = "message"
+        label.numberOfLines = 0
+        label.font = .systemFont(ofSize: 15, weight: .regular)
+        return label
+    }()
+
+
+    // MARK: - Lifecycle
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        setup()
+        layout()
+    }
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    //MARK: - Setup & Layout
+    func setup() {
+        contentView.addSubview(usernameLabel)
         contentView.addSubview(messageLabel)
-        messageLabel.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+    }
+
+    func layout() {
+        usernameLabel.snp.makeConstraints { make in
+            make.top.equalTo(5)
+            make.left.equalTo(5)
+            make.right.equalTo(-5)
+            make.height.equalTo(15)
         }
+        messageLabel.snp.makeConstraints { make in
+            make.top.equalTo(usernameLabel.snp.bottom).offset(2)
+            make.left.equalTo(5)
+            make.right.equalTo(-5)
+            make.bottom.equalTo(-5)
+        }
+    }
+
+    // MARK: - Functions
+    func configureCell(message: Message) {
+        if message.senderName == "" || message.senderName == nil{
+            usernameLabel.text = "Anonymous"
+        } else {
+            usernameLabel.text = message.senderName
+        }
+        self.messageLabel.text = message.message
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

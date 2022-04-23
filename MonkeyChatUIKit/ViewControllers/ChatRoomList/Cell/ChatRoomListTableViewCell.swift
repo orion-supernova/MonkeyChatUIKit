@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 
 class ChatRoomListTableViewCell: UITableViewCell {
 
@@ -14,6 +15,15 @@ class ChatRoomListTableViewCell: UITableViewCell {
         let label = UILabel()
         label.text = "Room: Hebele"
         label.font = .systemFont(ofSize: 15, weight: .bold)
+        label.numberOfLines = 0
+        return label
+    }()
+
+    private let chatRoomLastMessageSenderNameLabel: UILabel = {
+        let label = UILabel()
+        label.text = ""
+        label.font = .systemFont(ofSize: 10, weight: .regular)
+        label.numberOfLines = 0
         return label
     }()
 
@@ -21,6 +31,7 @@ class ChatRoomListTableViewCell: UITableViewCell {
         let label = UILabel()
         label.text = ""
         label.font = .systemFont(ofSize: 13, weight: .regular)
+        label.numberOfLines = 0
         label.textColor = .secondaryLabel
         return label
     }()
@@ -41,20 +52,30 @@ class ChatRoomListTableViewCell: UITableViewCell {
     // MARK: - Setup
     func setup() {
         contentView.addSubview(chatRoomNameLabel)
+        contentView.addSubview(chatRoomLastMessageSenderNameLabel)
         contentView.addSubview(chatRoomLastMessageLabel)
     }
 
     func layout() {
         chatRoomNameLabel.snp.makeConstraints { make in
-            make.top.equalTo(5)
-            make.left.equalTo(10)
+            make.top.left.equalTo(5)
+            make.right.equalTo(-5)
             make.height.greaterThanOrEqualTo(20)
         }
-        chatRoomLastMessageLabel.snp.makeConstraints { make in
+
+        chatRoomLastMessageSenderNameLabel.snp.makeConstraints { make in
             make.top.equalTo(chatRoomNameLabel.snp.bottom).offset(2)
-            make.left.equalTo(10)
-            make.height.greaterThanOrEqualTo(15)
-            make.bottom.equalToSuperview()
+            make.left.equalTo(5)
+            make.right.equalTo(-5)
+            make.height.greaterThanOrEqualTo(12)
+        }
+
+        chatRoomLastMessageLabel.snp.makeConstraints { make in
+            make.top.equalTo(chatRoomLastMessageSenderNameLabel.snp.bottom).offset(2)
+            make.left.equalTo(5)
+            make.right.equalTo(-5)
+            make.bottom.equalTo(-5)
+            make.height.greaterThanOrEqualTo(20)
         }
     }
 
@@ -63,7 +84,21 @@ class ChatRoomListTableViewCell: UITableViewCell {
         let viewmodel = ChatRoomViewModel(chatroom: chatRoom)
         self.chatRoomNameLabel.text = chatRoom.name
         viewmodel.getLastMessage {
-            self.chatRoomLastMessageLabel.text = viewmodel.lastMessage?.message
+            if viewmodel.lastMessage?.message == "" || viewmodel.lastMessage?.message == nil {
+                self.chatRoomLastMessageSenderNameLabel.text = ""
+                self.chatRoomLastMessageLabel.text = "No messages here yet"
+            } else {
+                if let senderName = viewmodel.lastMessage?.senderName {
+                    if senderName == "" {
+                        self.chatRoomLastMessageSenderNameLabel.text = "Anonymous"
+                    } else {
+                        self.chatRoomLastMessageSenderNameLabel.text = senderName == AppGlobal.shared.username ? "You" : senderName
+                    }
+                } else {
+                    self.chatRoomLastMessageSenderNameLabel.text = "Anonymous"
+                }
+                self.chatRoomLastMessageLabel.text = viewmodel.lastMessage?.message
+            }
         }
     }
 }

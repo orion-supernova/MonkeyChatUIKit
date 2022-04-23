@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		541DBA6127DF772A00A3A920 /* MonkeyListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 541DBA6027DF772A00A3A920 /* MonkeyListViewController.swift */; };
+		541DBA6327DF7B1000A3A920 /* MonkeyListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 541DBA6227DF7B1000A3A920 /* MonkeyListViewModel.swift */; };
 		545FFC6F27BC4C17008CC1ED /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545FFC6E27BC4C17008CC1ED /* AppDelegate.swift */; };
 		545FFC7127BC4C17008CC1ED /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545FFC7027BC4C17008CC1ED /* SceneDelegate.swift */; };
 		545FFC7327BC4C17008CC1ED /* ChatRoomListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545FFC7227BC4C17008CC1ED /* ChatRoomListViewController.swift */; };
@@ -50,6 +52,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		541DBA6027DF772A00A3A920 /* MonkeyListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonkeyListViewController.swift; sourceTree = "<group>"; };
+		541DBA6227DF7B1000A3A920 /* MonkeyListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonkeyListViewModel.swift; sourceTree = "<group>"; };
 		545FFC6B27BC4C17008CC1ED /* MonkeyChatUIKit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MonkeyChatUIKit.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		545FFC6E27BC4C17008CC1ED /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		545FFC7027BC4C17008CC1ED /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -106,6 +110,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		541DBA5F27DF761500A3A920 /* MonkeyList */ = {
+			isa = PBXGroup;
+			children = (
+				541DBA6027DF772A00A3A920 /* MonkeyListViewController.swift */,
+				541DBA6227DF7B1000A3A920 /* MonkeyListViewModel.swift */,
+			);
+			path = MonkeyList;
+			sourceTree = "<group>";
+		};
 		545FFC6227BC4C17008CC1ED = {
 			isa = PBXGroup;
 			children = (
@@ -157,6 +170,7 @@
 			isa = PBXGroup;
 			children = (
 				54664F5227C2E21000F94482 /* Auth */,
+				541DBA5F27DF761500A3A920 /* MonkeyList */,
 				545FFCA127BD0073008CC1ED /* ChatRoomList */,
 				54F2336627BD3C0400E9FD28 /* ChatRoom */,
 			);
@@ -367,6 +381,7 @@
 				54F2336F27BD635900E9FD28 /* ChatRoomViewModel.swift in Sources */,
 				545FFC8A27BC5149008CC1ED /* ChatRoom.swift in Sources */,
 				547D252E27C2EADF005D98B8 /* AuthViewController.swift in Sources */,
+				541DBA6127DF772A00A3A920 /* MonkeyListViewController.swift in Sources */,
 				54F2337227BD68C400E9FD28 /* MessageTableViewCell.swift in Sources */,
 				545FFC8D27BC5B72008CC1ED /* AlertHelper.swift in Sources */,
 				547D254127C4EED2005D98B8 /* ChatRoomNotificationsManager.swift in Sources */,
@@ -374,6 +389,7 @@
 				545FFC7127BC4C17008CC1ED /* SceneDelegate.swift in Sources */,
 				54664F4F27C2DC8300F94482 /* SensitiveData.swift in Sources */,
 				545FFC9E27BCFB05008CC1ED /* Message.swift in Sources */,
+				541DBA6327DF7B1000A3A920 /* MonkeyListViewModel.swift in Sources */,
 				545FFCA027BCFF9F008CC1ED /* Constants.swift in Sources */,
 				547D253D27C42F2D005D98B8 /* AppGlobal.swift in Sources */,
 				547D253F27C43459005D98B8 /* UsernameViewController.swift in Sources */,
@@ -532,7 +548,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = MonkeyChatUIKit/MonkeyChatUIKit.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = 37TC2VKVJ6;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MonkeyChatUIKit/Info.plist;
@@ -564,7 +580,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = MonkeyChatUIKit/MonkeyChatUIKit.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = 37TC2VKVJ6;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MonkeyChatUIKit/Info.plist;

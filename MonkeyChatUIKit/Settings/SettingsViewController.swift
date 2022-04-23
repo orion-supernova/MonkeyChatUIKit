@@ -78,12 +78,14 @@ class SettingsViewController: UIViewController {
 
     // MARK: - Actions
     @objc func logoutAction() {
-        LottieHUD.shared.show()
-        AuthManager.shared.signOut {
-            let viewController = AuthViewController()
-            viewController.modalPresentationStyle = .fullScreen
-            self.present(viewController, animated: true, completion: nil)
-            LottieHUD.shared.dismiss()
+        AlertHelper.alertMessage(viewController: self, title: "Logout", message: "Do you want to logout from MonkeyChat?") {
+            LottieHUD.shared.show()
+            AuthManager.shared.signOut {
+                let viewController = AuthViewController()
+                viewController.modalPresentationStyle = .fullScreen
+                self.present(viewController, animated: true, completion: nil)
+                LottieHUD.shared.dismiss()
+            }
         }
     }
 
