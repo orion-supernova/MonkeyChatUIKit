@@ -25,6 +25,12 @@ class VerificationCodeViewController: UIViewController {
         return textField
     }()
 
+    private lazy var verificationCodeView: OTPStackView = {
+        let view = OTPStackView()
+        view.delegate = self
+        return view
+    }()
+
     //MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,8 +51,8 @@ class VerificationCodeViewController: UIViewController {
 
     //MARK: - Setup
     func setup() {
-        view.addSubview(verificationCodeTextField)
         view.addSubview(verificationInfoLabel)
+        view.addSubview(verificationCodeView)
     }
 
     func layout() {
@@ -56,10 +62,10 @@ class VerificationCodeViewController: UIViewController {
             make.height.equalTo(40)
         }
 
-        verificationCodeTextField.snp.makeConstraints { make in
+        verificationCodeView.snp.makeConstraints { make in
             make.centerY.equalToSuperview().offset(-100)
             make.width.equalToSuperview()
-            make.height.equalTo(40)
+            make.height.equalTo(50)
         }
     }
 
@@ -68,28 +74,24 @@ class VerificationCodeViewController: UIViewController {
     }
 
     //MARK: - Actions
-    @objc func verifyCode() {
-        if verificationCodeTextField.text?.count == 6 {
-            verificationCodeTextField.endEditing(true)
-            LottieHUD.shared.show()
-            guard let smsCode = self.verificationCodeTextField.text else { return }
-            AuthManager.shared.verifyCodeAndSignIn(smsCode: smsCode) { [weak self] success in
-                guard let self = self else { return }
-                guard success else {
-                    LottieHUD.shared.dismiss()
-                    DispatchQueue.main.async {
-                        AlertHelper.alertMessage(viewController: self, title: "Error", message: "Please check your code or try again later.") {
-                            //
-                        }
+    @objc func verifyCode(with code: String) {
+        LottieHUD.shared.show()
+        AuthManager.shared.verifyCodeAndSignIn(smsCode: code) { [weak self] success in
+            guard let self = self else { return }
+            guard success else {
+                LottieHUD.shared.dismiss()
+                DispatchQueue.main.async {
+                    AlertHelper.simpleAlertMessage(viewController: self, title: "Error", message: "Please check your code or try again later.") {
+                        self.verificationCodeView.resetOTPString()
                     }
-                    return
                 }
-                self.configureLoginView { tabBar in
-                    let tabController = tabBar
-                    tabController.modalPresentationStyle = .fullScreen
-                    self.present(tabController, animated: true, completion: nil)
-                    LottieHUD.shared.dismiss()
-                }
+                return
+            }
+            self.configureLoginView { tabBar in
+                let tabController = tabBar
+                tabController.modalPresentationStyle = .fullScreen
+                self.present(tabController, animated: true, completion: nil)
+                LottieHUD.shared.dismiss()
             }
         }
     }
@@ -132,5 +134,10 @@ extension VerificationCodeViewController: UITextFieldDelegate {
         // make sure the result is under 16 characters
         return updatedText.count <= 6
     }
+}
 
+extension VerificationCodeViewController: OTPDelegate {
+    func didStartRequestWith(OTP: String) {
+        verifyCode(with: OTP)
+    }
 }

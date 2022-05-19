@@ -11,6 +11,7 @@
 		5404033E2836768400FF58D8 /* Country.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5404033D2836768400FF58D8 /* Country.swift */; };
 		540403412836796300FF58D8 /* CountryCodeHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 540403402836796300FF58D8 /* CountryCodeHelper.swift */; };
 		54040343283689AA00FF58D8 /* UIColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54040342283689AA00FF58D8 /* UIColorExtension.swift */; };
+		540403452836946500FF58D8 /* OTPStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 540403442836946500FF58D8 /* OTPStackView.swift */; };
 		541DBA6127DF772A00A3A920 /* MonkeyListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 541DBA6027DF772A00A3A920 /* MonkeyListViewController.swift */; };
 		541DBA6327DF7B1000A3A920 /* MonkeyListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 541DBA6227DF7B1000A3A920 /* MonkeyListViewModel.swift */; };
 		545FFC6F27BC4C17008CC1ED /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545FFC6E27BC4C17008CC1ED /* AppDelegate.swift */; };
@@ -62,6 +63,7 @@
 		5404033D2836768400FF58D8 /* Country.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Country.swift; sourceTree = "<group>"; };
 		540403402836796300FF58D8 /* CountryCodeHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryCodeHelper.swift; sourceTree = "<group>"; };
 		54040342283689AA00FF58D8 /* UIColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorExtension.swift; sourceTree = "<group>"; };
+		540403442836946500FF58D8 /* OTPStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OTPStackView.swift; sourceTree = "<group>"; };
 		541DBA6027DF772A00A3A920 /* MonkeyListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonkeyListViewController.swift; sourceTree = "<group>"; };
 		541DBA6227DF7B1000A3A920 /* MonkeyListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonkeyListViewModel.swift; sourceTree = "<group>"; };
 		545FFC6B27BC4C17008CC1ED /* MonkeyChatUIKit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MonkeyChatUIKit.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -254,6 +256,7 @@
 				547D252D27C2EADF005D98B8 /* AuthViewController.swift */,
 				5404033B28366BD300FF58D8 /* CountryCodeSelectionView.swift */,
 				547D253127C3E786005D98B8 /* VerificationCodeViewController.swift */,
+				540403442836946500FF58D8 /* OTPStackView.swift */,
 				547D252F27C3DD92005D98B8 /* AuthManager.swift */,
 				5404033F283676D900FF58D8 /* Models */,
 			);
@@ -428,6 +431,7 @@
 				547D253427C3EF4D005D98B8 /* LottieHUD.swift in Sources */,
 				5404033E2836768400FF58D8 /* Country.swift in Sources */,
 				547D253027C3DD92005D98B8 /* AuthManager.swift in Sources */,
+				540403452836946500FF58D8 /* OTPStackView.swift in Sources */,
 				54F2336C27BD44F900E9FD28 /* SettingsViewController.swift in Sources */,
 				548BC3B527C04F8400CBC6EA /* SettingsViewModel.swift in Sources */,
 			);
