@@ -14,8 +14,9 @@ class SettingsViewController: UIViewController {
     private let tableView: UITableView = {
         let tableView = UITableView()
         tableView.tableFooterView = UIView()
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Username")
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Logout")
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Account")
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "PrivacySecurity")
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Hehe")
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 44
         return tableView
@@ -27,25 +28,6 @@ class SettingsViewController: UIViewController {
         return imageView
     }()
 
-    private let usernameTextField: UITextField = {
-        let textField = UITextField()
-        textField.placeholder = "Username"
-        textField.textAlignment = .center
-        textField.returnKeyType = .done
-        return textField
-    }()
-
-    private let logoutButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setTitle("Logout", for: .normal)
-        button.tintColor = .systemPink
-        button.addTarget(self, action: #selector(logoutAction), for: .touchUpInside)
-        return button
-    }()
-
-    // MARK: - Private Properties
-    let viewmodel = SettingsViewModel()
-
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,12 +35,12 @@ class SettingsViewController: UIViewController {
         setup()
         layout()
         setDelegates()
-        addObservers()
     }
 
     override func viewDidLayoutSubviews() {
         self.title = "Settings"
         view.backgroundColor = .systemBackground
+        navigationController?.navigationBar.tintColor = .systemPink
     }
 
     // MARK: - Setup
@@ -72,58 +54,11 @@ class SettingsViewController: UIViewController {
         }
     }
 
-    func addObservers() {
-        NotificationCenter.default.addObserver(self, selector: #selector(reloadTableView), name: NSNotification.Name("reloadTableView"), object: nil)
-    }
-
-    // MARK: - Actions
-    @objc func logoutAction() {
-        AlertHelper.alertMessage(viewController: self, title: "Logout", message: "Do you want to logout from MonkeyChat?") {
-            LottieHUD.shared.show()
-            AuthManager.shared.signOut {
-                let viewController = AuthViewController()
-                viewController.modalPresentationStyle = .fullScreen
-                self.present(viewController, animated: true, completion: nil)
-                LottieHUD.shared.dismiss()
-            }
-        }
-    }
-
-    @objc func reloadTableView() {
-        tableView.reloadData()
-    }
-
-    //MARK: - Functions
+    // MARK: - Functions
     func setDelegates() {
         tableView.delegate = self
         tableView.dataSource = self
     }
-}
-
-//MARK: - UITextFieldDelegate
-extension SettingsViewController: UITextFieldDelegate {
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        if textField == usernameTextField {
-            guard let username = textField.text else { return false }
-            viewmodel.changeUsername(username: username)
-        }
-        return true
-    }
-
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        // get the current text, or use an empty string if that failed
-        let currentText = textField.text ?? ""
-
-        // attempt to read the range they are trying to change, or exit if we can't
-        guard let stringRange = Range(range, in: currentText) else { return false }
-
-        // add their new text to the existing text
-        let updatedText = currentText.replacingCharacters(in: stringRange, with: string)
-
-        // make sure the result is under 16 characters
-        return updatedText.count <= 13
-    }
-
 }
 
 // MARK: - UITableViewDelegate
@@ -132,12 +67,19 @@ extension SettingsViewController: UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
 
         if indexPath.row == 0 {
-            let vc = UsernameViewController()
-            vc.title = "Edit Profile"
+            let vc = AccountViewController()
+            vc.title = "Account"
             vc.navigationItem.largeTitleDisplayMode = .never
             navigationController?.pushViewController(vc, animated: true)
         } else if indexPath.row == 1 {
-            logoutAction()
+            let vc = PrivacySecurityViewController()
+            vc.title = "Privacy & Security"
+            vc.navigationItem.largeTitleDisplayMode = .never
+            navigationController?.pushViewController(vc, animated: true)
+        } else if indexPath.row == 2 {
+            AlertHelper.alertMessage(viewController: self, title: "Hehe", message: "Hehe") {
+                //
+            }
         }
     }
 }
@@ -146,27 +88,30 @@ extension SettingsViewController: UITableViewDelegate {
 // MARK: - UITableViewDelegate
 extension SettingsViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 2
+        return 3
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.row  == 0 {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "Username", for: indexPath)
-            cell.textLabel?.text = "Username: \(AppGlobal.shared.username ?? "")"
+            let cell = tableView.dequeueReusableCell(withIdentifier: "Account", for: indexPath)
+            cell.textLabel?.text = "Account"
             cell.textLabel?.textAlignment = .center
             cell.textLabel?.textColor = .systemGray
             return cell
-
         } else if indexPath.row == 1 {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "Logout", for: indexPath)
-            cell.textLabel?.text = "Logout"
+            let cell = tableView.dequeueReusableCell(withIdentifier: "PrivacySecurity", for: indexPath)
+            cell.textLabel?.text = "Privacy & Security"
             cell.textLabel?.textAlignment = .center
-            cell.textLabel?.textColor = .red
+            cell.textLabel?.textColor = .systemGray
+            return cell
+        }else if indexPath.row == 2 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "Hehe", for: indexPath)
+            cell.textLabel?.text = "Hehe"
+            cell.textLabel?.textAlignment = .center
+            cell.textLabel?.textColor = .systemGray
             return cell
         } else {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "Logout", for: indexPath)
-            return cell
+            return UITableViewCell()
         }
-
     }
 }

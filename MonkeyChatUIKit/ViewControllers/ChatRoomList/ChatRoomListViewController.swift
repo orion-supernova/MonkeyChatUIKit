@@ -50,6 +50,7 @@ class ChatRoomListViewController: UIViewController {
 
     override func viewDidLayoutSubviews() {
         navigationItem.backButtonTitle = ""
+        view.backgroundColor = .systemBackground
     }
 
     // MARK: - Setup
@@ -116,8 +117,10 @@ class ChatRoomListViewController: UIViewController {
     private func toggleEmptyView() {
         if viewModel.chatRooms.count == 0 {
             emptyLabel.isHidden = false
+            tableView.isHidden = true
         } else {
             emptyLabel.isHidden = true
+            tableView.isHidden = false
         }
     }
 

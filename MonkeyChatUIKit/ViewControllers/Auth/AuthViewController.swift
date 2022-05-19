@@ -6,11 +6,12 @@
 //
 
 import UIKit
+import SnapKit
 
 class AuthViewController: UIViewController {
 
     // MARK: - UI Elements
-    private let welcomeLabel: UILabel = {
+    private lazy var welcomeLabel: UILabel = {
         let label = UILabel()
         label.text = "Welcome To MonkeyChat"
         label.font = .systemFont(ofSize: 25, weight: .bold)
@@ -20,7 +21,7 @@ class AuthViewController: UIViewController {
         return label
     }()
 
-    private let phoneInfoLabel: UILabel = {
+    private lazy var phoneInfoLabel: UILabel = {
         let label = UILabel()
         label.text = "Please enter your phone number below"
         label.textAlignment = .center
@@ -28,14 +29,40 @@ class AuthViewController: UIViewController {
         return label
     }()
 
-    private let phoneTextField: UITextField = {
+    private lazy var countryCodeSelectionView: CountryCodeSelectionView = {
+        let view = CountryCodeSelectionView()
+        view.delegate = self
+        view.backgroundColor = .clear
+        return view
+    }()
+
+    private lazy var phoneTextField: UITextField = {
         let textField = UITextField()
         textField.keyboardType = .phonePad
-        textField.placeholder = "+1 234 567 890"
-        textField.textAlignment = .center
-        textField.addTarget(self, action: #selector(signIn), for: .editingChanged)
+        textField.placeholder = " Phone Number"
+        textField.font = .systemFont(ofSize: 14)
         return textField
     }()
+
+    private lazy var dividerView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .secondarySystemBackground
+        return view
+    }()
+
+    private lazy var sendButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("Fire Up", for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 14)
+        button.setTitleColor(UIColor.monkeyOrange, for: .normal)
+        button.layer.cornerRadius = 4
+        button.addTarget(self, action: #selector(signIn), for: .touchUpInside)
+        return button
+    }()
+
+    // MARK: - Private variables
+    private lazy var userCountryCode = ""
+    private lazy var userFullNumber = ""
 
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -57,12 +84,15 @@ class AuthViewController: UIViewController {
     func setup() {
         view.addSubview(welcomeLabel)
         view.addSubview(phoneInfoLabel)
+        view.addSubview(countryCodeSelectionView)
         view.addSubview(phoneTextField)
+        view.addSubview(dividerView)
+        view.addSubview(sendButton)
     }
 
     func layout() {
         welcomeLabel.snp.makeConstraints { make in
-            make.centerY.equalToSuperview().offset(-100)
+            make.centerY.equalToSuperview().offset(-150)
             make.height.greaterThanOrEqualTo(60)
             make.left.right.equalToSuperview()
         }
@@ -73,10 +103,31 @@ class AuthViewController: UIViewController {
             make.left.right.equalToSuperview()
         }
 
+        countryCodeSelectionView.snp.makeConstraints { make in
+            make.top.equalTo(phoneInfoLabel.snp.bottom).offset(10)
+            make.left.equalToSuperview()
+            make.width.equalTo(80)
+            make.height.equalTo(40)
+        }
+
         phoneTextField.snp.makeConstraints { make in
             make.top.equalTo(phoneInfoLabel.snp.bottom).offset(10)
             make.height.equalTo(40)
+            make.left.equalTo(countryCodeSelectionView.snp.right)
+            make.right.equalToSuperview()
+        }
+
+        dividerView.snp.makeConstraints { make in
+            make.top.equalTo(phoneTextField.snp.bottom).offset(2)
             make.left.right.equalToSuperview()
+            make.height.equalTo(1)
+        }
+
+        sendButton.snp.makeConstraints { make in
+            make.top.equalTo(dividerView.snp.bottom).offset(10)
+            make.left.equalTo(20)
+            make.right.equalTo(-20)
+            make.height.equalTo(20)
         }
     }
 
@@ -91,19 +142,17 @@ class AuthViewController: UIViewController {
 
     // MARK: - Private Methods
     @objc func signIn() {
-        if phoneTextField.text?.count == 13 {
-            self.endEditing()
-            AlertHelper.alertMessage(viewController: self,title: "Check Your Number", message: "Your number is \(phoneTextField.text ?? ""). Continue?") {
-                LottieHUD.shared.show()
-                guard let phoneNumber = self.phoneTextField.text else { return }
-                AuthManager.shared.startAuth(phoneNumber: phoneNumber) { [weak self] success in
-                    guard success else { return }
-                    guard let self = self else { return }
-                    let viewController = VerificationCodeViewController()
-                    viewController.modalPresentationStyle = .fullScreen
-                    self.present(viewController, animated: true, completion: nil)
-                    LottieHUD.shared.dismiss()
-                }
+        self.endEditing()
+        AlertHelper.alertMessage(viewController: self,title: "Check Your Number", message: "Your number is (\(userCountryCode )) \(phoneTextField.text ?? ""). Continue?") { [weak self] in
+            guard let self = self else { return }
+            LottieHUD.shared.show()
+            let phoneNumber = self.userCountryCode + (self.phoneTextField.text ?? "")
+            AuthManager.shared.startAuth(phoneNumber: phoneNumber) { success in
+                guard success else { return }
+                let viewController = VerificationCodeViewController()
+                viewController.modalPresentationStyle = .fullScreen
+                self.present(viewController, animated: true, completion: nil)
+                LottieHUD.shared.dismiss()
             }
         }
     }
@@ -128,8 +177,14 @@ extension AuthViewController: UITextFieldDelegate {
         // add their new text to the existing text
         let updatedText = currentText.replacingCharacters(in: stringRange, with: string)
 
-        // make sure the result is under 16 characters
-        return updatedText.count <= 13
+        // make sure the result is under 20 characters
+        return updatedText.count <= 20
     }
 
+}
+
+extension AuthViewController: CountryCodeSelectionViewDelegate {
+    func didSelectCountry(countryPhoneExtension: String) {
+        userCountryCode = "+\(countryPhoneExtension)"
+    }
 }

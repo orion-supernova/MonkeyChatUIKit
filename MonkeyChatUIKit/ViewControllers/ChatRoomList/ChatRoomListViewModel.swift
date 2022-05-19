@@ -31,7 +31,7 @@ class ChatRoomListViewModel {
     func createRoomOrEnterRoomAction(target: UIViewController) {
         let actionSheetController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         let enterRoomAction = UIAlertAction(title: "Enter Room", style: .default) { [weak self] action in
-            self?.enterRoom()
+            self?.enterRoom(target: target)
         }
         let createRoomAction = UIAlertAction(title: "Create Room", style: .default) { [weak self] action in
             self?.createRoom(target: target)
@@ -45,7 +45,7 @@ class ChatRoomListViewModel {
     }
 
     // MARK: - Enter Room Action
-    func enterRoom() {
+    func enterRoom(target: UIViewController) {
         let alertController = UIAlertController(title: "Enter Room", message: "Please enter the room Code:", preferredStyle: .alert)
         alertController.addTextField { textfield in
             textfield.placeholder = "Room Code"
@@ -111,8 +111,8 @@ class ChatRoomListViewModel {
         alertController.addAction(cancelAction)
         alertController.addAction(okAction)
 
-        let viewController = UIApplication.shared.windows.first!.rootViewController!
-        viewController.present(alertController, animated: true, completion: nil)
+
+        target.present(alertController, animated: true, completion: nil)
     }
 
     // MARK: - Create Room Action

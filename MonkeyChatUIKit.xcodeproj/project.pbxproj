@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5404033C28366BD300FF58D8 /* CountryCodeSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5404033B28366BD300FF58D8 /* CountryCodeSelectionView.swift */; };
+		5404033E2836768400FF58D8 /* Country.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5404033D2836768400FF58D8 /* Country.swift */; };
+		540403412836796300FF58D8 /* CountryCodeHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 540403402836796300FF58D8 /* CountryCodeHelper.swift */; };
+		54040343283689AA00FF58D8 /* UIColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54040342283689AA00FF58D8 /* UIColorExtension.swift */; };
 		541DBA6127DF772A00A3A920 /* MonkeyListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 541DBA6027DF772A00A3A920 /* MonkeyListViewController.swift */; };
 		541DBA6327DF7B1000A3A920 /* MonkeyListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 541DBA6227DF7B1000A3A920 /* MonkeyListViewModel.swift */; };
 		545FFC6F27BC4C17008CC1ED /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545FFC6E27BC4C17008CC1ED /* AppDelegate.swift */; };
@@ -43,6 +47,8 @@
 		548BC3B327C042A500CBC6EA /* PushNotificationSender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 548BC3B227C042A500CBC6EA /* PushNotificationSender.swift */; };
 		548BC3B527C04F8400CBC6EA /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 548BC3B427C04F8400CBC6EA /* SettingsViewModel.swift */; };
 		548BC3B927C069D400CBC6EA /* apns-sound.wav in Resources */ = {isa = PBXBuildFile; fileRef = 548BC3B827C069D400CBC6EA /* apns-sound.wav */; };
+		549FB85928201F68003E65E3 /* AccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 549FB85828201F68003E65E3 /* AccountViewController.swift */; };
+		549FB85F28202976003E65E3 /* PrivacySecurityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 549FB85E28202976003E65E3 /* PrivacySecurityViewController.swift */; };
 		54F2336427BD337100E9FD28 /* ChatRoomListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F2336327BD337100E9FD28 /* ChatRoomListTableViewCell.swift */; };
 		54F2336A27BD3C7500E9FD28 /* ChatRoomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F2336927BD3C7500E9FD28 /* ChatRoomViewController.swift */; };
 		54F2336C27BD44F900E9FD28 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F2336B27BD44F900E9FD28 /* SettingsViewController.swift */; };
@@ -52,6 +58,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		5404033B28366BD300FF58D8 /* CountryCodeSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryCodeSelectionView.swift; sourceTree = "<group>"; };
+		5404033D2836768400FF58D8 /* Country.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Country.swift; sourceTree = "<group>"; };
+		540403402836796300FF58D8 /* CountryCodeHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryCodeHelper.swift; sourceTree = "<group>"; };
+		54040342283689AA00FF58D8 /* UIColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorExtension.swift; sourceTree = "<group>"; };
 		541DBA6027DF772A00A3A920 /* MonkeyListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonkeyListViewController.swift; sourceTree = "<group>"; };
 		541DBA6227DF7B1000A3A920 /* MonkeyListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonkeyListViewModel.swift; sourceTree = "<group>"; };
 		545FFC6B27BC4C17008CC1ED /* MonkeyChatUIKit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MonkeyChatUIKit.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -82,6 +92,8 @@
 		548BC3B227C042A500CBC6EA /* PushNotificationSender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushNotificationSender.swift; sourceTree = "<group>"; };
 		548BC3B427C04F8400CBC6EA /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
 		548BC3B827C069D400CBC6EA /* apns-sound.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "apns-sound.wav"; sourceTree = "<group>"; };
+		549FB85828201F68003E65E3 /* AccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountViewController.swift; sourceTree = "<group>"; };
+		549FB85E28202976003E65E3 /* PrivacySecurityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacySecurityViewController.swift; sourceTree = "<group>"; };
 		54F2336327BD337100E9FD28 /* ChatRoomListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomListTableViewCell.swift; sourceTree = "<group>"; };
 		54F2336927BD3C7500E9FD28 /* ChatRoomViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomViewController.swift; sourceTree = "<group>"; };
 		54F2336B27BD44F900E9FD28 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
@@ -110,6 +122,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5404033F283676D900FF58D8 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				5404033D2836768400FF58D8 /* Country.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		541DBA5F27DF761500A3A920 /* MonkeyList */ = {
 			isa = PBXGroup;
 			children = (
@@ -199,10 +219,12 @@
 		545FFC8B27BC5B61008CC1ED /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				540403402836796300FF58D8 /* CountryCodeHelper.swift */,
 				545FFC8C27BC5B72008CC1ED /* AlertHelper.swift */,
 				545FFC9F27BCFF9F008CC1ED /* Constants.swift */,
 				54664F4E27C2DC8300F94482 /* SensitiveData.swift */,
 				547D253327C3EF4D005D98B8 /* LottieHUD.swift */,
+				54040342283689AA00FF58D8 /* UIColorExtension.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -230,8 +252,10 @@
 			isa = PBXGroup;
 			children = (
 				547D252D27C2EADF005D98B8 /* AuthViewController.swift */,
+				5404033B28366BD300FF58D8 /* CountryCodeSelectionView.swift */,
 				547D253127C3E786005D98B8 /* VerificationCodeViewController.swift */,
 				547D252F27C3DD92005D98B8 /* AuthManager.swift */,
+				5404033F283676D900FF58D8 /* Models */,
 			);
 			path = Auth;
 			sourceTree = "<group>";
@@ -267,6 +291,8 @@
 			isa = PBXGroup;
 			children = (
 				54F2336B27BD44F900E9FD28 /* SettingsViewController.swift */,
+				549FB85828201F68003E65E3 /* AccountViewController.swift */,
+				549FB85E28202976003E65E3 /* PrivacySecurityViewController.swift */,
 				547D253E27C43459005D98B8 /* UsernameViewController.swift */,
 				548BC3B427C04F8400CBC6EA /* SettingsViewModel.swift */,
 			);
@@ -371,6 +397,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				545FFC7327BC4C17008CC1ED /* ChatRoomListViewController.swift in Sources */,
+				549FB85F28202976003E65E3 /* PrivacySecurityViewController.swift in Sources */,
 				548BC3B327C042A500CBC6EA /* PushNotificationSender.swift in Sources */,
 				54F2337427BD7BB000E9FD28 /* TextEntryView.swift in Sources */,
 				545FFCA327BD007F008CC1ED /* ChatRoomListViewModel.swift in Sources */,
@@ -383,18 +410,23 @@
 				547D252E27C2EADF005D98B8 /* AuthViewController.swift in Sources */,
 				541DBA6127DF772A00A3A920 /* MonkeyListViewController.swift in Sources */,
 				54F2337227BD68C400E9FD28 /* MessageTableViewCell.swift in Sources */,
+				540403412836796300FF58D8 /* CountryCodeHelper.swift in Sources */,
 				545FFC8D27BC5B72008CC1ED /* AlertHelper.swift in Sources */,
+				5404033C28366BD300FF58D8 /* CountryCodeSelectionView.swift in Sources */,
+				54040343283689AA00FF58D8 /* UIColorExtension.swift in Sources */,
 				547D254127C4EED2005D98B8 /* ChatRoomNotificationsManager.swift in Sources */,
 				548BC3B127C0120100CBC6EA /* PushNotificationManager.swift in Sources */,
 				545FFC7127BC4C17008CC1ED /* SceneDelegate.swift in Sources */,
 				54664F4F27C2DC8300F94482 /* SensitiveData.swift in Sources */,
 				545FFC9E27BCFB05008CC1ED /* Message.swift in Sources */,
 				541DBA6327DF7B1000A3A920 /* MonkeyListViewModel.swift in Sources */,
+				549FB85928201F68003E65E3 /* AccountViewController.swift in Sources */,
 				545FFCA027BCFF9F008CC1ED /* Constants.swift in Sources */,
 				547D253D27C42F2D005D98B8 /* AppGlobal.swift in Sources */,
 				547D253F27C43459005D98B8 /* UsernameViewController.swift in Sources */,
 				54F2336A27BD3C7500E9FD28 /* ChatRoomViewController.swift in Sources */,
 				547D253427C3EF4D005D98B8 /* LottieHUD.swift in Sources */,
+				5404033E2836768400FF58D8 /* Country.swift in Sources */,
 				547D253027C3DD92005D98B8 /* AuthManager.swift in Sources */,
 				54F2336C27BD44F900E9FD28 /* SettingsViewController.swift in Sources */,
 				548BC3B527C04F8400CBC6EA /* SettingsViewModel.swift in Sources */,
@@ -548,7 +580,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = MonkeyChatUIKit/MonkeyChatUIKit.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 8;
 				DEVELOPMENT_TEAM = 37TC2VKVJ6;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MonkeyChatUIKit/Info.plist;
@@ -580,7 +612,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = MonkeyChatUIKit/MonkeyChatUIKit.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 8;
 				DEVELOPMENT_TEAM = 37TC2VKVJ6;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MonkeyChatUIKit/Info.plist;

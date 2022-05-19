@@ -10,14 +10,14 @@ import UIKit
 class VerificationCodeViewController: UIViewController {
 
     //MARK: - UI Elements
-    private let verificationInfoLabel: UILabel = {
+    private lazy var verificationInfoLabel: UILabel = {
         let label = UILabel()
         label.text = "Please Enter Your Verification Code"
         label.textAlignment = .center
         return label
     }()
 
-    private let verificationCodeTextField: UITextField = {
+    private lazy var verificationCodeTextField: UITextField = {
         let textField = UITextField()
         textField.placeholder = "Verification Code"
         textField.textAlignment = .center

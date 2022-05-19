@@ -37,7 +37,7 @@ class UsernameViewController: UIViewController {
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        
+        usernameTextField.layer.cornerRadius = 10
     }
 
     // MARK: - Setup
