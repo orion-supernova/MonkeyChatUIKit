@@ -41,6 +41,7 @@ class AuthViewController: UIViewController {
         textField.keyboardType = .phonePad
         textField.placeholder = " Phone Number"
         textField.font = .systemFont(ofSize: 14)
+        textField.delegate = self
         return textField
     }()
 
@@ -69,7 +70,6 @@ class AuthViewController: UIViewController {
         super.viewDidLoad()
         setup()
         layout()
-        setDelegates()
     }
 
     override func viewDidLayoutSubviews() {
@@ -131,30 +131,47 @@ class AuthViewController: UIViewController {
         }
     }
 
-    func setDelegates() {
-        phoneTextField.delegate = self
-    }
-
-    // MARK: - Actions
-    @objc func endEditing() {
-        phoneTextField.endEditing(true)
-    }
-
     // MARK: - Private Methods
     @objc func signIn() {
         self.endEditing()
+        checkForValidity { valid in
+            guard valid else { return }
+        }
         AlertHelper.alertMessage(viewController: self,title: "Check Your Number", message: "Your number is (\(userCountryCode )) \(phoneTextField.text ?? ""). Continue?") { [weak self] in
             guard let self = self else { return }
             LottieHUD.shared.show()
             let phoneNumber = self.userCountryCode + (self.phoneTextField.text ?? "")
             AuthManager.shared.startAuth(phoneNumber: phoneNumber) { success in
-                guard success else { return }
+                guard success else {
+                    LottieHUD.shared.dismiss()
+                    AlertHelper.simpleAlertMessage(viewController: self, title: "Error", message: "Please check your number or try again later.")
+                    return
+                }
                 let viewController = VerificationCodeViewController()
                 viewController.modalPresentationStyle = .fullScreen
                 self.present(viewController, animated: true, completion: nil)
                 LottieHUD.shared.dismiss()
             }
         }
+    }
+
+    private func checkForValidity(completion: ((Bool) -> Void)) {
+        guard !userCountryCode.isEmpty else {
+            AlertHelper.simpleAlertMessage(viewController: self, title: "Error", message: "Please choose your country code.")
+            completion(false)
+            return
+        }
+        guard phoneTextField.text != "", phoneTextField.text != nil else {
+            AlertHelper.simpleAlertMessage(viewController: self, title: "Error", message: "Please enter your phone number.")
+            completion(false)
+            return
+        }
+        completion(true)
+    }
+
+    // MARK: - Actions
+    @objc func endEditing() {
+        phoneTextField.endEditing(true)
     }
 }
 
