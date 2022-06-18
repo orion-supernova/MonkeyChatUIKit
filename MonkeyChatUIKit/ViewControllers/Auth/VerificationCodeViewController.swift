@@ -6,23 +6,23 @@
 //
 
 import UIKit
+import RiveRuntime
 
 class VerificationCodeViewController: UIViewController {
 
-    //MARK: - UI Elements
+    // MARK: - UI Elements
+    private lazy var animationBackgroundView: RiveView = {
+        let view = RiveView()
+        riveViewModel.setView(view)
+        riveViewModel.fit = Fit.fitCover
+        return view
+    }()
+    
     private lazy var verificationInfoLabel: UILabel = {
         let label = UILabel()
         label.text = "Please Enter Your Verification Code"
         label.textAlignment = .center
         return label
-    }()
-
-    private lazy var verificationCodeTextField: UITextField = {
-        let textField = UITextField()
-        textField.placeholder = "Verification Code"
-        textField.textAlignment = .center
-        textField.addTarget(self, action: #selector(verifyCode), for: .editingChanged)
-        return textField
     }()
 
     private lazy var verificationCodeView: OTPStackView = {
@@ -31,31 +31,38 @@ class VerificationCodeViewController: UIViewController {
         return view
     }()
 
-    //MARK: - Lifecycle
+    // MARK: - Private Variables
+    private lazy var riveViewModel = RiveViewModel(fileName: "safe_box_icon", stateMachineName: "State Machine 1")
+
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
 
         setup()
         layout()
-        setDelegates()
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         view.backgroundColor = .systemBackground
+        overrideUserInterfaceStyle = .dark
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
-        verificationCodeTextField.becomeFirstResponder()
     }
 
-    //MARK: - Setup
+    // MARK: - Setup
     func setup() {
-        view.addSubview(verificationInfoLabel)
-        view.addSubview(verificationCodeView)
+        view.addSubview(animationBackgroundView)
+        animationBackgroundView.addSubview(verificationInfoLabel)
+        animationBackgroundView.addSubview(verificationCodeView)
     }
 
     func layout() {
+        animationBackgroundView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        
         verificationInfoLabel.snp.makeConstraints { make in
             make.centerY.equalToSuperview().offset(-200)
             make.width.equalToSuperview()
@@ -67,10 +74,6 @@ class VerificationCodeViewController: UIViewController {
             make.width.equalToSuperview()
             make.height.equalTo(50)
         }
-    }
-
-    func setDelegates() {
-        verificationCodeTextField.delegate = self
     }
 
     //MARK: - Actions
@@ -87,14 +90,19 @@ class VerificationCodeViewController: UIViewController {
                 }
                 return
             }
-            self.configureLoginView { tabBar in
-                let tabController = tabBar
-                tabController.modalPresentationStyle = .fullScreen
-                self.present(tabController, animated: true, completion: nil)
-                LottieHUD.shared.dismiss()
+            LottieHUD.shared.dismiss()
+            self.riveViewModel.triggerInput("Pressed")
+            DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                self.configureLoginView { tabBar in
+                    let tabController = tabBar
+                    tabController.modalPresentationStyle = .fullScreen
+                    self.present(tabController, animated: true, completion: nil)
+                    self.riveViewModel.resetToDefaultModel()
+                }
             }
         }
     }
+
     //MARK: - Functions
     func configureLoginView(completion: @escaping (UITabBarController) -> Void) {
         let tabController = UITabBarController()
@@ -114,12 +122,6 @@ class VerificationCodeViewController: UIViewController {
 
 //MARK: - UITextFieldDelegate
 extension VerificationCodeViewController: UITextFieldDelegate {
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        if textField == verificationCodeTextField {
-            //
-        }
-        return true
-    }
 
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         // get the current text, or use an empty string if that failed

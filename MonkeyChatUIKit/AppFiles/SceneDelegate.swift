@@ -81,14 +81,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 }
 
 // MARK: - UNUserNotificationCenterDelegate
-
 extension SceneDelegate: UNUserNotificationCenterDelegate {
+    // If the user opens the app via notification, this function will be triggered.
     func userNotificationCenter(_ center: UNUserNotificationCenter,didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
 
         let userInfo = response.notification.request.content.userInfo
 
-        if
-            let aps = userInfo["aps"] as? [String: AnyObject] {
+        if let aps = userInfo["aps"] as? [String: AnyObject] {
 //            (window?.rootViewController as? UITabBarController)?.selectedIndex = 1
 
             if response.actionIdentifier == Identifiers.viewAction,

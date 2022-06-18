@@ -83,9 +83,11 @@ class OTPStackView: UIStackView {
 
     // MARK: - Public Functions
     func resetOTPString() {
-        for textField in textFieldsCollection{
+        for textField in textFieldsCollection {
             textField.text = ""
+            textField.textFieldUnderlineView?.backgroundColor = .white
         }
+        textFieldsCollection.first?.becomeFirstResponder()
     }
 }
 
@@ -111,7 +113,7 @@ extension OTPStackView: UITextFieldDelegate {
                     textField.text? = string
                     textField.nextTextField?.becomeFirstResponder()
                 }
-                textField.textFieldUnderlineView?.backgroundColor = .monkeyOrange
+                textField.textFieldUnderlineView?.backgroundColor = UIColor.init(hexString: "CC8899")
             default:
                 break
         }
@@ -143,7 +145,7 @@ class OTPTextFieldWithUnderlineView: UIView {
     var textField: OTPTextField = {
         let textField = OTPTextField()
         textField.backgroundColor = .clear
-        textField.tintColor = .monkeyOrange
+        textField.tintColor = UIColor.init(hexString: "CC8899")
         textField.textAlignment = .center
         textField.font = .systemFont(ofSize: 32)
         textField.keyboardType = .numberPad

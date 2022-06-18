@@ -7,10 +7,18 @@
 
 import UIKit
 import SnapKit
+import RiveRuntime
 
 class AuthViewController: UIViewController {
 
     // MARK: - UI Elements
+    private lazy var animationBackgroundView: RiveView = {
+        let view = RiveView()
+        riveViewModel.setView(view)
+        riveViewModel.fit = Fit.fitCover
+        return view
+    }()
+
     private lazy var welcomeLabel: UILabel = {
         let label = UILabel()
         label.text = "Welcome To MonkeyChat"
@@ -47,7 +55,7 @@ class AuthViewController: UIViewController {
 
     private lazy var dividerView: UIView = {
         let view = UIView()
-        view.backgroundColor = .secondarySystemBackground
+        view.backgroundColor = .darkGray
         return view
     }()
 
@@ -64,6 +72,7 @@ class AuthViewController: UIViewController {
     // MARK: - Private variables
     private lazy var userCountryCode = ""
     private lazy var userFullNumber = ""
+    private lazy var riveViewModel = RiveViewModel(fileName: "lights")
 
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -74,23 +83,30 @@ class AuthViewController: UIViewController {
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        overrideUserInterfaceStyle = .dark
         view.backgroundColor = .systemBackground
 
         let gesture = UITapGestureRecognizer(target: self, action: #selector(endEditing))
         view.addGestureRecognizer(gesture)
     }
 
+
     // MARK: - Setup
     func setup() {
-        view.addSubview(welcomeLabel)
-        view.addSubview(phoneInfoLabel)
-        view.addSubview(countryCodeSelectionView)
-        view.addSubview(phoneTextField)
-        view.addSubview(dividerView)
-        view.addSubview(sendButton)
+        view.addSubview(animationBackgroundView)
+        animationBackgroundView.addSubview(welcomeLabel)
+        animationBackgroundView.addSubview(phoneInfoLabel)
+        animationBackgroundView.addSubview(countryCodeSelectionView)
+        animationBackgroundView.addSubview(phoneTextField)
+        animationBackgroundView.addSubview(dividerView)
+        animationBackgroundView.addSubview(sendButton)
     }
 
     func layout() {
+        animationBackgroundView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+
         welcomeLabel.snp.makeConstraints { make in
             make.centerY.equalToSuperview().offset(-150)
             make.height.greaterThanOrEqualTo(60)
