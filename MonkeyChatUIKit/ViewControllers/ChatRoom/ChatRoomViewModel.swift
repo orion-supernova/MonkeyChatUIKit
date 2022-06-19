@@ -56,6 +56,7 @@ class ChatRoomViewModel {
         guard let chatroomID = chatroom.id else { return }
 
         let data = ["senderName": AppGlobal.shared.username ?? "",
+                    "senderUID": AppGlobal.shared.userID ?? "",
                     "message": message,
                     "timestamp": Timestamp(date: Date())] as [String: Any]
 

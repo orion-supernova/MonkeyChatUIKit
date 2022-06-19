@@ -15,6 +15,7 @@ struct Message: Identifiable, Decodable {
     var profileImageURL: String?
     let timestamp: Timestamp
     var senderName: String?
+    var senderUID: String?
 
     var timestampString: String? {
         let formatter = DateComponentsFormatter()

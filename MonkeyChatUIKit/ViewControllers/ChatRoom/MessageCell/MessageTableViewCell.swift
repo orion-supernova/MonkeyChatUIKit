@@ -10,7 +10,7 @@ import SnapKit
 
 class MessageTableViewCell: UITableViewCell {
 
-    private let usernameLabel: UILabel = {
+    private lazy var usernameLabel: UILabel = {
         let label = UILabel()
         label.text = "username"
         label.font = .systemFont(ofSize: 10, weight: .bold)
@@ -18,11 +18,18 @@ class MessageTableViewCell: UITableViewCell {
         return label
     }()
 
-    private let messageLabel: UILabel = {
+    private lazy var messageBubble: UIView = {
+        let view = UIView()
+        view.backgroundColor = .secondarySystemFill
+        return view
+    }()
+
+    private lazy var messageLabel: UILabel = {
         let label = UILabel()
         label.text = "message"
         label.numberOfLines = 0
         label.font = .systemFont(ofSize: 15, weight: .regular)
+        label.textColor = UIColor(named: "Black-White")
         return label
     }()
 
@@ -37,10 +44,15 @@ class MessageTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
+    override func layoutSubviews() {
+        messageBubble.layer.cornerRadius = 10
+    }
+
     //MARK: - Setup & Layout
     func setup() {
         contentView.addSubview(usernameLabel)
-        contentView.addSubview(messageLabel)
+        contentView.addSubview(messageBubble)
+        messageBubble.addSubview(messageLabel)
     }
 
     func layout() {
@@ -50,15 +62,23 @@ class MessageTableViewCell: UITableViewCell {
             make.right.equalTo(-5)
             make.height.equalTo(15)
         }
-        messageLabel.snp.makeConstraints { make in
+
+        messageBubble.snp.makeConstraints { make in
             make.top.equalTo(usernameLabel.snp.bottom).offset(2)
             make.left.equalTo(5)
-            make.right.equalTo(-5)
+            make.right.equalTo(-100)
             make.bottom.equalTo(-5)
+        }
+
+        messageLabel.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(5)
+            make.left.equalToSuperview().offset(5)
+            make.right.equalToSuperview().offset(-2)
+            make.bottom.equalToSuperview().offset(-5)
         }
     }
 
-    // MARK: - Functions
+    // MARK: - Public Methods
     func configureCell(message: Message) {
         if message.senderName == "" || message.senderName == nil{
             usernameLabel.text = "Anonymous"
@@ -66,11 +86,28 @@ class MessageTableViewCell: UITableViewCell {
             usernameLabel.text = message.senderName
         }
         self.messageLabel.text = message.message
+
+        if message.senderUID == AppGlobal.shared.userID {
+            usernameLabel.textAlignment = .right
+            messageBubble.backgroundColor = .monkeyBlue
+            messageLabel.textColor = .white
+
+            messageBubble.snp.updateConstraints { make in
+                make.top.equalTo(usernameLabel.snp.bottom).offset(2)
+                make.left.equalTo(100)
+                make.right.equalTo(-5)
+                make.bottom.equalTo(-5)
+            }
+        }
+    }
+
+    // MARK: - Private Methods
+    private func estimateWidthForText() {
+
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
         // Configure the view for the selected state
     }
 
