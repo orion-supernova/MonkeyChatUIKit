@@ -125,8 +125,13 @@ class ChatRoomListViewController: UIViewController {
 
     private func fetchAndObserveChatRooms() {
         viewModel.fetchChatRooms { [weak self] in
-            self?.toggleEmptyView()
-            self?.tableView.reloadData()
+            guard let self = self else { return }
+            self.toggleEmptyView()
+            self.tableView.reloadData()
+            UIView.transition(with: self.tableView,
+                              duration: 0.2,
+                              options: .transitionCrossDissolve,
+                              animations: { self.tableView.reloadData() })
         }
     }
 
@@ -161,4 +166,3 @@ extension ChatRoomListViewController: UITableViewDelegate {
         self.navigationController?.pushViewController(viewController, animated: true)
     }
 }
-

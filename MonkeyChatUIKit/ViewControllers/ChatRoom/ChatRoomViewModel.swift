@@ -37,7 +37,6 @@ class ChatRoomViewModel {
             self.lastMessage = self.messages.last
             self.delegate?.didChangeDataSource()
             completion()
-
         }
     }
 
@@ -60,19 +59,28 @@ class ChatRoomViewModel {
                     "message": message,
                     "timestamp": Timestamp(date: Date())] as [String: Any]
 
-        COLLECTION_CHATROOMS.document(chatroomID).collection("chatroom-messages").addDocument(data: data) { [weak self] error in
+        let room = COLLECTION_CHATROOMS.document(chatroomID)
+        room.collection("chatroom-messages").addDocument(data: data) { [weak self] error in
             if error != nil {
                 AlertHelper.alertMessage(title: "Failed to send message!", message: error?.localizedDescription ?? "", okButtonText: "OK")
                 print("Failed to upload message. \(error!.localizedDescription)")
             }
-            COLLECTION_CHATROOMS.document(chatroomID).collection("userIDs").getDocuments { snapshot, error in
-                guard let documents = snapshot?.documents else { return }
-                var fcmTokenForThisChatRoom = [String]()
-                for document in documents {
-                    fcmTokenForThisChatRoom.append(document.get("fcmToken") as? String ?? "")
+            let lastMessageData = ["lastMessageTimestamp": Timestamp(date: Date())] as [String: Any]
+            room.updateData(lastMessageData) { error in
+                guard error == nil else {
+                    print(error?.localizedDescription ?? "")
+                    return
                 }
-                for token in fcmTokenForThisChatRoom {
-                    sender.sendPushNotification(to: token, title: "\(self?.chatroom.name ?? "")", body: "\(message)")
+
+                room.collection("userIDs").getDocuments { snapshot, error in
+                    guard let documents = snapshot?.documents else { return }
+                    var fcmTokenForThisChatRoom = [String]()
+                    for document in documents {
+                        fcmTokenForThisChatRoom.append(document.get("fcmToken") as? String ?? "")
+                    }
+                    for token in fcmTokenForThisChatRoom {
+                        sender.sendPushNotification(to: token, title: "\(self?.chatroom.name ?? "")", body: "\(message)")
+                    }
                 }
             }
         }

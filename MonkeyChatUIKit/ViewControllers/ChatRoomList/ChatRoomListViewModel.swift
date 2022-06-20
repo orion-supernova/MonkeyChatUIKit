@@ -13,17 +13,42 @@ class ChatRoomListViewModel {
     typealias AlertCompletion = ((Bool) -> Void)?
 
     var chatRooms = [ChatRoom]()
-    static var lastMessageInChatRoom: Message?
 
     func fetchChatRooms(completion: @escaping () -> Void) {
         guard let userID = AppGlobal.shared.userID else { return }
-        COLLECTION_USERS.document(userID).collection("chatRooms").order(by: "timestamp", descending: true).addSnapshotListener { snapshot, error in
+        var roomIDs = [String]()
+        var chatRoomDocuments = [DocumentSnapshot]()
+        let group = DispatchGroup()
+        group.enter()
+        COLLECTION_USERS.document(userID).collection("chatRooms").addSnapshotListener {[weak self] snapshot, error in
+            guard let self = self else { return }
             guard error == nil else { print(error!.localizedDescription); return }
             guard let documents = snapshot?.documents else { return }
+            self.chatRooms = documents.compactMap({ try? $0.data(as: ChatRoom.self) })
 
-            self.chatRooms = documents.compactMap({ try? $0.data(as: ChatRoom.self)  })
-            print("ChatRooms fetched successfully")
-            completion()
+            for room in self.chatRooms {
+                roomIDs.append(room.id ?? "")
+            }
+            group.leave()
+        }
+
+        group.notify(queue: .global()) {
+            COLLECTION_CHATROOMS.addSnapshotListener { snapshot, error in
+                guard error == nil else { print(error!.localizedDescription); return }
+                guard let snapshot = snapshot else { return }
+                let documents = snapshot.documents
+                self.chatRooms.removeAll()
+                chatRoomDocuments.removeAll()
+                for id in roomIDs {
+                    guard let document = documents.first(where: { $0.documentID == id }) else { continue }
+                    chatRoomDocuments.append(document)
+                }
+                self.chatRooms = chatRoomDocuments.compactMap({ try? $0.data(as: ChatRoom.self) })
+                self.chatRooms.sort(by: { (first: ChatRoom, second: ChatRoom) -> Bool in
+                    first.lastMessageTimestamp?.seconds ?? 0 > second.lastMessageTimestamp?.seconds ?? 0
+                })
+                completion()
+            }
         }
     }
 
@@ -55,7 +80,8 @@ class ChatRoomListViewModel {
             textfield.isSecureTextEntry = true
         }
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
-        let okAction = UIAlertAction(title: "Enter", style: .default) { action in
+        let okAction = UIAlertAction(title: "Enter", style: .default) { [weak self] action in
+            guard let self = self else { return }
             guard let textfields = alertController.textFields else { return }
             var roomID = ""
             var roomPassword = ""
@@ -95,9 +121,8 @@ class ChatRoomListViewModel {
                                     "timestamp": Timestamp(date: Date()),
                                     "roomID": roomID] as [String: Any]
 
-                        COLLECTION_USERS.document(userID).collection("chatRooms").document(roomID).setData(data) { [weak self] error in
+                        COLLECTION_USERS.document(userID).collection("chatRooms").document(roomID).setData(data) { error in
                             guard error == nil else { return }
-                            guard let self = self else { return }
                             self.fetchChatRooms {
                                 print("DEBUG: ENTERED ROOM \(foundRoomID)")
                             }
@@ -137,12 +162,13 @@ class ChatRoomListViewModel {
                 password = boothPassword
             }
             let roomID = UUID().uuidString
-            let data = ["name": name,
+            let dataForChatRoom = ["name": name,
                         "password": password,
                         "timestamp": Timestamp(date: Date()),
-                        "roomID": roomID] as [String: Any]
+                        "roomID": roomID,
+                        "lastMessageTimestamp": Timestamp(date: Date())] as [String: Any]
 
-            COLLECTION_CHATROOMS.document(roomID).setData(data) { error in
+            COLLECTION_CHATROOMS.document(roomID).setData(dataForChatRoom) { error in
 
                 guard error == nil else { return }
 
@@ -153,7 +179,10 @@ class ChatRoomListViewModel {
                                             "fcmToken": fcmToken] as [String: Any]
                 COLLECTION_CHATROOMS.document(roomID).collection("userIDs").document(userID).setData(userDataWithFcmToken) { error in
                     guard error == nil else { return }
-                    let chatRoomdataInUserList = data
+                    let chatRoomdataInUserList = ["name": name,
+                                                  "password": password,
+                                                  "timestamp": Timestamp(date: Date()),
+                                                  "roomID": roomID] as [String: Any]
                     COLLECTION_USERS.document(userID).collection("chatRooms").document(roomID).setData(chatRoomdataInUserList) { error in
                         guard error == nil else { return }
                     }

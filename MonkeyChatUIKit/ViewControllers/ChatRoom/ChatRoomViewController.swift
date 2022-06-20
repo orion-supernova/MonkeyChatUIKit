@@ -55,12 +55,12 @@ class ChatRoomViewController: UIViewController {
     }()
 
     // MARK: - Private Properties
-    var chatRoom: ChatRoom?
-    var activeTextView : UITextView? = nil
-    var navigationBarHeight: CGFloat = 0
-    var tabbarHeight: CGFloat = 0
-    var viewmodel: ChatRoomViewModel?
-    var keyboardDispatchGroup: DispatchGroup?
+    private var chatRoom: ChatRoom?
+    private var activeTextView : UITextView? = nil
+    private var navigationBarHeight: CGFloat = 0
+    private var tabbarHeight: CGFloat = 0
+    private var viewmodel: ChatRoomViewModel?
+    private var keyboardDispatchGroup: DispatchGroup?
 
     // MARK: - Lifecycle
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?)   {

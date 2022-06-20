@@ -16,4 +16,5 @@ struct ChatRoom: Identifiable, Decodable {
     var roomCode: UUID?
     var messages: [Message]?
     var imageURL: String?
+    var lastMessageTimestamp: Timestamp?
 }
