@@ -108,9 +108,9 @@ extension SceneDelegate: UNUserNotificationCenterDelegate {
             return [.badge]
         }
         if state == .active {
-            return [.alert, .badge, .sound]
-        } else {
             return [.badge]
+        } else {
+            return [.alert, .badge, .sound]
         }
     }
 }
