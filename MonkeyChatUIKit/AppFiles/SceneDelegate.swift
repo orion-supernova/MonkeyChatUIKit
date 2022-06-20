@@ -103,7 +103,11 @@ extension SceneDelegate: UNUserNotificationCenterDelegate {
     //MARK: - Foreground Notifications
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification) async -> UNNotificationPresentationOptions {
         guard let apnsDict = notification.request.content.userInfo as? [String: Any] else { return [.badge] }
-        if apnsDict["user"] as? String != AppGlobal.shared.userID {
+        let state: UIApplication.State = UIApplication.shared.applicationState
+        guard apnsDict["user"] as? String != AppGlobal.shared.userID else {
+            return [.badge]
+        }
+        if state == .active {
             return [.alert, .badge, .sound]
         } else {
             return [.badge]

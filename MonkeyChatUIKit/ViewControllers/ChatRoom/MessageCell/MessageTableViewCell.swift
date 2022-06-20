@@ -20,7 +20,6 @@ class MessageTableViewCell: UITableViewCell {
 
     private lazy var messageBubble: UIView = {
         let view = UIView()
-        view.backgroundColor = .secondarySystemFill
         return view
     }()
 
@@ -29,7 +28,6 @@ class MessageTableViewCell: UITableViewCell {
         label.text = "message"
         label.numberOfLines = 0
         label.font = .systemFont(ofSize: 15, weight: .regular)
-        label.textColor = UIColor(named: "Black-White")
         return label
     }()
 
@@ -62,20 +60,6 @@ class MessageTableViewCell: UITableViewCell {
             make.right.equalTo(-5)
             make.height.equalTo(15)
         }
-
-        messageBubble.snp.makeConstraints { make in
-            make.top.equalTo(usernameLabel.snp.bottom).offset(2)
-            make.left.equalTo(5)
-            make.right.equalTo(-100)
-            make.bottom.equalTo(-5)
-        }
-
-        messageLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(5)
-            make.left.equalToSuperview().offset(5)
-            make.right.equalToSuperview().offset(-2)
-            make.bottom.equalToSuperview().offset(-5)
-        }
     }
 
     // MARK: - Public Methods
@@ -85,24 +69,60 @@ class MessageTableViewCell: UITableViewCell {
         } else {
             usernameLabel.text = message.senderName
         }
-        self.messageLabel.text = message.message
 
-        if message.senderUID == AppGlobal.shared.userID {
-            usernameLabel.textAlignment = .right
-            messageBubble.backgroundColor = .monkeyBlue
-            messageLabel.textColor = .white
-
-            messageBubble.snp.updateConstraints { make in
-                make.top.equalTo(usernameLabel.snp.bottom).offset(2)
-                make.left.equalTo(100)
-                make.right.equalTo(-5)
-                make.bottom.equalTo(-5)
+        if message.senderUID?.isEmpty == true {
+            configureLeftBubble()
+            self.messageLabel.text = message.message
+        } else {
+            if message.senderUID == AppGlobal.shared.userID {
+                configureRightBubble()
+                self.messageLabel.text = message.message
+            } else {
+                configureLeftBubble()
+                self.messageLabel.text = message.message
             }
         }
     }
 
     // MARK: - Private Methods
-    private func estimateWidthForText() {
+    private func configureLeftBubble() {
+        usernameLabel.textAlignment = .left
+        messageLabel.textColor = UIColor(named: "Black-White")
+        messageBubble.backgroundColor = .secondarySystemFill
+
+        messageBubble.snp.makeConstraints { make in
+            make.top.equalTo(usernameLabel.snp.bottom).offset(2)
+            make.left.equalTo(5)
+            make.right.equalTo(-100)
+            make.bottom.equalTo(-5)
+        }
+        configureMessageLabel()
+    }
+
+    private func configureRightBubble() {
+        usernameLabel.textAlignment = .right
+        messageBubble.backgroundColor = .monkeyBlue
+        messageLabel.textColor = .white
+
+        messageBubble.snp.makeConstraints { make in
+            make.top.equalTo(usernameLabel.snp.bottom).offset(2)
+            make.left.equalTo(100)
+            make.right.equalTo(-5)
+            make.bottom.equalTo(-5)
+        }
+        configureMessageLabel()
+    }
+
+    private func configureMessageLabel() {
+        messageLabel.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(5)
+            make.left.equalToSuperview().offset(5)
+            make.right.equalToSuperview().offset(-2)
+            make.bottom.equalToSuperview().offset(-5)
+        }
+    }
+
+    private func estimatedWidthForText() {
 
     }
 
@@ -111,4 +131,9 @@ class MessageTableViewCell: UITableViewCell {
         // Configure the view for the selected state
     }
 
+    override func prepareForReuse() {
+        messageLabel.text = ""
+        messageLabel.snp.removeConstraints()
+        messageBubble.snp.removeConstraints()
+    }
 }

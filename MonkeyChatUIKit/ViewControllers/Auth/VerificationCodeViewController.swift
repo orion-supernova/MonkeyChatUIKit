@@ -96,6 +96,7 @@ class VerificationCodeViewController: UIViewController {
                 self.configureLoginView { tabBar in
                     let tabController = tabBar
                     tabController.modalPresentationStyle = .fullScreen
+                    tabController.modalTransitionStyle = .crossDissolve
                     self.present(tabController, animated: true, completion: nil)
                     self.riveViewModel.resetToDefaultModel()
                 }

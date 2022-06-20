@@ -24,7 +24,6 @@ class ChatRoomListViewController: UIViewController {
         let tableView = UITableView()
         tableView.register(ChatRoomListTableViewCell.self, forCellReuseIdentifier: "ChatRoomListTableViewCell")
         tableView.tableFooterView = UIView()
-        tableView.rowHeight = UITableView.automaticDimension
         return tableView
     }()
 

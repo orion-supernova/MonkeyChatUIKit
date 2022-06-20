@@ -12,9 +12,11 @@
 		540403412836796300FF58D8 /* CountryCodeHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 540403402836796300FF58D8 /* CountryCodeHelper.swift */; };
 		54040343283689AA00FF58D8 /* UIColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54040342283689AA00FF58D8 /* UIColorExtension.swift */; };
 		540403452836946500FF58D8 /* OTPStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 540403442836946500FF58D8 /* OTPStackView.swift */; };
-		541262FF285E9ADA00D2D19C /* safe_box_icon.riv in Resources */ = {isa = PBXBuildFile; fileRef = 541262FE285E9ADA00D2D19C /* safe_box_icon.riv */; };
 		541DBA6127DF772A00A3A920 /* MonkeyListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 541DBA6027DF772A00A3A920 /* MonkeyListViewController.swift */; };
 		541DBA6327DF7B1000A3A920 /* MonkeyListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 541DBA6227DF7B1000A3A920 /* MonkeyListViewModel.swift */; };
+		544E9EB2285F541700F0B677 /* safe_box_icon.riv in Resources */ = {isa = PBXBuildFile; fileRef = 544E9EB1285F541700F0B677 /* safe_box_icon.riv */; };
+		544E9EB8285F80AD00F0B677 /* RoomSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544E9EB7285F80AD00F0B677 /* RoomSettingsViewController.swift */; };
+		544E9EBB285F862000F0B677 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 544E9EBA285F862000F0B677 /* Kingfisher */; };
 		545FFC6F27BC4C17008CC1ED /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545FFC6E27BC4C17008CC1ED /* AppDelegate.swift */; };
 		545FFC7127BC4C17008CC1ED /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545FFC7027BC4C17008CC1ED /* SceneDelegate.swift */; };
 		545FFC7327BC4C17008CC1ED /* ChatRoomListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545FFC7227BC4C17008CC1ED /* ChatRoomListViewController.swift */; };
@@ -67,9 +69,10 @@
 		540403402836796300FF58D8 /* CountryCodeHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryCodeHelper.swift; sourceTree = "<group>"; };
 		54040342283689AA00FF58D8 /* UIColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorExtension.swift; sourceTree = "<group>"; };
 		540403442836946500FF58D8 /* OTPStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OTPStackView.swift; sourceTree = "<group>"; };
-		541262FE285E9ADA00D2D19C /* safe_box_icon.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = safe_box_icon.riv; sourceTree = "<group>"; };
 		541DBA6027DF772A00A3A920 /* MonkeyListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonkeyListViewController.swift; sourceTree = "<group>"; };
 		541DBA6227DF7B1000A3A920 /* MonkeyListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonkeyListViewModel.swift; sourceTree = "<group>"; };
+		544E9EB1285F541700F0B677 /* safe_box_icon.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = safe_box_icon.riv; sourceTree = "<group>"; };
+		544E9EB7285F80AD00F0B677 /* RoomSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomSettingsViewController.swift; sourceTree = "<group>"; };
 		545FFC6B27BC4C17008CC1ED /* MonkeyChatUIKit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MonkeyChatUIKit.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		545FFC6E27BC4C17008CC1ED /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		545FFC7027BC4C17008CC1ED /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -119,6 +122,7 @@
 				545FFC9027BCDCF2008CC1ED /* FirebaseAnalyticsSwift-Beta in Frameworks */,
 				5499FC902857B2B400BCE34D /* RiveRuntime in Frameworks */,
 				545FFC9627BCDCF2008CC1ED /* FirebaseMessaging in Frameworks */,
+				544E9EBB285F862000F0B677 /* Kingfisher in Frameworks */,
 				545FFC9427BCDCF2008CC1ED /* FirebaseInAppMessagingSwift-Beta in Frameworks */,
 				545FFC8727BC4DBA008CC1ED /* SnapKit in Frameworks */,
 				54664F5527C2E5DD00F94482 /* FirebaseAuth in Frameworks */,
@@ -145,6 +149,23 @@
 				541DBA6227DF7B1000A3A920 /* MonkeyListViewModel.swift */,
 			);
 			path = MonkeyList;
+			sourceTree = "<group>";
+		};
+		544E9EB3285F662600F0B677 /* Rive_Assets */ = {
+			isa = PBXGroup;
+			children = (
+				5499FCD8285E6E7A00BCE34D /* lights.riv */,
+				544E9EB1285F541700F0B677 /* safe_box_icon.riv */,
+			);
+			path = Rive_Assets;
+			sourceTree = "<group>";
+		};
+		544E9EB6285F809100F0B677 /* RoomSettings */ = {
+			isa = PBXGroup;
+			children = (
+				544E9EB7285F80AD00F0B677 /* RoomSettingsViewController.swift */,
+			);
+			path = RoomSettings;
 			sourceTree = "<group>";
 		};
 		545FFC6227BC4C17008CC1ED = {
@@ -178,8 +199,7 @@
 				545FFC8427BC4C62008CC1ED /* Views */,
 				545FFC8B27BC5B61008CC1ED /* Utils */,
 				545FFC7727BC4C18008CC1ED /* Assets.xcassets */,
-				5499FCD8285E6E7A00BCE34D /* lights.riv */,
-				541262FE285E9ADA00D2D19C /* safe_box_icon.riv */,
+				544E9EB3285F662600F0B677 /* Rive_Assets */,
 				547D253A27C40206005D98B8 /* loading.json */,
 				545FFC7C27BC4C18008CC1ED /* Info.plist */,
 				545FFC9927BCDDA1008CC1ED /* GoogleService-Info.plist */,
@@ -294,6 +314,7 @@
 				54F2336E27BD635900E9FD28 /* ChatRoomViewModel.swift */,
 				54F2337327BD7BB000E9FD28 /* TextEntryView.swift */,
 				54F2337027BD68B200E9FD28 /* MessageCell */,
+				544E9EB6285F809100F0B677 /* RoomSettings */,
 			);
 			path = ChatRoom;
 			sourceTree = "<group>";
@@ -344,6 +365,7 @@
 				54664F5427C2E5DD00F94482 /* FirebaseAuth */,
 				547D253627C3F20A005D98B8 /* Lottie */,
 				5499FC8F2857B2B400BCE34D /* RiveRuntime */,
+				544E9EBA285F862000F0B677 /* Kingfisher */,
 			);
 			productName = MonkeyChatUIKit;
 			productReference = 545FFC6B27BC4C17008CC1ED /* MonkeyChatUIKit.app */;
@@ -378,6 +400,7 @@
 				545FFC8E27BCDCF2008CC1ED /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				547D253527C3F20A005D98B8 /* XCRemoteSwiftPackageReference "lottie-ios" */,
 				5499FC8E2857B2B300BCE34D /* XCRemoteSwiftPackageReference "rive-ios" */,
+				544E9EB9285F862000F0B677 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 			);
 			productRefGroup = 545FFC6C27BC4C17008CC1ED /* Products */;
 			projectDirPath = "";
@@ -400,7 +423,7 @@
 				545FFC9A27BCDDA1008CC1ED /* GoogleService-Info.plist in Resources */,
 				545FFC7827BC4C18008CC1ED /* Assets.xcassets in Resources */,
 				545FFC7627BC4C17008CC1ED /* Main.storyboard in Resources */,
-				541262FF285E9ADA00D2D19C /* safe_box_icon.riv in Resources */,
+				544E9EB2285F541700F0B677 /* safe_box_icon.riv in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -443,6 +466,7 @@
 				547D253427C3EF4D005D98B8 /* LottieHUD.swift in Sources */,
 				5404033E2836768400FF58D8 /* Country.swift in Sources */,
 				547D253027C3DD92005D98B8 /* AuthManager.swift in Sources */,
+				544E9EB8285F80AD00F0B677 /* RoomSettingsViewController.swift in Sources */,
 				540403452836946500FF58D8 /* OTPStackView.swift in Sources */,
 				54F2336C27BD44F900E9FD28 /* SettingsViewController.swift in Sources */,
 				548BC3B527C04F8400CBC6EA /* SettingsViewModel.swift in Sources */,
@@ -612,7 +636,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.3.2;
+				MARKETING_VERSION = 1.3.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.walhallaa.MonkeyChatUIKit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -644,7 +668,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.3.2;
+				MARKETING_VERSION = 1.3.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.walhallaa.MonkeyChatUIKit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -677,6 +701,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		544E9EB9285F862000F0B677 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 		545FFC8527BC4DBA008CC1ED /* XCRemoteSwiftPackageReference "SnapKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
@@ -712,6 +744,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		544E9EBA285F862000F0B677 /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 544E9EB9285F862000F0B677 /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
+		};
 		545FFC8627BC4DBA008CC1ED /* SnapKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 545FFC8527BC4DBA008CC1ED /* XCRemoteSwiftPackageReference "SnapKit" */;

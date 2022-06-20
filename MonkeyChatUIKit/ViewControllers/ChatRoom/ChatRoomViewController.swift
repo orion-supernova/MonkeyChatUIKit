@@ -10,7 +10,17 @@ import UIKit
 class ChatRoomViewController: UIViewController {
 
      // MARK: - UI Elements
-    private let tableView: UITableView = {
+    private lazy var emptyLabel: UILabel = {
+        let emptyLabel = UILabel()
+        emptyLabel.text = "You don't have any messages yet."
+        emptyLabel.textAlignment = .center
+        emptyLabel.font = .systemFont(ofSize: 20)
+        emptyLabel.textColor = .secondaryLabel
+        emptyLabel.numberOfLines = 0
+        return emptyLabel
+    }()
+
+    private lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.register(MessageTableViewCell.self, forCellReuseIdentifier: "MessageTableViewCell")
         tableView.rowHeight = UITableView.automaticDimension
@@ -19,18 +29,16 @@ class ChatRoomViewController: UIViewController {
         return tableView
     }()
 
-    private let textInputView: UITextView = {
+    private lazy var textInputView: UITextView = {
         let textView = UITextView()
         textView.font = UIFont.systemFont(ofSize: 17)
 //        textView.isScrollEnabled = false
-        textView.autocorrectionType = .no
-        textView.autocapitalizationType = .none
         textView.layer.cornerRadius = 10
         textView.layer.zPosition = 1
         return textView
     }()
 
-    private let sendButton: UIButton = {
+    private lazy var sendButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Send", for: .normal)
         button.titleLabel?.font =  UIFont(name: "Comic Sans MS", size: 10)
@@ -40,7 +48,7 @@ class ChatRoomViewController: UIViewController {
         return button
     }()
 
-    private let bottomView: UIView = {
+    private lazy var bottomView: UIView = {
         let view = UIView()
         view.backgroundColor = .secondarySystemBackground
         return view
@@ -64,8 +72,8 @@ class ChatRoomViewController: UIViewController {
     }
     
     init(chatRoom: ChatRoom) {
-        self.chatRoom = chatRoom
         super.init(nibName: nil, bundle: nil)
+        self.chatRoom = chatRoom
         self.viewmodel = ChatRoomViewModel(chatroom: chatRoom)
     }
     deinit {
@@ -76,6 +84,7 @@ class ChatRoomViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        configureNavigationBar()
         setup()
         setTableViewDelegates()
         layout()
@@ -84,14 +93,8 @@ class ChatRoomViewController: UIViewController {
     }
 
     override func viewDidLayoutSubviews() {
-        self.title = chatRoom?.name ?? ""
-        self.navigationController?.navigationBar.tintColor = .systemPink
-
-        let editRoomSettingsButton = UIBarButtonItem(barButtonSystemItem: .edit,
-                                                   target: self,
-                                                   action: #selector(editRoomSettings))
-        navigationItem.rightBarButtonItems = [editRoomSettingsButton]
-        navigationItem.rightBarButtonItem?.tintColor = .systemPink
+        navigationItem.backButtonTitle = "Back To Room"
+        view.backgroundColor = .systemBackground
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -105,7 +108,16 @@ class ChatRoomViewController: UIViewController {
         textInputView.delegate = self
     }
 
-    func setup() {
+    private func configureNavigationBar() {
+        self.title = chatRoom?.name ?? ""
+        self.navigationController?.navigationBar.tintColor = .systemPink
+        let editRoomSettingsButton = UIBarButtonItem(image: UIImage(systemName: "info.circle"), style: .plain, target: self, action: #selector(editRoomSettings))
+        navigationItem.rightBarButtonItems = [editRoomSettingsButton]
+        navigationItem.rightBarButtonItem?.tintColor = .systemPink
+    }
+
+    private func setup() {
+        view.addSubview(emptyLabel)
         view.addSubview(tableView)
         view.addSubview(bottomView)
         bottomView.addSubview(textInputView)
@@ -113,10 +125,16 @@ class ChatRoomViewController: UIViewController {
     }
 
     // MARK: - Layout
-    func layout() {
+    private func layout() {
         navigationBarHeight = (navigationController?.navigationBar.frame.size.height)!
         tabbarHeight = (tabBarController?.tabBar.frame.size.height)!
 
+        emptyLabel.snp.makeConstraints { make in
+            make.centerY.equalTo(view.snp.centerY)
+            make.left.equalTo(5)
+            make.right.equalTo(-5)
+            make.height.greaterThanOrEqualTo(40)
+        }
 
         tableView.snp.makeConstraints { make in
             make.top.equalTo(navigationBarHeight)
@@ -148,26 +166,12 @@ class ChatRoomViewController: UIViewController {
     // MARK: - Actions
     @objc func editRoomSettings() {
         guard let chatRoom = chatRoom else { return }
-        var alertMessage = ""
-        guard let tempPassword = chatRoom.password else { return }
-        if tempPassword != "" {
-            alertMessage = "Password: \(tempPassword)"
-        } else {
-            alertMessage = "Password: Not Configured"
-        }
-        guard let chatRoomID = chatRoom.id else { return }
-        UIPasteboard.general.string = chatRoomID
-        let alertController = UIAlertController(title: "Room ID copied to your clipboard", message: "Room ID: \(chatRoomID) \n" + alertMessage, preferredStyle: .alert)
-        let okAction = UIAlertAction(title: "OK", style: .default) { (action: UIAlertAction) in
-            //
-        }
-        alertController.addAction(okAction)
-
-        self.present(alertController, animated: true, completion: nil)
+        let vc = RoomSettingsViewController(chatRoom: chatRoom)
+        self.navigationController?.pushViewController(vc, animated: true)
     }
 
-    // MARK: - Functions
-    func addObservers() {
+    // MARK: - Private Functions
+    private func addObservers() {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(appEnteredBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
@@ -176,24 +180,42 @@ class ChatRoomViewController: UIViewController {
         self.keyboardDispatchGroup = DispatchGroup()
     }
 
-    func fetchMessagesAndObserve() {
+    private func fetchMessagesAndObserve() {
         viewmodel?.fetchMessages(completion: {
+            self.toggleEmptyView()
             self.tableView.reloadData()
             self.scrollToBottom()
             print("DEBUG: messages reloaded from didload")
         })
     }
 
-    func scrollToBottom() {
+    private func scrollToBottom() {
         if viewmodel?.messages.isEmpty == false {
             let indexPath = IndexPath(row: (viewmodel?.messages.count ?? 0) - 1, section: 0)
             tableView.scrollToRow(at: indexPath, at: .bottom, animated: false)
         }
     }
 
+    private func toggleEmptyView() {
+        if viewmodel?.messages.isEmpty == true {
+            emptyLabel.isHidden = false
+            tableView.isHidden = true
+        } else {
+            emptyLabel.isHidden = true
+            tableView.isHidden = false
+        }
+    }
+
     // MARK: - Actions
     @objc func sendButtonAction() {
         guard let viewmodel = viewmodel else { return }
+        let firstNonEmptyChar = textInputView.text.first(where: { $0 != " " && $0 != "\n"})
+        while textInputView.text.first != firstNonEmptyChar {
+            textInputView.text.removeFirst()
+        }
+        while textInputView.text.last == " " || textInputView.text.last == "\n" {
+            textInputView.text.removeLast()
+        }
         viewmodel.uploadMessage(message: textInputView.text ?? "")
         self.textInputView.text = ""
     }
@@ -289,29 +311,9 @@ extension ChatRoomViewController: UITextViewDelegate {
     }
 
     func textViewDidChange(_ textView: UITextView) {
-//        var textInputViewWidth: CGFloat = 0
-//
-//        textView.constraints.forEach { constraint in
-//            if constraint.firstAttribute == .width {
-//                textInputViewWidth = constraint.constant
-//            }
-//        }
-//        let size = CGSize(width: textInputViewWidth, height: .infinity)
-//        let estimatedSize = textView.sizeThatFits(size)
-//
-//        textView.constraints.forEach { constraint in
-//            if constraint.firstAttribute == .height {
-//                constraint.constant = estimatedSize.height
-//            }
-//        }
-//        self.bottomView.constraints.forEach { constraint in
-//            if constraint.firstAttribute == .height {
-//                constraint.constant = estimatedSize.height + 10
-//            }
-//        }
         var notNullOrEmptyString = false
         for item in textView.text {
-            if item != " " {
+            if item != " " && item != "\n" {
                 notNullOrEmptyString = true
             }
         }
