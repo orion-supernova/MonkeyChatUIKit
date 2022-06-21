@@ -31,6 +31,14 @@ class MessageTableViewCell: UITableViewCell {
         return label
     }()
 
+    private lazy var messageTimeLabel: UILabel = {
+        let label = UILabel()
+        label.text = "date"
+        label.textColor = .lightGray
+        label.font = .systemFont(ofSize: 8, weight: .regular)
+        return label
+    }()
+
 
     // MARK: - Lifecycle
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -51,6 +59,7 @@ class MessageTableViewCell: UITableViewCell {
         contentView.addSubview(usernameLabel)
         contentView.addSubview(messageBubble)
         messageBubble.addSubview(messageLabel)
+        messageBubble.addSubview(messageTimeLabel)
     }
 
     func layout() {
@@ -69,6 +78,8 @@ class MessageTableViewCell: UITableViewCell {
         } else {
             usernameLabel.text = message.senderName
         }
+
+        messageTimeLabel.text = message.timestampString
 
         if message.senderUID?.isEmpty == true {
             configureLeftBubble()
@@ -93,10 +104,20 @@ class MessageTableViewCell: UITableViewCell {
         messageBubble.snp.makeConstraints { make in
             make.top.equalTo(usernameLabel.snp.bottom).offset(2)
             make.left.equalTo(5)
-            make.right.equalTo(-100)
+            make.right.equalTo(messageTimeLabel.snp.right).offset(5)
             make.bottom.equalTo(-5)
         }
-        configureMessageLabel()
+        messageLabel.snp.makeConstraints { make in
+            make.top.equalTo(5)
+            make.left.equalTo(5)
+            make.bottom.equalTo(-5)
+        }
+
+        messageTimeLabel.snp.makeConstraints { make in
+            make.top.equalTo(5)
+            make.bottom.equalTo(-5)
+            make.left.equalTo(messageLabel.snp.right).offset(3)
+        }
     }
 
     private func configureRightBubble() {
@@ -106,19 +127,20 @@ class MessageTableViewCell: UITableViewCell {
 
         messageBubble.snp.makeConstraints { make in
             make.top.equalTo(usernameLabel.snp.bottom).offset(2)
-            make.left.equalTo(100)
             make.right.equalTo(-5)
+            make.left.equalTo(messageLabel.snp.left).offset(-5)
             make.bottom.equalTo(-5)
         }
-        configureMessageLabel()
-    }
-
-    private func configureMessageLabel() {
         messageLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(5)
-            make.left.equalToSuperview().offset(5)
-            make.right.equalToSuperview().offset(-2)
-            make.bottom.equalToSuperview().offset(-5)
+            make.top.equalTo(5)
+            make.right.equalTo(messageTimeLabel.snp.left).offset(-3)
+            make.bottom.equalTo(-5)
+        }
+
+        messageTimeLabel.snp.makeConstraints { make in
+            make.top.equalTo(5)
+            make.bottom.equalToSuperview()
+            make.right.equalTo(-5)
         }
     }
 
@@ -135,5 +157,6 @@ class MessageTableViewCell: UITableViewCell {
         messageLabel.text = ""
         messageLabel.snp.removeConstraints()
         messageBubble.snp.removeConstraints()
+        messageTimeLabel.snp.removeConstraints()
     }
 }

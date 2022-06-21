@@ -15,6 +15,8 @@ class ChatRoomListTableViewCell: UITableViewCell {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
         imageView.tintColor = .systemPink
+        imageView.layer.cornerRadius = 25
+        imageView.clipsToBounds = true
         return imageView
     }()
 
@@ -117,5 +119,24 @@ class ChatRoomListTableViewCell: UITableViewCell {
                 self.chatRoomLastMessageLabel.text = viewmodel.lastMessage?.message
             }
         }
+
+        let roomSettingsViewModel = RoomSettingsViewModel(chatRoom: chatRoom)
+        roomSettingsViewModel.fetchImage { [weak self] imageURL in
+            guard let self = self else { return }
+                self.setGroupIconImage(url: imageURL)
+        }
+    }
+
+    // MARK: - Private Methods
+    private func setGroupIconImage(url: String) {
+        guard url.isEmpty == false else { return }
+        chatRoomIconImageView.kf.setImage(with: URL(string: url), placeholder: nil, options: nil, progressBlock: nil, completionHandler: { result in
+            switch result {
+                case .success(let value):
+                    print("Image: \(value.image). Got from: \(value.cacheType)")
+                case .failure(let error):
+                    print(error.localizedDescription)
+            }
+        })
     }
 }

@@ -18,10 +18,13 @@ struct Message: Identifiable, Decodable {
     var senderUID: String?
 
     var timestampString: String? {
+        var calendar = Calendar.current
+        calendar.locale = Locale(identifier: "en")
         let formatter = DateComponentsFormatter()
         formatter.allowedUnits = [.second, .minute, .hour, .day, .weekOfMonth]
         formatter.maximumUnitCount = 1
-        formatter.unitsStyle = .abbreviated
+        formatter.unitsStyle = .brief
+        formatter.calendar = calendar
         return formatter.string(from: timestamp.dateValue(), to: Date()) ?? ""
     }
 

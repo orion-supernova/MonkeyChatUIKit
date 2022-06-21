@@ -21,6 +21,7 @@ class RoomSettingsViewController: UIViewController {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
         imageView.tintColor = .systemPink
+        imageView.isUserInteractionEnabled = true
         return imageView
     }()
 
@@ -73,7 +74,7 @@ class RoomSettingsViewController: UIViewController {
     init(chatRoom: ChatRoom) {
         super.init(nibName: nil, bundle: nil)
         self.chatRoom = chatRoom
-        setGroupIconImage()
+        fetchAndObserverGroupImage()
         setLabelTexts()
     }
 
@@ -82,11 +83,14 @@ class RoomSettingsViewController: UIViewController {
         setup()
         layout()
         configureNavigationBar()
+        addGestures()
+        fetchAndObserverGroupImage()
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         roomIconImageView.layer.cornerRadius = 50 // size'ın yarısı kadar olmalı ki daire olsun
+        roomIconImageView.clipsToBounds = true
         inviteButton.layer.cornerRadius = 5
     }
 
@@ -158,6 +162,11 @@ class RoomSettingsViewController: UIViewController {
         navigationItem.rightBarButtonItem?.tintColor = .systemPink
     }
 
+    private func addGestures() {
+        let roomIconImageViewRecognizer = UITapGestureRecognizer(target: self, action: #selector(roomIconImageViewRecognizerAction))
+        roomIconImageView.addGestureRecognizer(roomIconImageViewRecognizer)
+    }
+
     // MARK: - Private Methods
     private func setGroupIconImage() {
         guard let chatRoom = chatRoom else { return }
@@ -204,6 +213,17 @@ class RoomSettingsViewController: UIViewController {
         roomPasswordLabel.attributedText = roomPasswordAttributedString
     }
 
+    private func fetchAndObserverGroupImage() {
+        guard let chatRoom = chatRoom else { return }
+        let viewModel = RoomSettingsViewModel(chatRoom: chatRoom)
+        viewModel.fetchImage {[weak self] imageURL in
+            guard let self = self else { return }
+            DispatchQueue.main.async {
+                self.setGroupIconImage()
+            }
+        }
+    }
+
     // MARK: - Actions
     @objc func deleteRoomButtonAction() {
         AlertHelper.alertMessage(viewController: self, title: "Delete This Room", message: "Do you want to delete this room and everything related to this room in our servers? This action will affect everyone in this room and can NOT be undone.", okButtonText: "Delete") {
@@ -225,5 +245,34 @@ class RoomSettingsViewController: UIViewController {
         }
         alertController.addAction(okAction)
         self.present(alertController, animated: true, completion: nil)
+    }
+
+    @objc func roomIconImageViewRecognizerAction() {
+        let imagePickerController = UIImagePickerController()
+        imagePickerController.delegate = self
+        imagePickerController.sourceType = .photoLibrary
+        imagePickerController.allowsEditing = true
+        present(imagePickerController, animated: true)
+    }
+}
+
+extension RoomSettingsViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        let image = info[.editedImage] as? UIImage
+        picker.dismiss(animated: true)
+        guard let image = image else { return }
+        LottieHUD.shared.show()
+        guard let chatRoom = chatRoom else { return }
+        let viewModel = RoomSettingsViewModel(chatRoom: chatRoom)
+        viewModel.uploadPicture(image: image) { [weak self] in
+            guard let self = self else { return }
+            self.roomIconImageView.image = image
+            LottieHUD.shared.dismiss()
+        }
+        
+    }
+
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        picker.dismiss(animated: true)
     }
 }
