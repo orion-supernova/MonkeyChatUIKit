@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 
 class ChatRoomViewController: UIViewController {
 
@@ -29,28 +30,8 @@ class ChatRoomViewController: UIViewController {
         return tableView
     }()
 
-    private lazy var textInputView: UITextView = {
-        let textView = UITextView()
-        textView.font = UIFont.systemFont(ofSize: 17)
-//        textView.isScrollEnabled = false
-        textView.layer.cornerRadius = 10
-        textView.layer.zPosition = 1
-        return textView
-    }()
-
-    private lazy var sendButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setTitle("Send", for: .normal)
-        button.titleLabel?.font =  UIFont(name: "Comic Sans MS", size: 10)
-        button.tintColor = .systemPink
-        button.addTarget(self, action: #selector(sendButtonAction), for: .touchUpInside)
-        button.isEnabled = false
-        return button
-    }()
-
-    private lazy var bottomView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .secondarySystemBackground
+    private lazy var textInputView: TextEntryView = {
+        let view = TextEntryView(frame: .zero, viewController: self)
         return view
     }()
 
@@ -60,7 +41,6 @@ class ChatRoomViewController: UIViewController {
     private var navigationBarHeight: CGFloat = 0
     private var tabbarHeight: CGFloat = 0
     private var viewmodel: ChatRoomViewModel?
-    private var keyboardDispatchGroup: DispatchGroup?
 
     // MARK: - Lifecycle
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?)   {
@@ -86,8 +66,8 @@ class ChatRoomViewController: UIViewController {
         super.viewDidLoad()
         configureNavigationBar()
         setup()
-        setTableViewDelegates()
         layout()
+        setTableViewDelegates()
         addObservers()
         fetchMessagesAndObserve()
     }
@@ -119,9 +99,7 @@ class ChatRoomViewController: UIViewController {
     private func setup() {
         view.addSubview(emptyLabel)
         view.addSubview(tableView)
-        view.addSubview(bottomView)
-        bottomView.addSubview(textInputView)
-        bottomView.addSubview(sendButton)
+        view.addSubview(textInputView)
     }
 
     // MARK: - Layout
@@ -139,28 +117,14 @@ class ChatRoomViewController: UIViewController {
         tableView.snp.makeConstraints { make in
             make.top.equalTo(navigationBarHeight)
             make.right.left.equalToSuperview()
-            make.bottom.equalTo(bottomView.snp.top)
-        }
-
-        bottomView.snp.makeConstraints { make in
-            make.left.right.equalToSuperview()
-            make.bottom.equalTo(-tabbarHeight)
-            make.height.equalTo(50)
+            make.bottom.equalTo(textInputView.snp.top)
         }
 
         textInputView.snp.makeConstraints { make in
-            make.left.equalTo(30)
-            make.right.equalTo(sendButton.snp.left).offset(-30)
-            make.height.equalTo(40)
-            make.bottom.equalTo(-5)
+            make.left.right.equalToSuperview()
+            make.bottom.equalTo(-tabbarHeight)
+            make.height.greaterThanOrEqualTo(40)
         }
-
-        sendButton.snp.makeConstraints { make in
-            make.right.equalTo(-12)
-            make.bottom.equalTo(-5)
-            make.width.height.equalTo(40)
-        }
-
     }
 
     // MARK: - Actions
@@ -177,7 +141,6 @@ class ChatRoomViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(appEnteredBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(backgroundTap))
         self.view.addGestureRecognizer(tapGestureRecognizer)
-        self.keyboardDispatchGroup = DispatchGroup()
     }
 
     private func fetchMessagesAndObserve() {
@@ -207,54 +170,34 @@ class ChatRoomViewController: UIViewController {
     }
 
     // MARK: - Actions
-    @objc func sendButtonAction() {
-        guard let viewmodel = viewmodel else { return }
-        let firstNonEmptyChar = textInputView.text.first(where: { $0 != " " && $0 != "\n"})
-        while textInputView.text.first != firstNonEmptyChar {
-            textInputView.text.removeFirst()
-        }
-        while textInputView.text.last == " " || textInputView.text.last == "\n" {
-            textInputView.text.removeLast()
-        }
-        viewmodel.uploadMessage(message: textInputView.text ?? "")
-        self.textInputView.text = ""
-    }
-
     @objc func keyboardWillShow(notification: NSNotification) {
-        keyboardDispatchGroup?.notify(queue: .main, execute: { [weak self] in
-            guard let self = self else { return }
 
-            guard let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else {
-                // if keyboard size is not available for some reason, dont do anything
-                return
-            }
-            var shouldMoveViewUp = false
+        guard let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else {
+            // if keyboard size is not available for some reason, dont do anything
+            return
+        }
+        var shouldMoveViewUp = false
 
-            // if active text field is not nil
-            if let activeTextField = self.activeTextView {
+        let bottomOfTextField = textInputView.convert(textInputView.bounds, to: self.view).maxY;
+        let topOfKeyboard = self.view.frame.height - keyboardSize.height
 
-                let bottomOfTextField = activeTextField.convert(activeTextField.bounds, to: self.view).maxY;
-                let topOfKeyboard = self.view.frame.height - keyboardSize.height
+        if bottomOfTextField > topOfKeyboard {
+            shouldMoveViewUp = true
+        }
 
-                if bottomOfTextField > topOfKeyboard {
-                    shouldMoveViewUp = true
-                }
-            }
+        if(shouldMoveViewUp) {
+            let contentInsets = UIEdgeInsets(top: keyboardSize.height - self.navigationBarHeight - self.textInputView.frame.size.height, left: 0.0, bottom: 0.0, right: 0.0)
 
-            if(shouldMoveViewUp) {
-                let contentInsets = UIEdgeInsets(top: keyboardSize.height - self.navigationBarHeight - self.textInputView.frame.size.height, left: 0.0, bottom: 0.0, right: 0.0)
+            // Getting Default Keyboard Animation Config
+            let duration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as! Double
+            let curve = notification.userInfo![UIResponder.keyboardAnimationCurveUserInfoKey] as! UInt
 
-                // Getting Default Keyboard Animation Config
-                let duration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as! Double
-                let curve = notification.userInfo![UIResponder.keyboardAnimationCurveUserInfoKey] as! UInt
-
-                UIView.animate(withDuration: duration, delay: 0.0, options: UIView.AnimationOptions(rawValue: curve), animations: {
-                    self.view.frame.origin.y = 0 - keyboardSize.height + self.tabbarHeight
-                    self.tableView.contentInset = contentInsets
-                    self.tableView.scrollIndicatorInsets = contentInsets
-                })
-            }
-        })
+            UIView.animate(withDuration: duration, delay: 0.0, options: UIView.AnimationOptions(rawValue: curve), animations: {
+                self.view.frame.origin.y = 0 - keyboardSize.height + self.tabbarHeight
+                self.tableView.contentInset = contentInsets
+                self.tableView.scrollIndicatorInsets = contentInsets
+            })
+        }
     }
 
     @objc func keyboardWillHide(notification: NSNotification) {
@@ -266,8 +209,6 @@ class ChatRoomViewController: UIViewController {
     }
 
     @objc func backgroundTap(_ sender: UITapGestureRecognizer) {
-        // go through all of the textfield inside the view, and end editing thus resigning first responder
-        // ie. it will trigger a keyboardWillHide notification
         self.view.endEditing(true)
     }
 
@@ -276,7 +217,7 @@ class ChatRoomViewController: UIViewController {
     }
 }
 
-// MARK: UITableViewDataSource
+// MARK: UITableView DataSource
 extension ChatRoomViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "MessageTableViewCell", for: indexPath) as? MessageTableViewCell else { return UITableViewCell() }
@@ -290,40 +231,31 @@ extension ChatRoomViewController: UITableViewDataSource {
     }
 }
 
-// MARK: UITableViewDelegate
+// MARK: UITableView Delegate
 extension ChatRoomViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
     }
 }
 
-// MARK: UITextViewDelegate
-extension ChatRoomViewController: UITextViewDelegate {
-    func textViewDidBeginEditing(_ textView: UITextView) {
-        keyboardDispatchGroup?.enter()
-        self.activeTextView = textView
-        keyboardDispatchGroup?.leave()
-        textViewDidChange(textView)
-    }
-
-    func textViewDidEndEditing(_ textView: UITextView) {
-        self.activeTextView = nil
-    }
-
-    func textViewDidChange(_ textView: UITextView) {
-        var notNullOrEmptyString = false
-        for item in textView.text {
-            if item != " " && item != "\n" {
-                notNullOrEmptyString = true
-            }
-        }
-        sendButton.isEnabled = notNullOrEmptyString && textView.text != ""
-    }
-}
-
-// MARK: - ChatRoomViewModelDelegate
+// MARK: - ChatRoomViewModel Delegate
 extension ChatRoomViewController: ChatRoomViewModelDelegate {
     func didChangeDataSource() {
         //
+    }
+}
+
+extension ChatRoomViewController: TextEntryViewDelegate {
+    func didChangeTextViewSize(height: CGFloat) {
+        textInputView.constraints.forEach { (constraint) in
+            if constraint.firstAttribute == .height {
+                constraint.constant = height
+            }
+        }
+    }
+
+    func didClickSendButton(text: String) {
+        guard let viewmodel = viewmodel else { return }
+        viewmodel.uploadMessage(message: text)
     }
 }
