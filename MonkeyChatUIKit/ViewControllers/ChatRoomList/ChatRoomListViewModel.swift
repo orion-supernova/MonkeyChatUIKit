@@ -9,45 +9,57 @@ import UIKit
 import Firebase
 import FirebaseFirestoreSwift
 
+protocol ChatRoomListViewModelDelegate: AnyObject {
+    func didChangeDataSource()
+}
+
 class ChatRoomListViewModel {
     typealias AlertCompletion = ((Bool) -> Void)?
 
+    // MARK: - Public Properties
     var chatRooms = [ChatRoom]()
+    weak var delegate: ChatRoomListViewModelDelegate?
 
-    func fetchChatRooms(completion: @escaping () -> Void) {
+    func fetchChatRooms() {
         guard let userID = AppGlobal.shared.userID else { return }
-        var roomIDs = [String]()
-        var chatRoomDocuments = [DocumentSnapshot]()
-        let group = DispatchGroup()
-        group.enter()
+        var count = 0
+
         COLLECTION_USERS.document(userID).collection("chatRooms").addSnapshotListener {[weak self] snapshot, error in
             guard let self = self else { return }
+            var chatRoomDocuments = [DocumentSnapshot]()
+            self.chatRooms.removeAll()
             guard error == nil else { print(error!.localizedDescription); return }
             guard let documents = snapshot?.documents else { return }
             self.chatRooms = documents.compactMap({ try? $0.data(as: ChatRoom.self) })
 
+            let group = DispatchGroup()
             for room in self.chatRooms {
-                roomIDs.append(room.id ?? "")
-            }
-            group.leave()
-        }
-
-        group.notify(queue: .global()) {
-            COLLECTION_CHATROOMS.addSnapshotListener { snapshot, error in
-                guard error == nil else { print(error!.localizedDescription); return }
-                guard let snapshot = snapshot else { return }
-                let documents = snapshot.documents
-                self.chatRooms.removeAll()
-                chatRoomDocuments.removeAll()
-                for id in roomIDs {
-                    guard let document = documents.first(where: { $0.documentID == id }) else { continue }
-                    chatRoomDocuments.append(document)
+                group.enter()
+                COLLECTION_CHATROOMS.document(room.id ?? "").addSnapshotListener { snapshot, error in
+                    guard error == nil else { print(error!.localizedDescription); return }
+                    guard let document = snapshot else { return }
+                    if count == 0 {
+                        chatRoomDocuments.append(document)
+                        group.leave()
+                    } else {
+                        let room = chatRoomDocuments.first(where: { $0.documentID == room.id })
+                        chatRoomDocuments.removeAll(where: { $0 == room})
+                        chatRoomDocuments.append(document)
+                        orderRooms()
+                    }
                 }
+            }
+            group.notify(queue: .global()) {
+                count += 1
+                orderRooms()
+            }
+            func orderRooms() {
+                self.chatRooms.removeAll()
                 self.chatRooms = chatRoomDocuments.compactMap({ try? $0.data(as: ChatRoom.self) })
                 self.chatRooms.sort(by: { (first: ChatRoom, second: ChatRoom) -> Bool in
                     first.lastMessageTimestamp?.seconds ?? 0 > second.lastMessageTimestamp?.seconds ?? 0
                 })
-                completion()
+                self.delegate?.didChangeDataSource()
             }
         }
     }
@@ -92,15 +104,14 @@ class ChatRoomListViewModel {
                 roomPassword = tempPassword
             }
             guard let userID = AppGlobal.shared.userID else { return }
-            COLLECTION_CHATROOMS.getDocuments { snapshot, error in
-                guard error == nil else { return }
-                guard let documents = snapshot?.documents else { return }
-                var foundRoomDict: [String: Any]?
-                for document in documents {
-                    if document.documentID == roomID {
-                        foundRoomDict = document.data()
-                    }
+            COLLECTION_CHATROOMS.document(roomID).getDocument { snapshot, error in
+                guard error == nil else {
+                    AlertHelper.alertMessage(title: "ERROR",
+                                             message: error?.localizedDescription ?? "",
+                                             okButtonText: "OK")
+                    return
                 }
+                let foundRoomDict = snapshot?.data()
                 guard let foundRoom = foundRoomDict else { return }
                 if roomID == "" {
                     AlertHelper.alertMessage(title: "ERROR", message: "Inlavid Room Code", okButtonText: "OK")
@@ -122,9 +133,9 @@ class ChatRoomListViewModel {
                                     "roomID": roomID] as [String: Any]
 
                         COLLECTION_USERS.document(userID).collection("chatRooms").document(roomID).setData(data) { error in
-                            guard error == nil else { return }
-                            self.fetchChatRooms {
-                                print("DEBUG: ENTERED ROOM \(foundRoomID)")
+                            guard error == nil else {
+                                print(error?.localizedDescription ?? "")
+                                return
                             }
                         }
                     }

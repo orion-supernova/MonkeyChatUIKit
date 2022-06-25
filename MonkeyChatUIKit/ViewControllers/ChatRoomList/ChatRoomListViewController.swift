@@ -23,7 +23,7 @@ class ChatRoomListViewController: UIViewController {
     private let tableView: UITableView = {
         let tableView = UITableView()
         tableView.register(ChatRoomListTableViewCell.self, forCellReuseIdentifier: "ChatRoomListTableViewCell")
-        tableView.tableFooterView = UIView()
+        tableView.rowHeight = 55
         return tableView
     }()
 
@@ -34,7 +34,7 @@ class ChatRoomListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
-        setTableViewDelegates()
+        setDelegates()
         layout()
         fetchAndObserveChatRooms()
     }
@@ -58,9 +58,10 @@ class ChatRoomListViewController: UIViewController {
         view.addSubview(tableView)
     }
 
-    private func setTableViewDelegates() {
+    private func setDelegates() {
         tableView.delegate = self
         tableView.dataSource = self
+        viewModel.delegate = self
     }
 
     private func layout() {
@@ -124,15 +125,7 @@ class ChatRoomListViewController: UIViewController {
     }
 
     private func fetchAndObserveChatRooms() {
-        viewModel.fetchChatRooms { [weak self] in
-            guard let self = self else { return }
-            self.toggleEmptyView()
-            self.tableView.reloadData()
-            UIView.transition(with: self.tableView,
-                              duration: 0.2,
-                              options: .transitionCrossDissolve,
-                              animations: { self.tableView.reloadData() })
-        }
+        viewModel.fetchChatRooms()
     }
 
     private func updateLastMessages() {
@@ -158,7 +151,7 @@ extension ChatRoomListViewController: UITableViewDataSource {
     }
 }
 
-// MARK: UITableViewDelegate
+// MARK: UITableView Delegate
 extension ChatRoomListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
@@ -166,3 +159,16 @@ extension ChatRoomListViewController: UITableViewDelegate {
         self.navigationController?.pushViewController(viewController, animated: true)
     }
 }
+// MARK: ChatRoomListViewModel Delegate
+extension ChatRoomListViewController: ChatRoomListViewModelDelegate {
+    func didChangeDataSource() {
+        DispatchQueue.main.async {
+            self.toggleEmptyView()
+            UIView.transition(with: self.tableView,
+                              duration: 0.2,
+                              options: .transitionCrossDissolve,
+                              animations: { self.tableView.reloadData() })
+        }
+    }
+}
+

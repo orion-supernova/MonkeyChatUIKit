@@ -15,7 +15,6 @@ class ChatRoomListTableViewCell: UITableViewCell {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
         imageView.tintColor = .systemPink
-        imageView.layer.cornerRadius = 25
         imageView.clipsToBounds = true
         return imageView
     }()
@@ -43,7 +42,9 @@ class ChatRoomListTableViewCell: UITableViewCell {
     }()
 
     // MARK: - Private Properties
-    let chatRoom: ChatRoom? = nil
+    private let chatRoom: ChatRoom? = nil
+    private var viewModel: ChatRoomViewModel?
+    private var roomSettingsViewModel: RoomSettingsViewModel?
 
     // MARK: - Lifecycle
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -53,6 +54,10 @@ class ChatRoomListTableViewCell: UITableViewCell {
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        chatRoomIconImageView.layer.cornerRadius = chatRoomIconImageView.frame.size.width/2
     }
 
     // MARK: - Setup
@@ -65,8 +70,9 @@ class ChatRoomListTableViewCell: UITableViewCell {
 
     func layout() {
         chatRoomIconImageView.snp.makeConstraints { make in
-            make.top.left.bottom.equalToSuperview()
-            make.width.equalTo(50)
+            make.left.equalToSuperview()
+            make.centerY.equalToSuperview()
+            make.size.equalTo(50)
         }
 
         chatRoomNameLabel.snp.makeConstraints { make in
@@ -94,20 +100,28 @@ class ChatRoomListTableViewCell: UITableViewCell {
 
     // MARK: - Functions
     func configureCell(chatRoom: ChatRoom) {
-        let viewmodel = ChatRoomViewModel(chatroom: chatRoom)
+        if self.viewModel == nil {
+            self.viewModel = ChatRoomViewModel(chatroom: chatRoom)
+        } else {
+            self.viewModel?.chatroom = chatRoom
+        }
+        guard let viewModel = viewModel else { return }
         self.chatRoomNameLabel.text = chatRoom.name
         let firstCharacterOfTheChatRoomName = chatRoom.name?.first ?? String.Element("")
         if let icon = UIImage(systemName: "\(firstCharacterOfTheChatRoomName).circle") {
+            guard chatRoomIconImageView.image != icon else { return }
             chatRoomIconImageView.image = icon
         } else {
-            chatRoomIconImageView.image = UIImage(systemName: "questionmark.circle")
+            let icon = UIImage(systemName: "questionmark.circle")
+            guard chatRoomIconImageView.image != icon else { return }
+            chatRoomIconImageView.image = icon
         }
-        viewmodel.getLastMessage {
-            if viewmodel.lastMessage?.message == "" || viewmodel.lastMessage?.message == nil {
+        viewModel.getLastMessage {
+            if viewModel.lastMessage?.message == "" || viewModel.lastMessage?.message == nil {
                 self.chatRoomLastMessageSenderNameLabel.text = ""
                 self.chatRoomLastMessageLabel.text = "No messages here yet"
             } else {
-                if let senderName = viewmodel.lastMessage?.senderName {
+                if let senderName = viewModel.lastMessage?.senderName {
                     if senderName == "" {
                         self.chatRoomLastMessageSenderNameLabel.text = "Anonymous"
                     } else {
@@ -116,12 +130,15 @@ class ChatRoomListTableViewCell: UITableViewCell {
                 } else {
                     self.chatRoomLastMessageSenderNameLabel.text = "Anonymous"
                 }
-                self.chatRoomLastMessageLabel.text = viewmodel.lastMessage?.message
+                self.chatRoomLastMessageLabel.text = viewModel.lastMessage?.message
             }
         }
-
-        let roomSettingsViewModel = RoomSettingsViewModel(chatRoom: chatRoom)
-        roomSettingsViewModel.fetchImage { [weak self] imageURL in
+        if roomSettingsViewModel == nil {
+            self.roomSettingsViewModel = RoomSettingsViewModel(chatRoom: chatRoom)
+        } else {
+            self.roomSettingsViewModel?.chatRoom = chatRoom
+        }
+        roomSettingsViewModel?.fetchImage { [weak self] imageURL in
             guard let self = self else { return }
                 self.setGroupIconImage(url: imageURL)
         }

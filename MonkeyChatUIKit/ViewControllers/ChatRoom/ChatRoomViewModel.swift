@@ -15,7 +15,7 @@ protocol ChatRoomViewModelDelegate: AnyObject {
 class ChatRoomViewModel {
 
     // MARK: - Stored Properties
-    private let chatroom: ChatRoom
+    var chatroom: ChatRoom
     var messages = [Message]()
     var lastMessage: Message?
     weak var delegate: ChatRoomViewModelDelegate?

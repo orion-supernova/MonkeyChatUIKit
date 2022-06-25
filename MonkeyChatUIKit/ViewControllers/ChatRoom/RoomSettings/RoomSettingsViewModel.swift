@@ -10,8 +10,8 @@ import Firebase
 
 class RoomSettingsViewModel {
 
-    // MARK: - Private Properties
-    private var chatRoom: ChatRoom?
+    // MARK: - Public Properties
+    var chatRoom: ChatRoom?
 
     // MARK: - Lifecycle
     init(chatRoom: ChatRoom) {
@@ -22,7 +22,7 @@ class RoomSettingsViewModel {
     func fetchImage(completion: @escaping (String) -> Void) {
         guard let chatRoomID = chatRoom?.id else { return }
 
-        COLLECTION_CHATROOMS.document(chatRoomID).addSnapshotListener { snapshot, error in
+        COLLECTION_CHATROOMS.document(chatRoomID).getDocument { snapshot, error in
             guard error == nil else { return }
             guard let snapshot = snapshot else { return }
 
