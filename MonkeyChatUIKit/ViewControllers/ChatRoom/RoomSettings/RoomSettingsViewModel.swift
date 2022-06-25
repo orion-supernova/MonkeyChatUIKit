@@ -31,7 +31,9 @@ class RoomSettingsViewModel {
             completion(imageURL ?? "")
         }
     }
+
     func uploadPicture(image: UIImage, completion: @escaping(() -> Void)) {
+        deletePreviousImageFromStorage()
 
         ImageUploader.uploadImage(image: image, type: .chatRoomPicture) { imageURL in
             guard let chatRoomID = self.chatRoom?.id else { return }
@@ -44,6 +46,16 @@ class RoomSettingsViewModel {
                     return
                 }
                 completion()
+            }
+        }
+    }
+
+    func deletePreviousImageFromStorage() {
+        let storage = Storage.storage()
+        storage.reference(forURL: chatRoom?.imageURL ?? "").delete { error in
+            guard error == nil else {
+                print(error?.localizedDescription ?? "")
+                return
             }
         }
     }

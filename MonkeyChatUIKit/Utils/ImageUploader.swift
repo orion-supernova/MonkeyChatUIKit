@@ -27,9 +27,7 @@ enum UploadType {
 }
 
 struct ImageUploader {
-
     static func uploadImage(image: UIImage, type: UploadType, completion: @escaping(String) -> Void) {
-
         guard let imageData = image.jpegData(compressionQuality: 0.5) else { return }
 
         let ref = type.filePath
@@ -39,14 +37,11 @@ struct ImageUploader {
                 print("Failed to upload image. \(error!.localizedDescription)")
                 return
             }
-
             print("Succesfully uploaded the image via ImageUploader!")
-
             ref.downloadURL { url, _ in
                 guard let imageURL = url?.absoluteString else { return }
                 completion(imageURL)
             }
         }
-
     }
 }
