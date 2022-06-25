@@ -22,10 +22,10 @@ class ChatRoomListViewModel {
 
     func fetchChatRooms() {
         guard let userID = AppGlobal.shared.userID else { return }
-        var count = 0
 
         COLLECTION_USERS.document(userID).collection("chatRooms").addSnapshotListener {[weak self] snapshot, error in
             guard let self = self else { return }
+            var count = 0
             var chatRoomDocuments = [DocumentSnapshot]()
             self.chatRooms.removeAll()
             guard error == nil else { print(error!.localizedDescription); return }
@@ -92,8 +92,7 @@ class ChatRoomListViewModel {
             textfield.isSecureTextEntry = true
         }
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
-        let okAction = UIAlertAction(title: "Enter", style: .default) { [weak self] action in
-            guard let self = self else { return }
+        let okAction = UIAlertAction(title: "Enter", style: .default) { action in
             guard let textfields = alertController.textFields else { return }
             var roomID = ""
             var roomPassword = ""
@@ -112,12 +111,12 @@ class ChatRoomListViewModel {
                     return
                 }
                 let foundRoomDict = snapshot?.data()
-                guard let foundRoom = foundRoomDict else { return }
-                if roomID == "" {
-                    AlertHelper.alertMessage(title: "ERROR", message: "Inlavid Room Code", okButtonText: "OK")
+                guard let foundRoom = foundRoomDict else {
+                    AlertHelper.alertMessage(title: "ERROR",
+                                             message: "The room you're trying to enter is not exist. Please check your ID.",
+                                             okButtonText: "OK")
                     return
                 }
-                guard let foundRoomID = foundRoom["roomID"] as? String else { return }
                 guard let fcmToken = AppGlobal.shared.fcmToken else { return }
 
                 let userDataWithFcmToken = ["userID": userID,
