@@ -83,9 +83,9 @@ class ChatRoomListViewModel {
 
     // MARK: - Enter Room Action
     func enterRoom(target: UIViewController) {
-        let alertController = UIAlertController(title: "Enter Room", message: "Please enter the room Code:", preferredStyle: .alert)
+        let alertController = UIAlertController(title: "Enter Room", message: "Please Enter The Room ID:", preferredStyle: .alert)
         alertController.addTextField { textfield in
-            textfield.placeholder = "Room Code"
+            textfield.placeholder = "Room ID"
         }
         alertController.addTextField { textfield in
             textfield.placeholder = "Room Password"

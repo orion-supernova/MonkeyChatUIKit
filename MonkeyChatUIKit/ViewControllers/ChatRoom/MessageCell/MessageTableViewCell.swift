@@ -110,13 +110,15 @@ class MessageTableViewCell: UITableViewCell {
         messageLabel.snp.makeConstraints { make in
             make.top.equalTo(5)
             make.left.equalTo(5)
+            make.width.lessThanOrEqualTo(contentView.snp.width).multipliedBy(0.8)
             make.bottom.equalTo(-5)
         }
 
         messageTimeLabel.snp.makeConstraints { make in
-            make.top.equalTo(5)
             make.bottom.equalTo(-5)
-            make.left.equalTo(messageLabel.snp.right).offset(3)
+            make.left.equalTo(messageLabel.snp.right).offset(5)
+            make.height.lessThanOrEqualTo(30)
+            make.width.lessThanOrEqualTo(30)
         }
     }
 
@@ -131,16 +133,19 @@ class MessageTableViewCell: UITableViewCell {
             make.left.equalTo(messageLabel.snp.left).offset(-5)
             make.bottom.equalTo(-5)
         }
+
         messageLabel.snp.makeConstraints { make in
             make.top.equalTo(5)
             make.right.equalTo(messageTimeLabel.snp.left).offset(-3)
+            make.width.lessThanOrEqualTo(contentView.snp.width).multipliedBy(0.8)
             make.bottom.equalTo(-5)
         }
 
         messageTimeLabel.snp.makeConstraints { make in
-            make.top.equalTo(5)
-            make.bottom.equalToSuperview()
+            make.bottom.equalTo(-5)
             make.right.equalTo(-5)
+            make.height.lessThanOrEqualTo(30)
+            make.width.lessThanOrEqualTo(30)
         }
     }
 
