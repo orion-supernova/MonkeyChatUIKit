@@ -8,6 +8,10 @@
 import UIKit
 import SnapKit
 
+protocol MessageTableViewCellDelegate: AnyObject {
+    func didToggleEmojiReactionsView(state: EmojiReactionsView.State, indexPath: IndexPath)
+}
+
 class MessageTableViewCell: UITableViewCell {
 
     private lazy var usernameLabel: UILabel = {
@@ -39,12 +43,23 @@ class MessageTableViewCell: UITableViewCell {
         return label
     }()
 
+    private lazy var emojiReactionsView: EmojiReactionsView = {
+        let view = EmojiReactionsView()
+        return view
+    }()
+
+    // MARK: - Public Variables
+    weak var delegate: MessageTableViewCellDelegate?
+
+    // MARK: - Private Variables
+    private var indexPath: IndexPath?
 
     // MARK: - Lifecycle
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setup()
         layout()
+        addRecognizer()
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -54,15 +69,27 @@ class MessageTableViewCell: UITableViewCell {
         messageBubble.layer.cornerRadius = 10
     }
 
+    override func setSelected(_ selected: Bool, animated: Bool) {
+        super.setSelected(selected, animated: animated)
+        // Configure the view for the selected state
+    }
+
+    override func prepareForReuse() {
+        messageLabel.text = ""
+        messageLabel.snp.removeConstraints()
+        messageBubble.snp.removeConstraints()
+        messageTimeLabel.snp.removeConstraints()
+    }
+
     //MARK: - Setup & Layout
-    func setup() {
+    private func setup() {
         contentView.addSubview(usernameLabel)
         contentView.addSubview(messageBubble)
         messageBubble.addSubview(messageLabel)
         messageBubble.addSubview(messageTimeLabel)
     }
 
-    func layout() {
+    private func layout() {
         usernameLabel.snp.makeConstraints { make in
             make.top.equalTo(5)
             make.left.equalTo(5)
@@ -72,7 +99,8 @@ class MessageTableViewCell: UITableViewCell {
     }
 
     // MARK: - Public Methods
-    func configureCell(message: Message) {
+    func configureCell(message: Message, indexPath: IndexPath) {
+        self.indexPath = indexPath
         if message.senderName == "" || message.senderName == nil{
             usernameLabel.text = "Anonymous"
         } else {
@@ -96,6 +124,11 @@ class MessageTableViewCell: UITableViewCell {
     }
 
     // MARK: - Private Methods
+    private func addRecognizer() {
+        let recognizer = UILongPressGestureRecognizer(target: self, action: #selector(messageBubbleAction))
+        messageBubble.addGestureRecognizer(recognizer)
+    }
+
     private func configureLeftBubble() {
         usernameLabel.textAlignment = .left
         messageLabel.textColor = UIColor(named: "Black-White")
@@ -153,15 +186,11 @@ class MessageTableViewCell: UITableViewCell {
 
     }
 
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-        // Configure the view for the selected state
-    }
-
-    override func prepareForReuse() {
-        messageLabel.text = ""
-        messageLabel.snp.removeConstraints()
-        messageBubble.snp.removeConstraints()
-        messageTimeLabel.snp.removeConstraints()
+    // MARK: - Actions
+    @objc private func messageBubbleAction() {
+        guard let indexPath = indexPath else {
+            return
+        }
+        delegate?.didToggleEmojiReactionsView(state: .added, indexPath: indexPath)
     }
 }

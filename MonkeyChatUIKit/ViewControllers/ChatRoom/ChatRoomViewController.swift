@@ -35,6 +35,18 @@ class ChatRoomViewController: UIViewController {
         return view
     }()
 
+    private lazy var emojiReactionsView: EmojiReactionsView = {
+        let view = EmojiReactionsView()
+        return view
+    }()
+
+    private lazy var blurEffectView: UIVisualEffectView = {
+        let blurEffect = UIBlurEffect(style: .prominent)
+        let view = UIVisualEffectView(effect: blurEffect)
+        view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        return view
+    }()
+
     // MARK: - Private Properties
     private var chatRoom: ChatRoom?
     private var activeTextView : UITextView? = nil
@@ -80,6 +92,9 @@ class ChatRoomViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         self.scrollToBottom()
     }
+
+    // MARK: - Private Properties
+    var isEmojiReactionsViewActive = false
 
     //MARK: - Setup
     private func setTableViewDelegates() {
@@ -209,6 +224,10 @@ class ChatRoomViewController: UIViewController {
     }
 
     @objc func backgroundTap(_ sender: UITapGestureRecognizer) {
+        if isEmojiReactionsViewActive {
+            self.didToggleEmojiReactionsView(state: .removed, indexPath: IndexPath(row: 0, section: 9))
+            return
+        }
         self.view.endEditing(true)
     }
 
@@ -222,7 +241,8 @@ extension ChatRoomViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "MessageTableViewCell", for: indexPath) as? MessageTableViewCell else { return UITableViewCell() }
         guard let message = viewmodel?.messages[indexPath.row] else { return UITableViewCell() }
-        cell.configureCell(message: message)
+        cell.delegate = self
+        cell.configureCell(message: message, indexPath: indexPath)
         return cell
     }
 
@@ -257,5 +277,64 @@ extension ChatRoomViewController: TextEntryViewDelegate {
     func didClickSendButton(text: String) {
         guard let viewmodel = viewmodel else { return }
         viewmodel.uploadMessage(message: text)
+    }
+}
+
+extension ChatRoomViewController: MessageTableViewCellDelegate {
+    func didToggleEmojiReactionsView(state: EmojiReactionsView.State, indexPath: IndexPath) {
+        var cell = UITableViewCell()
+        var copy = UIView()
+        if indexPath != IndexPath(row: 0, section: 9) {
+            cell = self.tableView.cellForRow(at: indexPath) as? MessageTableViewCell ?? UITableViewCell()
+            copy = cell.contentView.snapshotView(afterScreenUpdates: true) ?? UIView()
+        }
+        switch state {
+            case .added:
+                guard !isEmojiReactionsViewActive else { return }
+//                self.view.addSubview(blurEffectView)
+//                blurEffectView.snp.makeConstraints { make in
+//                    make.edges.equalToSuperview()
+//                }
+//                self.view.addSubview(copy)
+//                copy.snp.makeConstraints { make in
+//                    make.top.equalTo(cell.snp.top)
+//                    make.left.equalTo(cell.snp.left)
+//                    make.right.equalTo(cell.snp.right)
+//                    make.bottom.equalTo(cell.snp.bottom)
+//                }
+                UIView.transition(with: self.emojiReactionsView, duration: 0.25, options: .transitionFlipFromTop, animations: { [weak self] in
+                    guard let self = self else { return }
+                    self.view.addSubview(self.emojiReactionsView)
+                    self.view.bringSubviewToFront(self.emojiReactionsView)
+
+                    self.emojiReactionsView.snp.makeConstraints { make in
+                        make.bottom.equalTo(cell.snp.top)
+                        make.left.equalTo(cell.snp.left)
+                        make.right.equalTo(cell.snp.right)
+                        make.height.equalTo(50)
+                    }
+                    self.isEmojiReactionsViewActive = true
+                    self.tableView.isScrollEnabled = false
+                }, completion: nil)
+
+            case .removed:
+                guard isEmojiReactionsViewActive else { return }
+//                copy.snp.removeConstraints()
+//                copy.removeFromSuperview()
+                UIView.transition(with: self.emojiReactionsView, duration: 0.25, options: .transitionFlipFromBottom, animations: { [weak self] in
+                    guard let self = self else { return }
+                    self.emojiReactionsView.snp.removeConstraints()
+                    self.emojiReactionsView.removeFromSuperview()
+
+                    self.isEmojiReactionsViewActive = false
+                    self.tableView.isScrollEnabled = true
+                    self.tableView.reloadData()
+                }, completion: nil)
+
+//                blurEffectView.snp.removeConstraints()
+//                blurEffectView.removeFromSuperview()
+
+
+        }
     }
 }

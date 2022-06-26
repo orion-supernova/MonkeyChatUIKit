@@ -57,6 +57,8 @@
 		5499FCD9285E6E7A00BCE34D /* lights.riv in Resources */ = {isa = PBXBuildFile; fileRef = 5499FCD8285E6E7A00BCE34D /* lights.riv */; };
 		549FB85928201F68003E65E3 /* AccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 549FB85828201F68003E65E3 /* AccountViewController.swift */; };
 		549FB85F28202976003E65E3 /* PrivacySecurityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 549FB85E28202976003E65E3 /* PrivacySecurityViewController.swift */; };
+		54E08EAF286876C800A418AE /* EmojiReactionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54E08EAE286876C800A418AE /* EmojiReactionsView.swift */; };
+		54E08EB12868775100A418AE /* animated-emojis.riv in Resources */ = {isa = PBXBuildFile; fileRef = 54E08EB02868775100A418AE /* animated-emojis.riv */; };
 		54F2336427BD337100E9FD28 /* ChatRoomListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F2336327BD337100E9FD28 /* ChatRoomListTableViewCell.swift */; };
 		54F2336A27BD3C7500E9FD28 /* ChatRoomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F2336927BD3C7500E9FD28 /* ChatRoomViewController.swift */; };
 		54F2336C27BD44F900E9FD28 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F2336B27BD44F900E9FD28 /* SettingsViewController.swift */; };
@@ -108,6 +110,8 @@
 		5499FCD8285E6E7A00BCE34D /* lights.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = lights.riv; sourceTree = "<group>"; };
 		549FB85828201F68003E65E3 /* AccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountViewController.swift; sourceTree = "<group>"; };
 		549FB85E28202976003E65E3 /* PrivacySecurityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacySecurityViewController.swift; sourceTree = "<group>"; };
+		54E08EAE286876C800A418AE /* EmojiReactionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiReactionsView.swift; sourceTree = "<group>"; };
+		54E08EB02868775100A418AE /* animated-emojis.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = "animated-emojis.riv"; sourceTree = "<group>"; };
 		54F2336327BD337100E9FD28 /* ChatRoomListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomListTableViewCell.swift; sourceTree = "<group>"; };
 		54F2336927BD3C7500E9FD28 /* ChatRoomViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomViewController.swift; sourceTree = "<group>"; };
 		54F2336B27BD44F900E9FD28 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
@@ -158,6 +162,7 @@
 		544E9EB3285F662600F0B677 /* Rive_Assets */ = {
 			isa = PBXGroup;
 			children = (
+				54E08EB22868C34C00A418AE /* Emoji-Package */,
 				5499FCD8285E6E7A00BCE34D /* lights.riv */,
 				544E9EB1285F541700F0B677 /* safe_box_icon.riv */,
 			);
@@ -313,12 +318,21 @@
 			path = Managers;
 			sourceTree = "<group>";
 		};
+		54E08EB22868C34C00A418AE /* Emoji-Package */ = {
+			isa = PBXGroup;
+			children = (
+				54E08EB02868775100A418AE /* animated-emojis.riv */,
+			);
+			path = "Emoji-Package";
+			sourceTree = "<group>";
+		};
 		54F2336627BD3C0400E9FD28 /* ChatRoom */ = {
 			isa = PBXGroup;
 			children = (
 				54F2336927BD3C7500E9FD28 /* ChatRoomViewController.swift */,
 				54F2336E27BD635900E9FD28 /* ChatRoomViewModel.swift */,
 				54F2337327BD7BB000E9FD28 /* TextEntryView.swift */,
+				54E08EAE286876C800A418AE /* EmojiReactionsView.swift */,
 				54F2337027BD68B200E9FD28 /* MessageCell */,
 				544E9EB6285F809100F0B677 /* RoomSettings */,
 			);
@@ -424,6 +438,7 @@
 			files = (
 				545FFC7B27BC4C18008CC1ED /* LaunchScreen.storyboard in Resources */,
 				548BC3B927C069D400CBC6EA /* apns-sound.wav in Resources */,
+				54E08EB12868775100A418AE /* animated-emojis.riv in Resources */,
 				547D253B27C40206005D98B8 /* loading.json in Resources */,
 				5499FCD9285E6E7A00BCE34D /* lights.riv in Resources */,
 				545FFC9A27BCDDA1008CC1ED /* GoogleService-Info.plist in Resources */,
@@ -448,6 +463,7 @@
 				545FFCA327BD007F008CC1ED /* ChatRoomListViewModel.swift in Sources */,
 				545FFC6F27BC4C17008CC1ED /* AppDelegate.swift in Sources */,
 				547D253227C3E786005D98B8 /* VerificationCodeViewController.swift in Sources */,
+				54E08EAF286876C800A418AE /* EmojiReactionsView.swift in Sources */,
 				545FFC9C27BCDEDB008CC1ED /* User.swift in Sources */,
 				544E9EBD2860CFB600F0B677 /* ImageUploader.swift in Sources */,
 				54F2336427BD337100E9FD28 /* ChatRoomListTableViewCell.swift in Sources */,
@@ -628,7 +644,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = MonkeyChatUIKit/MonkeyChatUIKit.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = 37TC2VKVJ6;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MonkeyChatUIKit/Info.plist;
@@ -661,7 +677,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = MonkeyChatUIKit/MonkeyChatUIKit.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = 37TC2VKVJ6;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MonkeyChatUIKit/Info.plist;
