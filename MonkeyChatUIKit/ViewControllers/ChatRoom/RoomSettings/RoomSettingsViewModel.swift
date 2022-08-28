@@ -33,19 +33,24 @@ class RoomSettingsViewModel {
     }
 
     func uploadPicture(image: UIImage, completion: @escaping(() -> Void)) {
-        deletePreviousImageFromStorage()
-
-        ImageUploader.uploadImage(image: image, type: .chatRoomPicture) { imageURL in
-            guard let chatRoomID = self.chatRoom?.id else { return }
-            let room = COLLECTION_CHATROOMS.document(chatRoomID)
-
-            let imageURLData = ["imageURL": imageURL] as [String: Any]
-            room.updateData(imageURLData) { error in
-                guard error == nil else {
-                    print(error?.localizedDescription ?? "")
-                    return
+        guard let chatRoomID = self.chatRoom?.id else { return }
+        let room = COLLECTION_CHATROOMS.document(chatRoomID)
+        room.getDocument { snapshot, error in
+            guard error == nil, snapshot != nil else { return }
+            let dict = snapshot?.data()
+            let imageURL = dict?["imageURL"] as? String
+            if imageURL?.isEmpty == false {
+                self.deletePreviousImageFromStorage()
+            }
+            ImageUploader.uploadImage(image: image, type: .chatRoomPicture) { imageURL in
+                let imageURLData = ["imageURL": imageURL] as [String: Any]
+                room.updateData(imageURLData) { error in
+                    guard error == nil else {
+                        print(error?.localizedDescription ?? "")
+                        return
+                    }
+                    completion()
                 }
-                completion()
             }
         }
     }
