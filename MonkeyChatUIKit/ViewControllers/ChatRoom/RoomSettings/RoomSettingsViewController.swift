@@ -9,6 +9,10 @@ import UIKit
 import SnapKit
 import Kingfisher
 
+protocol RoomSettingsViewControllerDelegate: AnyObject {
+    func didDeleteOrBlockRoom()
+}
+
 class RoomSettingsViewController: UIViewController {
     // MARK: - Elements
     private lazy var mainContainerView: UIView = {
@@ -57,10 +61,20 @@ class RoomSettingsViewController: UIViewController {
         return button
     }()
 
-    // MARK: - Private Properties
+    private lazy var blockButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("Block This Room", for: .normal)
+        button.setTitleColor(.red, for: .normal)
+        button.backgroundColor = .secondarySystemBackground
+        button.addTarget(self, action: #selector(blockRoomAction), for: .touchUpInside)
+        return button
+    }()
+
+    // MARK: - Public Properties
     var chatRoom: ChatRoom?
     var navigationBarHeight: CGFloat = 0
     var tabbarHeight: CGFloat = 0
+    weak var delegate: RoomSettingsViewControllerDelegate?
 
     // MARK: - Lifecycle
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?)   {
@@ -92,6 +106,7 @@ class RoomSettingsViewController: UIViewController {
         roomIconImageView.layer.cornerRadius = 50 // size'ın yarısı kadar olmalı ki daire olsun
         roomIconImageView.clipsToBounds = true
         inviteButton.layer.cornerRadius = 5
+        blockButton.layer.cornerRadius = 5
     }
 
     // MARK: - Seyup & Layout
@@ -103,6 +118,7 @@ class RoomSettingsViewController: UIViewController {
         mainContainerView.addSubview(roomPasswordLabel)
         mainContainerView.addSubview(seperatorOneView)
         mainContainerView.addSubview(inviteButton)
+        mainContainerView.addSubview(blockButton)
     }
 
     private func layout() {
@@ -148,6 +164,13 @@ class RoomSettingsViewController: UIViewController {
         inviteButton.snp.makeConstraints { make in
             make.top.equalTo(seperatorOneView.snp.bottom).offset(10)
             make.left.equalToSuperview()
+            make.height.equalTo(30)
+            make.width.equalTo(180)
+        }
+
+        blockButton.snp.makeConstraints { make in
+            make.top.equalTo(inviteButton.snp.top)
+            make.right.equalToSuperview()
             make.height.equalTo(30)
             make.width.equalTo(180)
         }
@@ -227,11 +250,14 @@ class RoomSettingsViewController: UIViewController {
     // MARK: - Actions
     @objc func deleteRoomButtonAction() {
         AlertHelper.alertMessage(viewController: self, title: "Delete This Room", message: "Do you want to delete this room and everything related to this room in our servers? This action will affect everyone in this room and can NOT be undone.", okButtonText: "Delete") {
-            print("TAMAM")
-            AlertHelper.simpleAlertMessage(viewController: self, title: "Lol", message: "Henüz yapmadım xd")
-            // Go to chatrooms and find this rooms users
-            // Delete this room from chatrooms
-            // Delete this room from users -> chatroom
+            guard let chatRoom = self.chatRoom else { return }
+            LottieHUD.shared.show()
+            let viewmodel = RoomSettingsViewModel(chatRoom: chatRoom)
+            viewmodel.deleteOrBlockRoom {
+                LottieHUD.shared.dismiss()
+                self.navigationController?.popViewController(animated: true)
+                self.delegate?.didDeleteOrBlockRoom()
+            }
         }
     }
 
@@ -253,6 +279,19 @@ class RoomSettingsViewController: UIViewController {
         imagePickerController.sourceType = .photoLibrary
         imagePickerController.allowsEditing = true
         present(imagePickerController, animated: true)
+    }
+
+    @objc func blockRoomAction() {
+        AlertHelper.alertMessage(viewController: self, title: "Warning", message: "You will not be able to get new messages from this room and the room will be deleted. Proceed?", okButtonText: "Block") {
+            guard let chatRoom = self.chatRoom else { return }
+            LottieHUD.shared.show()
+            let viewmodel = RoomSettingsViewModel(chatRoom: chatRoom)
+            viewmodel.deleteOrBlockRoom {
+                LottieHUD.shared.dismiss()
+                self.navigationController?.popViewController(animated: true)
+                self.delegate?.didDeleteOrBlockRoom()
+            }
+        }
     }
 }
 

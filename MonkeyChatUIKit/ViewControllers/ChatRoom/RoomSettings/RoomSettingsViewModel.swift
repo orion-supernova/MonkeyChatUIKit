@@ -64,4 +64,36 @@ class RoomSettingsViewModel {
             }
         }
     }
+
+    func deleteOrBlockRoom(completion: @escaping () -> Void) {
+        // Find everyone in this room
+        COLLECTION_CHATROOMS.document(chatRoom?.id ?? "").collection("userIDs").getDocuments { snapshot, error in
+            guard error == nil, let snapshot = snapshot else { return }
+            var userIDs = [String]()
+            let documents = snapshot.documents
+            for document in documents {
+                let dict = document.data()
+                let id = dict["userID"] as? String
+                userIDs.append(id ?? "")
+            }
+            // Delete room from Rooms
+            COLLECTION_CHATROOMS.document(self.chatRoom?.id ?? "").getDocument { snapshot, error in
+                guard error == nil else { return }
+                guard let snapshot = snapshot else { return }
+                snapshot.reference.delete { error in
+                    guard error == nil else { return }
+                }
+                // Go into every user in the room delete the room from rooms
+                for userID in userIDs {
+                    COLLECTION_USERS.document(userID).collection("chatRooms").document(self.chatRoom?.id ?? "").getDocument { snapshot, error in
+                        guard let snapshot = snapshot, error == nil else { return }
+                        snapshot.reference.delete { error in
+                            guard error == nil else { return }
+                        }
+                    }
+                }
+                completion()
+            }
+        }
+    }
 }

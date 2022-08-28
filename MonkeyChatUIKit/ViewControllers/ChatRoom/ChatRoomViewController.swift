@@ -131,6 +131,7 @@ class ChatRoomViewController: UIViewController {
     @objc func editRoomSettings() {
         guard let chatRoom = chatRoom else { return }
         let vc = RoomSettingsViewController(chatRoom: chatRoom)
+        vc.delegate = self
         self.navigationController?.pushViewController(vc, animated: true)
     }
 
@@ -245,6 +246,7 @@ extension ChatRoomViewController: ChatRoomViewModelDelegate {
     }
 }
 
+// MARK: - TextEntry Delegate
 extension ChatRoomViewController: TextEntryViewDelegate {
     func didChangeTextViewSize(height: CGFloat) {
         textInputView.constraints.forEach { (constraint) in
@@ -257,5 +259,12 @@ extension ChatRoomViewController: TextEntryViewDelegate {
     func didClickSendButton(text: String) {
         guard let viewmodel = viewmodel else { return }
         viewmodel.uploadMessage(message: text)
+    }
+}
+
+// MARK: - RoomSettings Delegate
+extension ChatRoomViewController: RoomSettingsViewControllerDelegate {
+    func didDeleteOrBlockRoom() {
+        self.navigationController?.popViewController(animated: true)
     }
 }
