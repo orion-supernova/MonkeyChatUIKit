@@ -93,6 +93,17 @@ class VerificationCodeViewController: UIViewController {
             LottieHUD.shared.dismiss()
             self.riveViewModel.triggerInput("Pressed")
             DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                // Redirect to EULA Page if the user did not accept yet.
+                let confirmed = AppGlobal.shared.eulaConfirmed ?? false
+                guard confirmed else {
+                    let viewController = EULAViewController()
+                    viewController.modalPresentationStyle = .fullScreen
+                    viewController.modalTransitionStyle = .crossDissolve
+                    self.present(viewController, animated: true, completion: nil)
+                    self.riveViewModel.resetToDefaultModel()
+                    return
+                }
+                // If there is no problem, navigate to MainPage
                 self.configureLoginView { tabBar in
                     let tabController = tabBar
                     tabController.modalPresentationStyle = .fullScreen

@@ -31,6 +31,14 @@ class ChatRoomListViewController: UIViewController {
     private var viewModel = ChatRoomListViewModel()
 
     // MARK: - Lifecycle
+    init() {
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required convenience init?(coder: NSCoder) {
+        self.init()
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()

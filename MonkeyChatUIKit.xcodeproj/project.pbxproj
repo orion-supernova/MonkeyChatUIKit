@@ -57,6 +57,7 @@
 		5499FCD9285E6E7A00BCE34D /* lights.riv in Resources */ = {isa = PBXBuildFile; fileRef = 5499FCD8285E6E7A00BCE34D /* lights.riv */; };
 		549FB85928201F68003E65E3 /* AccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 549FB85828201F68003E65E3 /* AccountViewController.swift */; };
 		549FB85F28202976003E65E3 /* PrivacySecurityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 549FB85E28202976003E65E3 /* PrivacySecurityViewController.swift */; };
+		54E3213A28BFA8140014F166 /* EULAViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54E3213928BFA8140014F166 /* EULAViewController.swift */; };
 		54F2336427BD337100E9FD28 /* ChatRoomListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F2336327BD337100E9FD28 /* ChatRoomListTableViewCell.swift */; };
 		54F2336A27BD3C7500E9FD28 /* ChatRoomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F2336927BD3C7500E9FD28 /* ChatRoomViewController.swift */; };
 		54F2336C27BD44F900E9FD28 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F2336B27BD44F900E9FD28 /* SettingsViewController.swift */; };
@@ -108,6 +109,7 @@
 		5499FCD8285E6E7A00BCE34D /* lights.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = lights.riv; sourceTree = "<group>"; };
 		549FB85828201F68003E65E3 /* AccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountViewController.swift; sourceTree = "<group>"; };
 		549FB85E28202976003E65E3 /* PrivacySecurityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacySecurityViewController.swift; sourceTree = "<group>"; };
+		54E3213928BFA8140014F166 /* EULAViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EULAViewController.swift; sourceTree = "<group>"; };
 		54F2336327BD337100E9FD28 /* ChatRoomListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomListTableViewCell.swift; sourceTree = "<group>"; };
 		54F2336927BD3C7500E9FD28 /* ChatRoomViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomViewController.swift; sourceTree = "<group>"; };
 		54F2336B27BD44F900E9FD28 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
@@ -225,6 +227,7 @@
 			isa = PBXGroup;
 			children = (
 				54664F5227C2E21000F94482 /* Auth */,
+				54E3213828BFA8000014F166 /* EULA */,
 				541DBA5F27DF761500A3A920 /* MonkeyList */,
 				545FFCA127BD0073008CC1ED /* ChatRoomList */,
 				54F2336627BD3C0400E9FD28 /* ChatRoom */,
@@ -311,6 +314,14 @@
 				548BC3B227C042A500CBC6EA /* PushNotificationSender.swift */,
 			);
 			path = Managers;
+			sourceTree = "<group>";
+		};
+		54E3213828BFA8000014F166 /* EULA */ = {
+			isa = PBXGroup;
+			children = (
+				54E3213928BFA8140014F166 /* EULAViewController.swift */,
+			);
+			path = EULA;
 			sourceTree = "<group>";
 		};
 		54F2336627BD3C0400E9FD28 /* ChatRoom */ = {
@@ -467,6 +478,7 @@
 				545FFC9E27BCFB05008CC1ED /* Message.swift in Sources */,
 				541DBA6327DF7B1000A3A920 /* MonkeyListViewModel.swift in Sources */,
 				549FB85928201F68003E65E3 /* AccountViewController.swift in Sources */,
+				54E3213A28BFA8140014F166 /* EULAViewController.swift in Sources */,
 				545FFCA027BCFF9F008CC1ED /* Constants.swift in Sources */,
 				547D253D27C42F2D005D98B8 /* AppGlobal.swift in Sources */,
 				547D253F27C43459005D98B8 /* UsernameViewController.swift in Sources */,
@@ -628,7 +640,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = MonkeyChatUIKit/MonkeyChatUIKit.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 37TC2VKVJ6;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MonkeyChatUIKit/Info.plist;
@@ -645,7 +657,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.3.5;
+				MARKETING_VERSION = 1.3.6;
 				PRODUCT_BUNDLE_IDENTIFIER = com.walhallaa.MonkeyChatUIKit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = NO;
@@ -662,7 +674,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = MonkeyChatUIKit/MonkeyChatUIKit.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 37TC2VKVJ6;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MonkeyChatUIKit/Info.plist;
@@ -679,7 +691,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.3.5;
+				MARKETING_VERSION = 1.3.6;
 				PRODUCT_BUNDLE_IDENTIFIER = com.walhallaa.MonkeyChatUIKit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = NO;

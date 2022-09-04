@@ -36,4 +36,12 @@ class AppGlobal {
             UserDefaults.standard.set(newValue, forKey: "fcmToken")
         }
     }
+    var eulaConfirmed: Bool? {
+        get {
+            return UserDefaults.standard.value(forKey: "eulaConfirmed") as? Bool
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: "eulaConfirmed")
+        }
+    }
 }

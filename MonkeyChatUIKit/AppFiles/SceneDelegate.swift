@@ -41,6 +41,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let currentUser = Auth.auth().currentUser
 
         if currentUser != nil {
+            let confirmed = AppGlobal.shared.eulaConfirmed ?? false
+            guard confirmed else {
+                window?.rootViewController = EULAViewController()
+                return
+            }
             window?.rootViewController = tabController
         } else {
             window?.rootViewController = AuthViewController()
