@@ -17,7 +17,7 @@ class EULAViewController: UIViewController {
     }()
 
     private lazy var checkbox: UIButton = {
-        let button = UIButton(type: .system)
+        let button = UIButton(type: .custom)
         button.setImage(UIImage(systemName: "square"), for: .normal)
         button.setImage(UIImage(systemName: "checkmark.square"), for: .selected)
         button.addTarget(self, action: #selector(checkboxAction), for: .touchUpInside)
@@ -45,6 +45,7 @@ class EULAViewController: UIViewController {
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        overrideUserInterfaceStyle = .dark
         setup()
         layout()
         loadWebView()
@@ -117,7 +118,7 @@ class EULAViewController: UIViewController {
                 self.present(tabController, animated: true, completion: nil)
             }
         } else {
-            AlertHelper.simpleAlertMessage(viewController: self, title: "Not agreed", message: "You need to agree to our license in order to use our app.")
+            AlertHelper.simpleAlertMessage(viewController: self, title: "Not agreed", message: "You need to agree to our license in order to use the app.")
         }
     }
 
