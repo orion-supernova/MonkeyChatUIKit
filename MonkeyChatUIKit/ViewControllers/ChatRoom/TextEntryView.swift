@@ -129,6 +129,7 @@ class TextEntryView: UIView {
         }
         delegate?.didClickSendButton(text: textView.text)
         self.textView.text = ""
+        self.textViewDidChange(self.textView)
     }
 }
 
