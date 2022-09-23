@@ -65,14 +65,16 @@ class RoomImageViewController: UIViewController {
     }
 
     private func layout() {
+        let width = view.frame.width
+
         imageView.snp.makeConstraints { make in
             make.center.equalToSuperview()
-            make.width.equalToSuperview()
+            make.size.equalTo(width)
         }
 
         editButton.snp.makeConstraints { make in
             make.right.equalTo(-10)
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(10)
+            make.bottom.equalTo(imageView.snp.top).offset(-10)
             make.height.equalTo(30)
             make.width.equalTo(95)
         }
