@@ -7,6 +7,18 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5404033C28366BD300FF58D8 /* CountryCodeSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5404033B28366BD300FF58D8 /* CountryCodeSelectionView.swift */; };
+		5404033E2836768400FF58D8 /* Country.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5404033D2836768400FF58D8 /* Country.swift */; };
+		540403412836796300FF58D8 /* CountryCodeHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 540403402836796300FF58D8 /* CountryCodeHelper.swift */; };
+		54040343283689AA00FF58D8 /* UIColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54040342283689AA00FF58D8 /* UIColorExtension.swift */; };
+		540403452836946500FF58D8 /* OTPStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 540403442836946500FF58D8 /* OTPStackView.swift */; };
+		541DBA6127DF772A00A3A920 /* MonkeyListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 541DBA6027DF772A00A3A920 /* MonkeyListViewController.swift */; };
+		541DBA6327DF7B1000A3A920 /* MonkeyListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 541DBA6227DF7B1000A3A920 /* MonkeyListViewModel.swift */; };
+		544D84A528DE357200C87D0D /* RoomImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544D84A428DE357200C87D0D /* RoomImageViewController.swift */; };
+		544E9EB2285F541700F0B677 /* safe_box_icon.riv in Resources */ = {isa = PBXBuildFile; fileRef = 544E9EB1285F541700F0B677 /* safe_box_icon.riv */; };
+		544E9EB8285F80AD00F0B677 /* RoomSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544E9EB7285F80AD00F0B677 /* RoomSettingsViewController.swift */; };
+		544E9EBB285F862000F0B677 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 544E9EBA285F862000F0B677 /* Kingfisher */; };
+		544E9EBD2860CFB600F0B677 /* ImageUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544E9EBC2860CFB600F0B677 /* ImageUploader.swift */; };
 		545FFC6F27BC4C17008CC1ED /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545FFC6E27BC4C17008CC1ED /* AppDelegate.swift */; };
 		545FFC7127BC4C17008CC1ED /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545FFC7027BC4C17008CC1ED /* SceneDelegate.swift */; };
 		545FFC7327BC4C17008CC1ED /* ChatRoomListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545FFC7227BC4C17008CC1ED /* ChatRoomListViewController.swift */; };
@@ -28,6 +40,7 @@
 		545FFCA327BD007F008CC1ED /* ChatRoomListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545FFCA227BD007F008CC1ED /* ChatRoomListViewModel.swift */; };
 		54664F4F27C2DC8300F94482 /* SensitiveData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54664F4E27C2DC8300F94482 /* SensitiveData.swift */; };
 		54664F5527C2E5DD00F94482 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 54664F5427C2E5DD00F94482 /* FirebaseAuth */; };
+		546851982860DFDC008670E4 /* RoomSettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 546851972860DFDC008670E4 /* RoomSettingsViewModel.swift */; };
 		547D252E27C2EADF005D98B8 /* AuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 547D252D27C2EADF005D98B8 /* AuthViewController.swift */; };
 		547D253027C3DD92005D98B8 /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 547D252F27C3DD92005D98B8 /* AuthManager.swift */; };
 		547D253227C3E786005D98B8 /* VerificationCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 547D253127C3E786005D98B8 /* VerificationCodeViewController.swift */; };
@@ -41,6 +54,11 @@
 		548BC3B327C042A500CBC6EA /* PushNotificationSender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 548BC3B227C042A500CBC6EA /* PushNotificationSender.swift */; };
 		548BC3B527C04F8400CBC6EA /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 548BC3B427C04F8400CBC6EA /* SettingsViewModel.swift */; };
 		548BC3B927C069D400CBC6EA /* apns-sound.wav in Resources */ = {isa = PBXBuildFile; fileRef = 548BC3B827C069D400CBC6EA /* apns-sound.wav */; };
+		5499FC902857B2B400BCE34D /* RiveRuntime in Frameworks */ = {isa = PBXBuildFile; productRef = 5499FC8F2857B2B400BCE34D /* RiveRuntime */; };
+		5499FCD9285E6E7A00BCE34D /* lights.riv in Resources */ = {isa = PBXBuildFile; fileRef = 5499FCD8285E6E7A00BCE34D /* lights.riv */; };
+		549FB85928201F68003E65E3 /* AccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 549FB85828201F68003E65E3 /* AccountViewController.swift */; };
+		549FB85F28202976003E65E3 /* PrivacySecurityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 549FB85E28202976003E65E3 /* PrivacySecurityViewController.swift */; };
+		54E3213A28BFA8140014F166 /* EULAViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54E3213928BFA8140014F166 /* EULAViewController.swift */; };
 		54F2336427BD337100E9FD28 /* ChatRoomListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F2336327BD337100E9FD28 /* ChatRoomListTableViewCell.swift */; };
 		54F2336A27BD3C7500E9FD28 /* ChatRoomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F2336927BD3C7500E9FD28 /* ChatRoomViewController.swift */; };
 		54F2336C27BD44F900E9FD28 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F2336B27BD44F900E9FD28 /* SettingsViewController.swift */; };
@@ -50,6 +68,17 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		5404033B28366BD300FF58D8 /* CountryCodeSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryCodeSelectionView.swift; sourceTree = "<group>"; };
+		5404033D2836768400FF58D8 /* Country.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Country.swift; sourceTree = "<group>"; };
+		540403402836796300FF58D8 /* CountryCodeHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryCodeHelper.swift; sourceTree = "<group>"; };
+		54040342283689AA00FF58D8 /* UIColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorExtension.swift; sourceTree = "<group>"; };
+		540403442836946500FF58D8 /* OTPStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OTPStackView.swift; sourceTree = "<group>"; };
+		541DBA6027DF772A00A3A920 /* MonkeyListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonkeyListViewController.swift; sourceTree = "<group>"; };
+		541DBA6227DF7B1000A3A920 /* MonkeyListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonkeyListViewModel.swift; sourceTree = "<group>"; };
+		544D84A428DE357200C87D0D /* RoomImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomImageViewController.swift; sourceTree = "<group>"; };
+		544E9EB1285F541700F0B677 /* safe_box_icon.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = safe_box_icon.riv; sourceTree = "<group>"; };
+		544E9EB7285F80AD00F0B677 /* RoomSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomSettingsViewController.swift; sourceTree = "<group>"; };
+		544E9EBC2860CFB600F0B677 /* ImageUploader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageUploader.swift; sourceTree = "<group>"; };
 		545FFC6B27BC4C17008CC1ED /* MonkeyChatUIKit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MonkeyChatUIKit.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		545FFC6E27BC4C17008CC1ED /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		545FFC7027BC4C17008CC1ED /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -66,6 +95,7 @@
 		545FFC9F27BCFF9F008CC1ED /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		545FFCA227BD007F008CC1ED /* ChatRoomListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomListViewModel.swift; sourceTree = "<group>"; };
 		54664F4E27C2DC8300F94482 /* SensitiveData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensitiveData.swift; sourceTree = "<group>"; };
+		546851972860DFDC008670E4 /* RoomSettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomSettingsViewModel.swift; sourceTree = "<group>"; };
 		547D252D27C2EADF005D98B8 /* AuthViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewController.swift; sourceTree = "<group>"; };
 		547D252F27C3DD92005D98B8 /* AuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
 		547D253127C3E786005D98B8 /* VerificationCodeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerificationCodeViewController.swift; sourceTree = "<group>"; };
@@ -78,6 +108,10 @@
 		548BC3B227C042A500CBC6EA /* PushNotificationSender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushNotificationSender.swift; sourceTree = "<group>"; };
 		548BC3B427C04F8400CBC6EA /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
 		548BC3B827C069D400CBC6EA /* apns-sound.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "apns-sound.wav"; sourceTree = "<group>"; };
+		5499FCD8285E6E7A00BCE34D /* lights.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = lights.riv; sourceTree = "<group>"; };
+		549FB85828201F68003E65E3 /* AccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountViewController.swift; sourceTree = "<group>"; };
+		549FB85E28202976003E65E3 /* PrivacySecurityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacySecurityViewController.swift; sourceTree = "<group>"; };
+		54E3213928BFA8140014F166 /* EULAViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EULAViewController.swift; sourceTree = "<group>"; };
 		54F2336327BD337100E9FD28 /* ChatRoomListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomListTableViewCell.swift; sourceTree = "<group>"; };
 		54F2336927BD3C7500E9FD28 /* ChatRoomViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomViewController.swift; sourceTree = "<group>"; };
 		54F2336B27BD44F900E9FD28 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
@@ -94,7 +128,9 @@
 			files = (
 				545FFC9227BCDCF2008CC1ED /* FirebaseFirestoreSwift-Beta in Frameworks */,
 				545FFC9027BCDCF2008CC1ED /* FirebaseAnalyticsSwift-Beta in Frameworks */,
+				5499FC902857B2B400BCE34D /* RiveRuntime in Frameworks */,
 				545FFC9627BCDCF2008CC1ED /* FirebaseMessaging in Frameworks */,
+				544E9EBB285F862000F0B677 /* Kingfisher in Frameworks */,
 				545FFC9427BCDCF2008CC1ED /* FirebaseInAppMessagingSwift-Beta in Frameworks */,
 				545FFC8727BC4DBA008CC1ED /* SnapKit in Frameworks */,
 				54664F5527C2E5DD00F94482 /* FirebaseAuth in Frameworks */,
@@ -106,6 +142,42 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5404033F283676D900FF58D8 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				5404033D2836768400FF58D8 /* Country.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		541DBA5F27DF761500A3A920 /* MonkeyList */ = {
+			isa = PBXGroup;
+			children = (
+				541DBA6027DF772A00A3A920 /* MonkeyListViewController.swift */,
+				541DBA6227DF7B1000A3A920 /* MonkeyListViewModel.swift */,
+			);
+			path = MonkeyList;
+			sourceTree = "<group>";
+		};
+		544E9EB3285F662600F0B677 /* Rive_Assets */ = {
+			isa = PBXGroup;
+			children = (
+				5499FCD8285E6E7A00BCE34D /* lights.riv */,
+				544E9EB1285F541700F0B677 /* safe_box_icon.riv */,
+			);
+			path = Rive_Assets;
+			sourceTree = "<group>";
+		};
+		544E9EB6285F809100F0B677 /* RoomSettings */ = {
+			isa = PBXGroup;
+			children = (
+				544E9EB7285F80AD00F0B677 /* RoomSettingsViewController.swift */,
+				546851972860DFDC008670E4 /* RoomSettingsViewModel.swift */,
+				544D84A428DE357200C87D0D /* RoomImageViewController.swift */,
+			);
+			path = RoomSettings;
+			sourceTree = "<group>";
+		};
 		545FFC6227BC4C17008CC1ED = {
 			isa = PBXGroup;
 			children = (
@@ -137,6 +209,7 @@
 				545FFC8427BC4C62008CC1ED /* Views */,
 				545FFC8B27BC5B61008CC1ED /* Utils */,
 				545FFC7727BC4C18008CC1ED /* Assets.xcassets */,
+				544E9EB3285F662600F0B677 /* Rive_Assets */,
 				547D253A27C40206005D98B8 /* loading.json */,
 				545FFC7C27BC4C18008CC1ED /* Info.plist */,
 				545FFC9927BCDDA1008CC1ED /* GoogleService-Info.plist */,
@@ -157,6 +230,8 @@
 			isa = PBXGroup;
 			children = (
 				54664F5227C2E21000F94482 /* Auth */,
+				54E3213828BFA8000014F166 /* EULA */,
+				541DBA5F27DF761500A3A920 /* MonkeyList */,
 				545FFCA127BD0073008CC1ED /* ChatRoomList */,
 				54F2336627BD3C0400E9FD28 /* ChatRoom */,
 			);
@@ -185,10 +260,13 @@
 		545FFC8B27BC5B61008CC1ED /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				540403402836796300FF58D8 /* CountryCodeHelper.swift */,
 				545FFC8C27BC5B72008CC1ED /* AlertHelper.swift */,
 				545FFC9F27BCFF9F008CC1ED /* Constants.swift */,
 				54664F4E27C2DC8300F94482 /* SensitiveData.swift */,
 				547D253327C3EF4D005D98B8 /* LottieHUD.swift */,
+				54040342283689AA00FF58D8 /* UIColorExtension.swift */,
+				544E9EBC2860CFB600F0B677 /* ImageUploader.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -216,8 +294,11 @@
 			isa = PBXGroup;
 			children = (
 				547D252D27C2EADF005D98B8 /* AuthViewController.swift */,
+				5404033B28366BD300FF58D8 /* CountryCodeSelectionView.swift */,
 				547D253127C3E786005D98B8 /* VerificationCodeViewController.swift */,
+				540403442836946500FF58D8 /* OTPStackView.swift */,
 				547D252F27C3DD92005D98B8 /* AuthManager.swift */,
+				5404033F283676D900FF58D8 /* Models */,
 			);
 			path = Auth;
 			sourceTree = "<group>";
@@ -238,6 +319,14 @@
 			path = Managers;
 			sourceTree = "<group>";
 		};
+		54E3213828BFA8000014F166 /* EULA */ = {
+			isa = PBXGroup;
+			children = (
+				54E3213928BFA8140014F166 /* EULAViewController.swift */,
+			);
+			path = EULA;
+			sourceTree = "<group>";
+		};
 		54F2336627BD3C0400E9FD28 /* ChatRoom */ = {
 			isa = PBXGroup;
 			children = (
@@ -245,6 +334,7 @@
 				54F2336E27BD635900E9FD28 /* ChatRoomViewModel.swift */,
 				54F2337327BD7BB000E9FD28 /* TextEntryView.swift */,
 				54F2337027BD68B200E9FD28 /* MessageCell */,
+				544E9EB6285F809100F0B677 /* RoomSettings */,
 			);
 			path = ChatRoom;
 			sourceTree = "<group>";
@@ -253,6 +343,8 @@
 			isa = PBXGroup;
 			children = (
 				54F2336B27BD44F900E9FD28 /* SettingsViewController.swift */,
+				549FB85828201F68003E65E3 /* AccountViewController.swift */,
+				549FB85E28202976003E65E3 /* PrivacySecurityViewController.swift */,
 				547D253E27C43459005D98B8 /* UsernameViewController.swift */,
 				548BC3B427C04F8400CBC6EA /* SettingsViewModel.swift */,
 			);
@@ -292,6 +384,8 @@
 				545FFC9727BCDCF2008CC1ED /* FirebaseStorageSwift-Beta */,
 				54664F5427C2E5DD00F94482 /* FirebaseAuth */,
 				547D253627C3F20A005D98B8 /* Lottie */,
+				5499FC8F2857B2B400BCE34D /* RiveRuntime */,
+				544E9EBA285F862000F0B677 /* Kingfisher */,
 			);
 			productName = MonkeyChatUIKit;
 			productReference = 545FFC6B27BC4C17008CC1ED /* MonkeyChatUIKit.app */;
@@ -325,6 +419,8 @@
 				545FFC8527BC4DBA008CC1ED /* XCRemoteSwiftPackageReference "SnapKit" */,
 				545FFC8E27BCDCF2008CC1ED /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				547D253527C3F20A005D98B8 /* XCRemoteSwiftPackageReference "lottie-ios" */,
+				5499FC8E2857B2B300BCE34D /* XCRemoteSwiftPackageReference "rive-ios" */,
+				544E9EB9285F862000F0B677 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 			);
 			productRefGroup = 545FFC6C27BC4C17008CC1ED /* Products */;
 			projectDirPath = "";
@@ -343,9 +439,11 @@
 				545FFC7B27BC4C18008CC1ED /* LaunchScreen.storyboard in Resources */,
 				548BC3B927C069D400CBC6EA /* apns-sound.wav in Resources */,
 				547D253B27C40206005D98B8 /* loading.json in Resources */,
+				5499FCD9285E6E7A00BCE34D /* lights.riv in Resources */,
 				545FFC9A27BCDDA1008CC1ED /* GoogleService-Info.plist in Resources */,
 				545FFC7827BC4C18008CC1ED /* Assets.xcassets in Resources */,
 				545FFC7627BC4C17008CC1ED /* Main.storyboard in Resources */,
+				544E9EB2285F541700F0B677 /* safe_box_icon.riv in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -356,30 +454,44 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				546851982860DFDC008670E4 /* RoomSettingsViewModel.swift in Sources */,
 				545FFC7327BC4C17008CC1ED /* ChatRoomListViewController.swift in Sources */,
+				549FB85F28202976003E65E3 /* PrivacySecurityViewController.swift in Sources */,
 				548BC3B327C042A500CBC6EA /* PushNotificationSender.swift in Sources */,
 				54F2337427BD7BB000E9FD28 /* TextEntryView.swift in Sources */,
 				545FFCA327BD007F008CC1ED /* ChatRoomListViewModel.swift in Sources */,
 				545FFC6F27BC4C17008CC1ED /* AppDelegate.swift in Sources */,
 				547D253227C3E786005D98B8 /* VerificationCodeViewController.swift in Sources */,
 				545FFC9C27BCDEDB008CC1ED /* User.swift in Sources */,
+				544E9EBD2860CFB600F0B677 /* ImageUploader.swift in Sources */,
 				54F2336427BD337100E9FD28 /* ChatRoomListTableViewCell.swift in Sources */,
 				54F2336F27BD635900E9FD28 /* ChatRoomViewModel.swift in Sources */,
 				545FFC8A27BC5149008CC1ED /* ChatRoom.swift in Sources */,
 				547D252E27C2EADF005D98B8 /* AuthViewController.swift in Sources */,
+				541DBA6127DF772A00A3A920 /* MonkeyListViewController.swift in Sources */,
+				544D84A528DE357200C87D0D /* RoomImageViewController.swift in Sources */,
 				54F2337227BD68C400E9FD28 /* MessageTableViewCell.swift in Sources */,
+				540403412836796300FF58D8 /* CountryCodeHelper.swift in Sources */,
 				545FFC8D27BC5B72008CC1ED /* AlertHelper.swift in Sources */,
+				5404033C28366BD300FF58D8 /* CountryCodeSelectionView.swift in Sources */,
+				54040343283689AA00FF58D8 /* UIColorExtension.swift in Sources */,
 				547D254127C4EED2005D98B8 /* ChatRoomNotificationsManager.swift in Sources */,
 				548BC3B127C0120100CBC6EA /* PushNotificationManager.swift in Sources */,
 				545FFC7127BC4C17008CC1ED /* SceneDelegate.swift in Sources */,
 				54664F4F27C2DC8300F94482 /* SensitiveData.swift in Sources */,
 				545FFC9E27BCFB05008CC1ED /* Message.swift in Sources */,
+				541DBA6327DF7B1000A3A920 /* MonkeyListViewModel.swift in Sources */,
+				549FB85928201F68003E65E3 /* AccountViewController.swift in Sources */,
+				54E3213A28BFA8140014F166 /* EULAViewController.swift in Sources */,
 				545FFCA027BCFF9F008CC1ED /* Constants.swift in Sources */,
 				547D253D27C42F2D005D98B8 /* AppGlobal.swift in Sources */,
 				547D253F27C43459005D98B8 /* UsernameViewController.swift in Sources */,
 				54F2336A27BD3C7500E9FD28 /* ChatRoomViewController.swift in Sources */,
 				547D253427C3EF4D005D98B8 /* LottieHUD.swift in Sources */,
+				5404033E2836768400FF58D8 /* Country.swift in Sources */,
 				547D253027C3DD92005D98B8 /* AuthManager.swift in Sources */,
+				544E9EB8285F80AD00F0B677 /* RoomSettingsViewController.swift in Sources */,
+				540403452836946500FF58D8 /* OTPStackView.swift in Sources */,
 				54F2336C27BD44F900E9FD28 /* SettingsViewController.swift in Sources */,
 				548BC3B527C04F8400CBC6EA /* SettingsViewModel.swift in Sources */,
 			);
@@ -532,11 +644,12 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = MonkeyChatUIKit/MonkeyChatUIKit.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = 37TC2VKVJ6;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MonkeyChatUIKit/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = MonkeyChat;
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Please allow access to be able to change group images, your profile picture and for sending images.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -548,9 +661,10 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.3.7;
 				PRODUCT_BUNDLE_IDENTIFIER = com.walhallaa.MonkeyChatUIKit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -564,11 +678,12 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = MonkeyChatUIKit/MonkeyChatUIKit.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = 37TC2VKVJ6;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MonkeyChatUIKit/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = MonkeyChat;
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Please allow access to be able to change group images, your profile picture and for sending images.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -580,9 +695,10 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.3.7;
 				PRODUCT_BUNDLE_IDENTIFIER = com.walhallaa.MonkeyChatUIKit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -613,6 +729,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		544E9EB9285F862000F0B677 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 		545FFC8527BC4DBA008CC1ED /* XCRemoteSwiftPackageReference "SnapKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
@@ -637,9 +761,22 @@
 				minimumVersion = 3.0.0;
 			};
 		};
+		5499FC8E2857B2B300BCE34D /* XCRemoteSwiftPackageReference "rive-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/rive-app/rive-ios";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		544E9EBA285F862000F0B677 /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 544E9EB9285F862000F0B677 /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
+		};
 		545FFC8627BC4DBA008CC1ED /* SnapKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 545FFC8527BC4DBA008CC1ED /* XCRemoteSwiftPackageReference "SnapKit" */;
@@ -679,6 +816,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 547D253527C3F20A005D98B8 /* XCRemoteSwiftPackageReference "lottie-ios" */;
 			productName = Lottie;
+		};
+		5499FC8F2857B2B400BCE34D /* RiveRuntime */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5499FC8E2857B2B300BCE34D /* XCRemoteSwiftPackageReference "rive-ios" */;
+			productName = RiveRuntime;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

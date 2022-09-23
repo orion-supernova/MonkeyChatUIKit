@@ -9,21 +9,58 @@ import UIKit
 import Firebase
 import FirebaseFirestoreSwift
 
+protocol ChatRoomListViewModelDelegate: AnyObject {
+    func didChangeDataSource()
+}
+
 class ChatRoomListViewModel {
     typealias AlertCompletion = ((Bool) -> Void)?
 
+    // MARK: - Public Properties
     var chatRooms = [ChatRoom]()
-    static var lastMessageInChatRoom: Message?
+    weak var delegate: ChatRoomListViewModelDelegate?
 
-    func fetchChatRooms(completion: @escaping () -> Void) {
+    func fetchChatRooms() {
         guard let userID = AppGlobal.shared.userID else { return }
-        COLLECTION_USERS.document(userID).collection("chatRooms").order(by: "timestamp", descending: true).addSnapshotListener { snapshot, error in
+
+        COLLECTION_USERS.document(userID).collection("chatRooms").addSnapshotListener {[weak self] snapshot, error in
+            guard let self = self else { return }
+            var count = 0
+            var chatRoomDocuments = [DocumentSnapshot]()
+            self.chatRooms.removeAll()
             guard error == nil else { print(error!.localizedDescription); return }
             guard let documents = snapshot?.documents else { return }
+            self.chatRooms = documents.compactMap({ try? $0.data(as: ChatRoom.self) })
 
-            self.chatRooms = documents.compactMap({ try? $0.data(as: ChatRoom.self)  })
-            print("ChatRooms fetched successfully")
-            completion()
+            let group = DispatchGroup()
+            for room in self.chatRooms {
+                group.enter()
+                COLLECTION_CHATROOMS.document(room.id ?? "").addSnapshotListener { snapshot, error in
+                    guard error == nil else { print(error!.localizedDescription); return }
+                    guard let document = snapshot else { return }
+                    if count == 0 {
+                        chatRoomDocuments.append(document)
+                        group.leave()
+                    } else {
+                        let room = chatRoomDocuments.first(where: { $0.documentID == room.id })
+                        chatRoomDocuments.removeAll(where: { $0 == room})
+                        chatRoomDocuments.append(document)
+                        orderRooms()
+                    }
+                }
+            }
+            group.notify(queue: .global()) {
+                count += 1
+                orderRooms()
+            }
+            func orderRooms() {
+                self.chatRooms.removeAll()
+                self.chatRooms = chatRoomDocuments.compactMap({ try? $0.data(as: ChatRoom.self) })
+                self.chatRooms.sort(by: { (first: ChatRoom, second: ChatRoom) -> Bool in
+                    first.lastMessageTimestamp?.seconds ?? 0 > second.lastMessageTimestamp?.seconds ?? 0
+                })
+                self.delegate?.didChangeDataSource()
+            }
         }
     }
 
@@ -31,7 +68,7 @@ class ChatRoomListViewModel {
     func createRoomOrEnterRoomAction(target: UIViewController) {
         let actionSheetController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         let enterRoomAction = UIAlertAction(title: "Enter Room", style: .default) { [weak self] action in
-            self?.enterRoom()
+            self?.enterRoom(target: target)
         }
         let createRoomAction = UIAlertAction(title: "Create Room", style: .default) { [weak self] action in
             self?.createRoom(target: target)
@@ -45,10 +82,10 @@ class ChatRoomListViewModel {
     }
 
     // MARK: - Enter Room Action
-    func enterRoom() {
-        let alertController = UIAlertController(title: "Enter Room", message: "Please enter the room name:", preferredStyle: .alert)
+    func enterRoom(target: UIViewController) {
+        let alertController = UIAlertController(title: "Enter Room", message: "Please Enter The Room ID:", preferredStyle: .alert)
         alertController.addTextField { textfield in
-            textfield.placeholder = "Room Name"
+            textfield.placeholder = "Room ID"
         }
         alertController.addTextField { textfield in
             textfield.placeholder = "Room Password"
@@ -66,24 +103,27 @@ class ChatRoomListViewModel {
                 roomPassword = tempPassword
             }
             guard let userID = AppGlobal.shared.userID else { return }
-            COLLECTION_CHATROOMS.getDocuments { snapshot, error in
-                guard error == nil else { return }
-                guard let documents = snapshot?.documents else { return }
-                var foundRoomDict: [String: Any]?
-                for document in documents {
-                    if document.documentID == roomID {
-                        foundRoomDict = document.data()
-                    }
-                }
-                guard let foundRoom = foundRoomDict else { return }
-                if roomID == "" {
-                    AlertHelper.alertMessage(title: "ERROR", message: "Inlavid Room Code", okButtonText: "OK")
+            COLLECTION_CHATROOMS.document(roomID).getDocument { snapshot, error in
+                guard error == nil else {
+                    AlertHelper.alertMessage(title: "ERROR",
+                                             message: error?.localizedDescription ?? "",
+                                             okButtonText: "OK")
                     return
                 }
-                guard let foundRoomID = foundRoom["roomID"] as? String else { return }
+                let foundRoomDict = snapshot?.data()
+                guard let foundRoom = foundRoomDict else {
+                    AlertHelper.alertMessage(title: "ERROR",
+                                             message: "The room you're trying to enter is not exist. Please check your ID.",
+                                             okButtonText: "OK")
+                    return
+                }
+                guard let fcmToken = AppGlobal.shared.fcmToken else { return }
+
+                let userDataWithFcmToken = ["userID": userID,
+                                            "fcmToken": fcmToken] as [String: Any]
 
                 if roomPassword == foundRoom["password"] as? String {
-                    COLLECTION_CHATROOMS.document(roomID).collection("userIDs").document(userID).setData([:], completion: { error in
+                    COLLECTION_CHATROOMS.document(roomID).collection("userIDs").document(userID).setData(userDataWithFcmToken) { error in
                         guard error == nil else { return }
 
                         let data = ["name": foundRoom["name"] ?? "",
@@ -91,14 +131,13 @@ class ChatRoomListViewModel {
                                     "timestamp": Timestamp(date: Date()),
                                     "roomID": roomID] as [String: Any]
 
-                        COLLECTION_USERS.document(userID).collection("chatRooms").document(roomID).setData(data) { [weak self] error in
-                            guard error == nil else { return }
-                            guard let self = self else { return }
-                            self.fetchChatRooms {
-                                print("DEBUG: ENTERED ROOM \(foundRoomID)")
+                        COLLECTION_USERS.document(userID).collection("chatRooms").document(roomID).setData(data) { error in
+                            guard error == nil else {
+                                print(error?.localizedDescription ?? "")
+                                return
                             }
                         }
-                    })
+                    }
                 } else {
                     AlertHelper.alertMessage(title: "ERROR", message: "Invalid Room Password", okButtonText: "OK")
                 }
@@ -107,8 +146,8 @@ class ChatRoomListViewModel {
         alertController.addAction(cancelAction)
         alertController.addAction(okAction)
 
-        let viewController = UIApplication.shared.windows.first!.rootViewController!
-        viewController.present(alertController, animated: true, completion: nil)
+
+        target.present(alertController, animated: true, completion: nil)
     }
 
     // MARK: - Create Room Action
@@ -133,19 +172,27 @@ class ChatRoomListViewModel {
                 password = boothPassword
             }
             let roomID = UUID().uuidString
-            let data = ["name": name,
+            let dataForChatRoom = ["name": name,
                         "password": password,
                         "timestamp": Timestamp(date: Date()),
-                        "roomID": roomID] as [String: Any]
+                        "roomID": roomID,
+                        "lastMessageTimestamp": Timestamp(date: Date())] as [String: Any]
 
-            COLLECTION_CHATROOMS.document(roomID).setData(data) { error in
+            COLLECTION_CHATROOMS.document(roomID).setData(dataForChatRoom) { error in
 
                 guard error == nil else { return }
 
                 guard let userID = AppGlobal.shared.userID else { return }
-                COLLECTION_CHATROOMS.document(roomID).collection("userIDs").document(userID).setData([:]) { error in
+                guard let fcmToken = AppGlobal.shared.fcmToken else { return }
+
+                let userDataWithFcmToken = ["userID": userID,
+                                            "fcmToken": fcmToken] as [String: Any]
+                COLLECTION_CHATROOMS.document(roomID).collection("userIDs").document(userID).setData(userDataWithFcmToken) { error in
                     guard error == nil else { return }
-                    let chatRoomdataInUserList = data
+                    let chatRoomdataInUserList = ["name": name,
+                                                  "password": password,
+                                                  "timestamp": Timestamp(date: Date()),
+                                                  "roomID": roomID] as [String: Any]
                     COLLECTION_USERS.document(userID).collection("chatRooms").document(roomID).setData(chatRoomdataInUserList) { error in
                         guard error == nil else { return }
                     }

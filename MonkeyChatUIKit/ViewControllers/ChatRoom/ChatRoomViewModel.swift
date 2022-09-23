@@ -15,7 +15,7 @@ protocol ChatRoomViewModelDelegate: AnyObject {
 class ChatRoomViewModel {
 
     // MARK: - Stored Properties
-    private let chatroom: ChatRoom
+    var chatroom: ChatRoom
     var messages = [Message]()
     var lastMessage: Message?
     weak var delegate: ChatRoomViewModelDelegate?
@@ -37,13 +37,12 @@ class ChatRoomViewModel {
             self.lastMessage = self.messages.last
             self.delegate?.didChangeDataSource()
             completion()
-
         }
     }
 
     func getLastMessage(completion: @escaping(() -> Void)) {
         guard let chatroomID = chatroom.id else { return }
-        COLLECTION_CHATROOMS.document(chatroomID).collection("chatroom-messages").order(by: "timestamp", descending: false).getDocuments { snapshot, error in
+        COLLECTION_CHATROOMS.document(chatroomID).collection("chatroom-messages").order(by: "timestamp", descending: false).addSnapshotListener { snapshot, error in
             guard error == nil else { print(error!.localizedDescription); return }
             guard let addedDocs = snapshot?.documentChanges.filter({ $0.type == .added }) else { return }
             self.lastMessage = addedDocs.compactMap({ try? $0.document.data(as: Message.self) }).last
@@ -52,18 +51,38 @@ class ChatRoomViewModel {
     }
 
     func uploadMessage(message: String) {
+        let sender = PushNotificationSender()
         guard let chatroomID = chatroom.id else { return }
 
-        let data = ["message": message,
+        let data = ["senderName": AppGlobal.shared.username ?? "",
+                    "senderUID": AppGlobal.shared.userID ?? "",
+                    "message": message,
                     "timestamp": Timestamp(date: Date())] as [String: Any]
 
-        COLLECTION_CHATROOMS.document(chatroomID).collection("chatroom-messages").addDocument(data: data) { [weak self] error in
+        let room = COLLECTION_CHATROOMS.document(chatroomID)
+        room.collection("chatroom-messages").addDocument(data: data) { [weak self] error in
             if error != nil {
                 AlertHelper.alertMessage(title: "Failed to send message!", message: error?.localizedDescription ?? "", okButtonText: "OK")
                 print("Failed to upload message. \(error!.localizedDescription)")
             }
-            let sender = PushNotificationSender()
-            sender.sendPushNotification(to: "/topics/newMessages", title: "\(self?.chatroom.name ?? "")", body: "\(message)")
+            let lastMessageData = ["lastMessageTimestamp": Timestamp(date: Date())] as [String: Any]
+            room.updateData(lastMessageData) { error in
+                guard error == nil else {
+                    print(error?.localizedDescription ?? "")
+                    return
+                }
+
+                room.collection("userIDs").getDocuments { snapshot, error in
+                    guard let documents = snapshot?.documents else { return }
+                    var fcmTokenForThisChatRoom = [String]()
+                    for document in documents {
+                        fcmTokenForThisChatRoom.append(document.get("fcmToken") as? String ?? "")
+                    }
+                    for token in fcmTokenForThisChatRoom {
+                        sender.sendPushNotification(to: token, title: "\(self?.chatroom.name ?? "")", body: "\(message)")
+                    }
+                }
+            }
         }
     }
 }

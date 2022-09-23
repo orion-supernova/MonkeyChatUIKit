@@ -22,21 +22,30 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         //MARK: Setup Logged In UI
         let tabController = UITabBarController()
+//        let vc0 = UINavigationController(rootViewController: MonkeyListViewController())
         let vc1 = UINavigationController(rootViewController: ChatRoomListViewController())
         let vc2 = UINavigationController(rootViewController: SettingsViewController())
-        tabController.viewControllers = [vc1, vc2]
+        tabController.viewControllers = [/*vc0,*/ vc1, vc2]
+        tabController.selectedIndex = 0
         tabController.tabBar.tintColor = .systemPink
 
+//        vc0.tabBarItem.image = UIImage(systemName: "person.crop.circle")
         vc1.tabBarItem.image = UIImage(systemName: "list.bullet")
         vc2.tabBarItem.image = UIImage(systemName: "gear")
 
-        vc1.title = "MonkeyList"
+//        vc0.title = "MonkeyList"
+        vc1.title = "ChatList"
         vc2.title = "Settings"
 
         //MARK: Check For Auth & Navigate
         let currentUser = Auth.auth().currentUser
 
         if currentUser != nil {
+            let confirmed = AppGlobal.shared.eulaConfirmed ?? false
+            guard confirmed else {
+                window?.rootViewController = EULAViewController()
+                return
+            }
             window?.rootViewController = tabController
         } else {
             window?.rootViewController = AuthViewController()
@@ -77,14 +86,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 }
 
 // MARK: - UNUserNotificationCenterDelegate
-
 extension SceneDelegate: UNUserNotificationCenterDelegate {
+    // If the user opens the app via notification, this function will be triggered.
     func userNotificationCenter(_ center: UNUserNotificationCenter,didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
 
         let userInfo = response.notification.request.content.userInfo
 
-        if
-            let aps = userInfo["aps"] as? [String: AnyObject] {
+        if let aps = userInfo["aps"] as? [String: AnyObject] {
 //            (window?.rootViewController as? UITabBarController)?.selectedIndex = 1
 
             if response.actionIdentifier == Identifiers.viewAction,
@@ -95,6 +103,20 @@ extension SceneDelegate: UNUserNotificationCenterDelegate {
         }
 
         completionHandler()
+    }
+
+    //MARK: - Foreground Notifications
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification) async -> UNNotificationPresentationOptions {
+        guard let apnsDict = notification.request.content.userInfo as? [String: Any] else { return [.badge] }
+        let state: UIApplication.State = UIApplication.shared.applicationState
+        guard apnsDict["user"] as? String != AppGlobal.shared.userID else {
+            return [.badge]
+        }
+        if state == .active {
+            return [.badge]
+        } else {
+            return [.alert, .badge, .sound]
+        }
     }
 }
 

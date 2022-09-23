@@ -37,7 +37,7 @@ class UsernameViewController: UIViewController {
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        view.backgroundColor = .secondarySystemBackground
+        usernameTextField.layer.cornerRadius = 10
     }
 
     // MARK: - Setup
@@ -48,7 +48,7 @@ class UsernameViewController: UIViewController {
     func layout() {
         usernameTextField.snp.makeConstraints { make in
             make.center.equalToSuperview()
-            make.width.equalTo(100)
+            make.width.equalToSuperview()
             make.height.equalTo(30)
         }
     }

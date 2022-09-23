@@ -6,74 +6,115 @@
 //
 
 import UIKit
+import RiveRuntime
 
 class VerificationCodeViewController: UIViewController {
 
-    //MARK: - UI Elements
-    private let verificationCodeTextField: UITextField = {
-        let textField = UITextField()
-        textField.placeholder = "Verification Code"
-        textField.textAlignment = .center
-        textField.addTarget(self, action: #selector(verifyCode), for: .editingChanged)
-        return textField
+    // MARK: - UI Elements
+    private lazy var animationBackgroundView: RiveView = {
+        let view = RiveView()
+        riveViewModel.setView(view)
+        riveViewModel.fit = Fit.fitCover
+        return view
+    }()
+    
+    private lazy var verificationInfoLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Please Enter Your Verification Code"
+        label.textAlignment = .center
+        return label
     }()
 
-    //MARK: - Lifecycle
+    private lazy var verificationCodeView: OTPStackView = {
+        let view = OTPStackView()
+        view.delegate = self
+        return view
+    }()
+
+    // MARK: - Private Variables
+    private lazy var riveViewModel = RiveViewModel(fileName: "safe_box_icon", stateMachineName: "State Machine 1")
+
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
 
         setup()
         layout()
-        setDelegates()
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         view.backgroundColor = .systemBackground
+        overrideUserInterfaceStyle = .dark
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
-        verificationCodeTextField.becomeFirstResponder()
     }
 
-    //MARK: - Setup
+    // MARK: - Setup
     func setup() {
-        view.addSubview(verificationCodeTextField)
+        view.addSubview(animationBackgroundView)
+        animationBackgroundView.addSubview(verificationInfoLabel)
+        animationBackgroundView.addSubview(verificationCodeView)
     }
 
     func layout() {
-        verificationCodeTextField.snp.makeConstraints { make in
-            make.centerY.equalToSuperview().offset(-100)
+        animationBackgroundView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        
+        verificationInfoLabel.snp.makeConstraints { make in
+            make.centerY.equalToSuperview().offset(-200)
             make.width.equalToSuperview()
             make.height.equalTo(40)
         }
-    }
 
-    func setDelegates() {
-        verificationCodeTextField.delegate = self
+        verificationCodeView.snp.makeConstraints { make in
+            make.centerY.equalToSuperview().offset(-100)
+            make.width.equalToSuperview()
+            make.height.equalTo(50)
+        }
     }
 
     //MARK: - Actions
-    @objc func verifyCode() {
-        if verificationCodeTextField.text?.count == 6 {
-            verificationCodeTextField.endEditing(true)
-            LottieHUD.shared.show()
-            guard let smsCode = self.verificationCodeTextField.text else { return }
-            AuthManager.shared.verifyCodeAndSignIn(smsCode: smsCode) { [weak self] success in
-                guard success else {
-                    AlertHelper.alertMessage(title: "Error", message: "Please try again later.", okButtonText: "OK")
+    @objc func verifyCode(with code: String) {
+        LottieHUD.shared.show()
+        AuthManager.shared.verifyCodeAndSignIn(smsCode: code) { [weak self] success in
+            guard let self = self else { return }
+            guard success else {
+                LottieHUD.shared.dismiss()
+                DispatchQueue.main.async {
+                    AlertHelper.simpleAlertMessage(viewController: self, title: "Error", message: "Please check your code or try again later.") {
+                        self.verificationCodeView.resetOTPString()
+                    }
+                }
+                return
+            }
+            LottieHUD.shared.dismiss()
+            self.riveViewModel.triggerInput("Pressed")
+            DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                // Redirect to EULA Page if the user did not accept yet.
+                let confirmed = AppGlobal.shared.eulaConfirmed ?? false
+                guard confirmed else {
+                    let viewController = EULAViewController()
+                    viewController.modalPresentationStyle = .fullScreen
+                    viewController.modalTransitionStyle = .crossDissolve
+                    self.present(viewController, animated: true, completion: nil)
+                    self.riveViewModel.resetToDefaultModel()
                     return
                 }
-                guard let self = self else { return }
+                // If there is no problem, navigate to MainPage
                 self.configureLoginView { tabBar in
                     let tabController = tabBar
                     tabController.modalPresentationStyle = .fullScreen
+                    tabController.modalTransitionStyle = .crossDissolve
                     self.present(tabController, animated: true, completion: nil)
-                    LottieHUD.shared.dismiss()
+                    self.riveViewModel.resetToDefaultModel()
                 }
             }
         }
     }
+
     //MARK: - Functions
     func configureLoginView(completion: @escaping (UITabBarController) -> Void) {
         let tabController = UITabBarController()
@@ -93,12 +134,6 @@ class VerificationCodeViewController: UIViewController {
 
 //MARK: - UITextFieldDelegate
 extension VerificationCodeViewController: UITextFieldDelegate {
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        if textField == verificationCodeTextField {
-            //
-        }
-        return true
-    }
 
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         // get the current text, or use an empty string if that failed
@@ -113,5 +148,10 @@ extension VerificationCodeViewController: UITextFieldDelegate {
         // make sure the result is under 16 characters
         return updatedText.count <= 6
     }
+}
 
+extension VerificationCodeViewController: OTPDelegate {
+    func didStartRequestWith(OTP: String) {
+        verifyCode(with: OTP)
+    }
 }

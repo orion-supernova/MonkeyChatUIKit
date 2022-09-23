@@ -12,7 +12,7 @@ class ChatRoomListViewController: UIViewController {
 
     private let emptyLabel: UILabel = {
         let emptyLabel = UILabel()
-        emptyLabel.text = "You don't have any private booth yet."
+        emptyLabel.text = "You don't have any private room yet."
         emptyLabel.textAlignment = .center
         emptyLabel.font = .systemFont(ofSize: 20)
         emptyLabel.textColor = .secondaryLabel
@@ -23,8 +23,7 @@ class ChatRoomListViewController: UIViewController {
     private let tableView: UITableView = {
         let tableView = UITableView()
         tableView.register(ChatRoomListTableViewCell.self, forCellReuseIdentifier: "ChatRoomListTableViewCell")
-        tableView.tableFooterView = UIView()
-        tableView.rowHeight = UITableView.automaticDimension
+        tableView.rowHeight = 55
         return tableView
     }()
 
@@ -32,10 +31,18 @@ class ChatRoomListViewController: UIViewController {
     private var viewModel = ChatRoomListViewModel()
 
     // MARK: - Lifecycle
+    init() {
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required convenience init?(coder: NSCoder) {
+        self.init()
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
-        setTableViewDelegates()
+        setDelegates()
         layout()
         fetchAndObserveChatRooms()
     }
@@ -50,6 +57,7 @@ class ChatRoomListViewController: UIViewController {
 
     override func viewDidLayoutSubviews() {
         navigationItem.backButtonTitle = ""
+        view.backgroundColor = .systemBackground
     }
 
     // MARK: - Setup
@@ -58,9 +66,10 @@ class ChatRoomListViewController: UIViewController {
         view.addSubview(tableView)
     }
 
-    private func setTableViewDelegates() {
+    private func setDelegates() {
         tableView.delegate = self
         tableView.dataSource = self
+        viewModel.delegate = self
     }
 
     private func layout() {
@@ -87,7 +96,13 @@ class ChatRoomListViewController: UIViewController {
 
         let userSessionLabel : UILabel = {
             let label = UILabel()
-            label.text = "Your username: \(AppGlobal.shared.username ?? "")"
+            var username = ""
+            if let usernameTemp = AppGlobal.shared.username {
+                username = (usernameTemp == "" ? "Anonymous" : usernameTemp)
+            } else {
+                username = "Anonymous"
+            }
+            label.text = "Your username: \(username)"
             label.numberOfLines = 0
             label.lineBreakMode = .byWordWrapping
             label.font = .systemFont(ofSize: 10)
@@ -110,16 +125,15 @@ class ChatRoomListViewController: UIViewController {
     private func toggleEmptyView() {
         if viewModel.chatRooms.count == 0 {
             emptyLabel.isHidden = false
+            tableView.isHidden = true
         } else {
-            emptyLabel.isHidden = false
+            emptyLabel.isHidden = true
+            tableView.isHidden = false
         }
     }
 
     private func fetchAndObserveChatRooms() {
-        viewModel.fetchChatRooms { [weak self] in
-            self?.toggleEmptyView()
-            self?.tableView.reloadData()
-        }
+        viewModel.fetchChatRooms()
     }
 
     private func updateLastMessages() {
@@ -145,12 +159,24 @@ extension ChatRoomListViewController: UITableViewDataSource {
     }
 }
 
-// MARK: UITableViewDelegate
+// MARK: UITableView Delegate
 extension ChatRoomListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let viewController = ChatRoomViewController(chatRoom: viewModel.chatRooms[indexPath.row])
         self.navigationController?.pushViewController(viewController, animated: true)
+    }
+}
+// MARK: ChatRoomListViewModel Delegate
+extension ChatRoomListViewController: ChatRoomListViewModelDelegate {
+    func didChangeDataSource() {
+        DispatchQueue.main.async {
+            self.toggleEmptyView()
+            UIView.transition(with: self.tableView,
+                              duration: 0.2,
+                              options: .transitionCrossDissolve,
+                              animations: { self.tableView.reloadData() })
+        }
     }
 }
 

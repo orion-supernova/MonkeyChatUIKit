@@ -19,6 +19,18 @@ class AlertHelper {
         viewController.present(alertVC, animated: true, completion: nil)
     }
 
+    static func alertMessage(viewController: UIViewController, title: String, message: String, okButtonText: String, completion: @escaping () -> Void ) {
+        let alertVC = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        let okAction = UIAlertAction(title: okButtonText, style: .default) { (action: UIAlertAction) in
+            completion()
+        }
+        alertVC.addAction(cancelAction)
+        alertVC.addAction(okAction)
+
+        viewController.present(alertVC, animated: true, completion: nil)
+    }
+
     static func alertMessage(viewController: UIViewController, title: String, message: String, completion: @escaping () -> Void ) {
         let alertVC = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
@@ -28,6 +40,15 @@ class AlertHelper {
         alertVC.addAction(cancelAction)
         alertVC.addAction(okAction)
 
+        viewController.present(alertVC, animated: true, completion: nil)
+    }
+
+    static func simpleAlertMessage(viewController: UIViewController, title: String, message: String, completion: (() -> Void)? = nil) {
+        let alertVC = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .default) { (action: UIAlertAction) in
+            completion?()
+        }
+        alertVC.addAction(okAction)
         viewController.present(alertVC, animated: true, completion: nil)
     }
 }

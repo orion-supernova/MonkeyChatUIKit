@@ -26,7 +26,7 @@ import SnapKit
     private lazy var containerView: UIView = {
         let view = UIView(frame: .zero)
         view.accessibilityIdentifier    = "LoadingHUD"
-        view.backgroundColor            = UIColor.black.withAlphaComponent(0.0)
+        view.backgroundColor            = UIColor.secondarySystemBackground.withAlphaComponent(0.7)
         view.layer.masksToBounds        = true
         return view
     }()
@@ -77,7 +77,8 @@ import SnapKit
                 make.size.equalToSuperview()
             } else {
                 containerView.layer.cornerRadius = 8
-                make.size.equalTo(90)
+//                make.size.equalTo(90)
+                make.size.equalToSuperview()
             }
 
             make.center.equalToSuperview()
@@ -121,7 +122,7 @@ import SnapKit
         DispatchQueue.main.async {
             self.createHUD()
             UIView.animate(withDuration: self.animationDuration, delay: 0, options: .curveEaseIn, animations: {
-                self.containerView.backgroundColor = UIColor.black.withAlphaComponent(0.6)
+//                self.containerView.backgroundColor = UIColor.black.withAlphaComponent(0.6)
                 self.animationView.alpha = 1
             }, completion: { (finished) in
                 self.animationView.isHidden = false
@@ -161,7 +162,7 @@ import SnapKit
         DispatchQueue.main.async {
             self.removeTimer()
             UIView.animate(withDuration: self.animationDuration, delay: 0, options: .curveEaseOut, animations: {
-                self.containerView.backgroundColor = UIColor.black.withAlphaComponent(0.0)
+//                self.containerView.backgroundColor = UIColor.black.withAlphaComponent(0.0)
                 self.animationView.alpha = 0
             }, completion: { (completed) in
                 self.animationView.isHidden = true

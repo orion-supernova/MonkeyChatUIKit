@@ -13,7 +13,7 @@ class PushNotificationSender {
         let url = NSURL(string: urlString)!
         let paramString: [String : Any] = ["to" : token,
                                            "notification" : ["title" : title, "body" : body, "sound" : "apns-sound.wav"],
-                                           "data" : ["user" : "test_id"]
+                                           "data" : ["user" : AppGlobal.shared.userID]
         ]
 
         let request = NSMutableURLRequest(url: url as URL)
