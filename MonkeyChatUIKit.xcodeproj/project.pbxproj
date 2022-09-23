@@ -14,6 +14,7 @@
 		540403452836946500FF58D8 /* OTPStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 540403442836946500FF58D8 /* OTPStackView.swift */; };
 		541DBA6127DF772A00A3A920 /* MonkeyListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 541DBA6027DF772A00A3A920 /* MonkeyListViewController.swift */; };
 		541DBA6327DF7B1000A3A920 /* MonkeyListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 541DBA6227DF7B1000A3A920 /* MonkeyListViewModel.swift */; };
+		544D84A528DE357200C87D0D /* RoomImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544D84A428DE357200C87D0D /* RoomImageViewController.swift */; };
 		544E9EB2285F541700F0B677 /* safe_box_icon.riv in Resources */ = {isa = PBXBuildFile; fileRef = 544E9EB1285F541700F0B677 /* safe_box_icon.riv */; };
 		544E9EB8285F80AD00F0B677 /* RoomSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544E9EB7285F80AD00F0B677 /* RoomSettingsViewController.swift */; };
 		544E9EBB285F862000F0B677 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 544E9EBA285F862000F0B677 /* Kingfisher */; };
@@ -74,6 +75,7 @@
 		540403442836946500FF58D8 /* OTPStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OTPStackView.swift; sourceTree = "<group>"; };
 		541DBA6027DF772A00A3A920 /* MonkeyListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonkeyListViewController.swift; sourceTree = "<group>"; };
 		541DBA6227DF7B1000A3A920 /* MonkeyListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonkeyListViewModel.swift; sourceTree = "<group>"; };
+		544D84A428DE357200C87D0D /* RoomImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomImageViewController.swift; sourceTree = "<group>"; };
 		544E9EB1285F541700F0B677 /* safe_box_icon.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = safe_box_icon.riv; sourceTree = "<group>"; };
 		544E9EB7285F80AD00F0B677 /* RoomSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomSettingsViewController.swift; sourceTree = "<group>"; };
 		544E9EBC2860CFB600F0B677 /* ImageUploader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageUploader.swift; sourceTree = "<group>"; };
@@ -171,6 +173,7 @@
 			children = (
 				544E9EB7285F80AD00F0B677 /* RoomSettingsViewController.swift */,
 				546851972860DFDC008670E4 /* RoomSettingsViewModel.swift */,
+				544D84A428DE357200C87D0D /* RoomImageViewController.swift */,
 			);
 			path = RoomSettings;
 			sourceTree = "<group>";
@@ -466,6 +469,7 @@
 				545FFC8A27BC5149008CC1ED /* ChatRoom.swift in Sources */,
 				547D252E27C2EADF005D98B8 /* AuthViewController.swift in Sources */,
 				541DBA6127DF772A00A3A920 /* MonkeyListViewController.swift in Sources */,
+				544D84A528DE357200C87D0D /* RoomImageViewController.swift in Sources */,
 				54F2337227BD68C400E9FD28 /* MessageTableViewCell.swift in Sources */,
 				540403412836796300FF58D8 /* CountryCodeHelper.swift in Sources */,
 				545FFC8D27BC5B72008CC1ED /* AlertHelper.swift in Sources */,

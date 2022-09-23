@@ -98,7 +98,6 @@ class RoomSettingsViewController: UIViewController {
         layout()
         configureNavigationBar()
         addGestures()
-        fetchAndObserverGroupImage()
     }
 
     override func viewDidLayoutSubviews() {
@@ -274,11 +273,12 @@ class RoomSettingsViewController: UIViewController {
     }
 
     @objc func roomIconImageViewRecognizerAction() {
-        let imagePickerController = UIImagePickerController()
-        imagePickerController.delegate = self
-        imagePickerController.sourceType = .photoLibrary
-        imagePickerController.allowsEditing = true
-        present(imagePickerController, animated: true)
+        guard let chatRoom = chatRoom else { return }
+        let viewController = RoomImageViewController(chatRoom: chatRoom)
+        viewController.delegate = self
+        viewController.modalPresentationStyle = .fullScreen
+        viewController.modalTransitionStyle = .crossDissolve
+        self.navigationController?.pushViewController(viewController, animated: true)
     }
 
     @objc func blockRoomAction() {
@@ -295,23 +295,8 @@ class RoomSettingsViewController: UIViewController {
     }
 }
 
-extension RoomSettingsViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        let image = info[.editedImage] as? UIImage
-        picker.dismiss(animated: true)
-        guard let image = image else { return }
-        LottieHUD.shared.show()
-        guard let chatRoom = chatRoom else { return }
-        let viewModel = RoomSettingsViewModel(chatRoom: chatRoom)
-        viewModel.uploadPicture(image: image) { [weak self] in
-            guard let self = self else { return }
-            self.roomIconImageView.image = image
-            LottieHUD.shared.dismiss()
-        }
-        
-    }
-
-    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        picker.dismiss(animated: true)
+extension RoomSettingsViewController: RoomImageViewControllerDelegate {
+    func didChangeImage(with image: UIImage) {
+        roomIconImageView.image = image
     }
 }
