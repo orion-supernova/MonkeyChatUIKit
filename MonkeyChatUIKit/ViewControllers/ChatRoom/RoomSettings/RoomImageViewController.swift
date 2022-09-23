@@ -8,6 +8,7 @@
 import UIKit
 import SnapKit
 import Kingfisher
+import Zoomy
 
 protocol RoomImageViewControllerDelegate: AnyObject {
     func didChangeImage(with image: UIImage)
@@ -55,6 +56,7 @@ class RoomImageViewController: UIViewController {
         setup()
         layout()
         setRoomImage()
+        addZoombehavior(for: imageView, settings: .defaultSettings)
     }
 
     // MARK: - Setup & Layout
