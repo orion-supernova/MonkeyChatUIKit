@@ -58,6 +58,7 @@
 		5499FCD9285E6E7A00BCE34D /* lights.riv in Resources */ = {isa = PBXBuildFile; fileRef = 5499FCD8285E6E7A00BCE34D /* lights.riv */; };
 		549FB85928201F68003E65E3 /* AccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 549FB85828201F68003E65E3 /* AccountViewController.swift */; };
 		549FB85F28202976003E65E3 /* PrivacySecurityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 549FB85E28202976003E65E3 /* PrivacySecurityViewController.swift */; };
+		54BAA68A28DE636C009DF815 /* Zoomy in Frameworks */ = {isa = PBXBuildFile; productRef = 54BAA68928DE636C009DF815 /* Zoomy */; };
 		54E3213A28BFA8140014F166 /* EULAViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54E3213928BFA8140014F166 /* EULAViewController.swift */; };
 		54F2336427BD337100E9FD28 /* ChatRoomListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F2336327BD337100E9FD28 /* ChatRoomListTableViewCell.swift */; };
 		54F2336A27BD3C7500E9FD28 /* ChatRoomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F2336927BD3C7500E9FD28 /* ChatRoomViewController.swift */; };
@@ -126,6 +127,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				54BAA68A28DE636C009DF815 /* Zoomy in Frameworks */,
 				545FFC9227BCDCF2008CC1ED /* FirebaseFirestoreSwift-Beta in Frameworks */,
 				545FFC9027BCDCF2008CC1ED /* FirebaseAnalyticsSwift-Beta in Frameworks */,
 				5499FC902857B2B400BCE34D /* RiveRuntime in Frameworks */,
@@ -386,6 +388,7 @@
 				547D253627C3F20A005D98B8 /* Lottie */,
 				5499FC8F2857B2B400BCE34D /* RiveRuntime */,
 				544E9EBA285F862000F0B677 /* Kingfisher */,
+				54BAA68928DE636C009DF815 /* Zoomy */,
 			);
 			productName = MonkeyChatUIKit;
 			productReference = 545FFC6B27BC4C17008CC1ED /* MonkeyChatUIKit.app */;
@@ -421,6 +424,7 @@
 				547D253527C3F20A005D98B8 /* XCRemoteSwiftPackageReference "lottie-ios" */,
 				5499FC8E2857B2B300BCE34D /* XCRemoteSwiftPackageReference "rive-ios" */,
 				544E9EB9285F862000F0B677 /* XCRemoteSwiftPackageReference "Kingfisher" */,
+				54BAA68828DE636C009DF815 /* XCRemoteSwiftPackageReference "Zoomy" */,
 			);
 			productRefGroup = 545FFC6C27BC4C17008CC1ED /* Products */;
 			projectDirPath = "";
@@ -769,6 +773,14 @@
 				kind = branch;
 			};
 		};
+		54BAA68828DE636C009DF815 /* XCRemoteSwiftPackageReference "Zoomy" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/lvnkmn/Zoomy.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -821,6 +833,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 5499FC8E2857B2B300BCE34D /* XCRemoteSwiftPackageReference "rive-ios" */;
 			productName = RiveRuntime;
+		};
+		54BAA68928DE636C009DF815 /* Zoomy */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 54BAA68828DE636C009DF815 /* XCRemoteSwiftPackageReference "Zoomy" */;
+			productName = Zoomy;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
