@@ -35,12 +35,16 @@ class SettingsViewController: UIViewController {
         setup()
         layout()
         setDelegates()
+        customizeView()
     }
 
     override func viewDidLayoutSubviews() {
-        self.title = "Settings"
-        view.backgroundColor = .systemBackground
-        navigationController?.navigationBar.tintColor = .systemPink
+
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        AppGlobal.shared.currentPage = .settings
     }
 
     // MARK: - Setup
@@ -54,10 +58,16 @@ class SettingsViewController: UIViewController {
         }
     }
 
-    // MARK: - Functions
-    func setDelegates() {
+    // MARK: - Private Functions
+    private func setDelegates() {
         tableView.delegate = self
         tableView.dataSource = self
+    }
+
+    private func customizeView() {
+        self.title = "Settings"
+        view.backgroundColor = .systemBackground
+        navigationController?.navigationBar.tintColor = .systemPink
     }
 }
 

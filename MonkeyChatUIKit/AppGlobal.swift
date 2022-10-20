@@ -44,4 +44,15 @@ class AppGlobal {
             UserDefaults.standard.set(newValue, forKey: "eulaConfirmed")
         }
     }
+
+    enum CurrentPage {
+        case monkeyList
+        case settings
+        case chatRoom
+        case roomSettings
+    }
+
+    var currentPage: CurrentPage = .monkeyList
+
+    var lastEnteredChatRoomID = ""
 }

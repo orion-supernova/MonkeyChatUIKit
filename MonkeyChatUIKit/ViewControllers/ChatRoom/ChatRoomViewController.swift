@@ -79,6 +79,7 @@ class ChatRoomViewController: UIViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         self.scrollToBottom()
+        AppGlobal.shared.currentPage = .chatRoom
     }
 
     //MARK: - Setup
@@ -89,8 +90,11 @@ class ChatRoomViewController: UIViewController {
     }
 
     private func configureNavigationBar() {
-        self.title = chatRoom?.name ?? ""
         self.navigationController?.navigationBar.tintColor = .systemPink
+
+        addTitleView()
+
+        // Bar Button Items
         let editRoomSettingsButton = UIBarButtonItem(image: UIImage(systemName: "info.circle"), style: .plain, target: self, action: #selector(editRoomSettings))
         navigationItem.rightBarButtonItems = [editRoomSettingsButton]
         navigationItem.rightBarButtonItem?.tintColor = .systemPink
@@ -167,6 +171,57 @@ class ChatRoomViewController: UIViewController {
         } else {
             emptyLabel.isHidden = true
             tableView.isHidden = false
+        }
+    }
+
+    private func addTitleView() {
+        let titleView: UIView = {
+            let view = UIView()
+            view.backgroundColor = .red
+            return view
+        }()
+
+        let titleViewLabel : UILabel = {
+            let label = UILabel()
+            label.text = chatRoom?.name ?? ""
+            label.font = .systemFont(ofSize: 18, weight: .bold)
+            return label
+        }()
+
+        let memberCountLabel: UILabel = {
+            let label = UILabel()
+            label.text = ""
+            label.textColor = .systemGray
+            label.font = .systemFont(ofSize: 10, weight: .medium)
+            return label
+        }()
+
+        titleView.addSubview(titleViewLabel)
+        titleView.addSubview(memberCountLabel)
+
+        titleViewLabel.snp.makeConstraints { make in
+            make.centerY.equalToSuperview().offset(-5)
+            make.centerX.equalToSuperview()
+            make.height.equalTo(20)
+        }
+
+        memberCountLabel.snp.makeConstraints { make in
+            make.top.equalTo(titleViewLabel.snp.bottom).offset(1)
+            make.centerX.equalToSuperview()
+            make.height.equalTo(12)
+        }
+
+        navigationItem.titleView = titleView
+
+        getMemberCount { count in
+            memberCountLabel.text = "\(count == 1 ? "1 member" : " \(count) members")"
+        }
+    }
+
+    private func getMemberCount(completion: @escaping (Int) -> Void) {
+        COLLECTION_CHATROOMS.document(chatRoom?.id ?? "").collection("userIDs").getDocuments { snapshot, error in
+            guard let snapshot else { return }
+            completion(snapshot.documents.count)
         }
     }
 

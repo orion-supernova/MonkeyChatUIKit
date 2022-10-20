@@ -108,6 +108,11 @@ class RoomSettingsViewController: UIViewController {
         blockButton.layer.cornerRadius = 5
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        AppGlobal.shared.currentPage = .roomSettings
+    }
+
     // MARK: - Seyup & Layout
     private func setup() {
         view.addSubview(mainContainerView)

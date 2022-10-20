@@ -44,6 +44,7 @@ class ChatRoomListViewController: UIViewController {
         setup()
         setDelegates()
         layout()
+        configureNavigationBar()
         fetchAndObserveChatRooms()
     }
 
@@ -51,8 +52,8 @@ class ChatRoomListViewController: UIViewController {
     }
 
     override func viewWillAppear(_ animated: Bool) {
-        configureNavigationBar()
         updateLastMessages()
+        AppGlobal.shared.currentPage = .monkeyList
     }
 
     override func viewDidLayoutSubviews() {
@@ -164,6 +165,7 @@ extension ChatRoomListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let viewController = ChatRoomViewController(chatRoom: viewModel.chatRooms[indexPath.row])
+        AppGlobal.shared.lastEnteredChatRoomID = viewModel.chatRooms[indexPath.row].id ?? ""
         self.navigationController?.pushViewController(viewController, animated: true)
     }
 }

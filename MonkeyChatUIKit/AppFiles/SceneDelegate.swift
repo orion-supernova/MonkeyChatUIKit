@@ -22,18 +22,18 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         //MARK: Setup Logged In UI
         let tabController = UITabBarController()
-//        let vc0 = UINavigationController(rootViewController: MonkeyListViewController())
+        let vc0 = UINavigationController(rootViewController: MonkeyListViewController())
         let vc1 = UINavigationController(rootViewController: ChatRoomListViewController())
         let vc2 = UINavigationController(rootViewController: SettingsViewController())
         tabController.viewControllers = [/*vc0,*/ vc1, vc2]
         tabController.selectedIndex = 0
         tabController.tabBar.tintColor = .systemPink
 
-//        vc0.tabBarItem.image = UIImage(systemName: "person.crop.circle")
+        vc0.tabBarItem.image = UIImage(systemName: "person.crop.circle")
         vc1.tabBarItem.image = UIImage(systemName: "list.bullet")
         vc2.tabBarItem.image = UIImage(systemName: "gear")
 
-//        vc0.title = "MonkeyList"
+        vc0.title = "MonkeyList"
         vc1.title = "ChatList"
         vc2.title = "Settings"
 
@@ -94,6 +94,7 @@ extension SceneDelegate: UNUserNotificationCenterDelegate {
 
         if let aps = userInfo["aps"] as? [String: AnyObject] {
 //            (window?.rootViewController as? UITabBarController)?.selectedIndex = 1
+            UIApplication.shared.applicationIconBadgeNumber = 0
 
             if response.actionIdentifier == Identifiers.viewAction,
                let url = URL(string: aps["link_url"] as! String) {
@@ -113,8 +114,18 @@ extension SceneDelegate: UNUserNotificationCenterDelegate {
             return [.badge]
         }
         if state == .active {
-            return [.badge]
+            let currentPage = AppGlobal.shared.currentPage
+            if currentPage != .chatRoom {
+                return [.alert, .sound]
+            } else {
+                guard apnsDict["chatRoomID"] as? String != AppGlobal.shared.lastEnteredChatRoomID else {
+                    return [.badge]
+                }
+                return [.alert, .sound]
+
+            }
         } else {
+            UIApplication.shared.applicationIconBadgeNumber += 1
             return [.alert, .badge, .sound]
         }
     }

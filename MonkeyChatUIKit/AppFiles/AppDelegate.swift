@@ -33,11 +33,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate {
         viewmodel.unsubscribeForNewMessages(chatRoomID: "newMessage")
         viewmodel.unsubscribeForNewMessages(chatRoomID: "newMessages")
 
-        // Check if launched from notification
+        /*// Check if launched from notification
         let notificationOption = launchOptions?[.remoteNotification]
         if  let notification = notificationOption as? [String: AnyObject], let aps = notification["aps"] as? [String: AnyObject] {
             //
-        }
+        }*/
         return true
     }
 

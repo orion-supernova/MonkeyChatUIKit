@@ -8,7 +8,7 @@
 import UIKit
 
 class MonkeyListViewController: UIViewController {
-    //MARK: - UI Elements
+    // MARK: - UI Elements
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "MonkeyListCell")
@@ -16,15 +16,16 @@ class MonkeyListViewController: UIViewController {
         return tableView
     }()
 
-    //MARK: - Private Properties
+    // MARK: - Private Properties
     private var viewModel = MonkeyListViewModel()
 
-    //MARK: - Lifecycle
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
         layout()
         setDelegates()
+        customizeNavigationBar()
     }
 
     override func viewDidLayoutSubviews() {
@@ -48,7 +49,7 @@ class MonkeyListViewController: UIViewController {
         }
     }
 
-    //MARK: - Private Functions
+    // MARK: - Private Functions
     private func setDelegates() {
         tableView.delegate = self
         tableView.dataSource = self
@@ -56,6 +57,27 @@ class MonkeyListViewController: UIViewController {
 
     private func fetchFriends() {
         
+    }
+
+    private func customizeNavigationBar() {
+        let addFriendButton = UIBarButtonItem(barButtonSystemItem: .add,
+                                                   target: self,
+                                                   action: #selector(addFriendButtonAction))
+        navigationItem.rightBarButtonItems = [addFriendButton]
+        navigationItem.rightBarButtonItem?.tintColor = .systemPink
+
+        let titleViewLabel : UILabel = {
+            let label = UILabel()
+            label.text = "MonkeyList"
+            label.font = .systemFont(ofSize: 18, weight: .bold)
+            return label
+        }()
+        navigationItem.titleView = titleViewLabel
+    }
+
+    // MARK: - Actions
+    @objc func addFriendButtonAction() {
+        print("HEDE")
     }
     
 }

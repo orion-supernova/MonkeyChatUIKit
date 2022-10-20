@@ -79,7 +79,7 @@ class ChatRoomViewModel {
                         fcmTokenForThisChatRoom.append(document.get("fcmToken") as? String ?? "")
                     }
                     for token in fcmTokenForThisChatRoom {
-                        sender.sendPushNotification(to: token, title: "\(self?.chatroom.name ?? "")", body: "\(message)")
+                        sender.sendPushNotification(to: token, title: "\(self?.chatroom.name ?? "")", body: "\(message)", chatRoomID: chatroomID)
                     }
                 }
             }
