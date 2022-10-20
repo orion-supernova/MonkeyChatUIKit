@@ -44,7 +44,6 @@ class ChatRoomListViewController: UIViewController {
         setup()
         setDelegates()
         layout()
-        configureNavigationBar()
         fetchAndObserveChatRooms()
     }
 
@@ -52,6 +51,7 @@ class ChatRoomListViewController: UIViewController {
     }
 
     override func viewWillAppear(_ animated: Bool) {
+        configureNavigationBar() // It is called from willAppear because username might be updated.
         updateLastMessages()
         AppGlobal.shared.currentPage = .monkeyList
     }
@@ -89,6 +89,7 @@ class ChatRoomListViewController: UIViewController {
 
     // MARK: - Functions
     func configureNavigationBar() {
+        // FIXME: - This function should not be called from willAppear. Only the username stuff might be called from there.
         let createChatRoomButton = UIBarButtonItem(barButtonSystemItem: .compose,
                                                    target: self,
                                                    action: #selector(createChatRoomAction))
@@ -97,13 +98,19 @@ class ChatRoomListViewController: UIViewController {
 
         let userSessionLabel : UILabel = {
             let label = UILabel()
-            var username = ""
-            if let usernameTemp = AppGlobal.shared.username {
-                username = (usernameTemp == "" ? "Anonymous" : usernameTemp)
-            } else {
-                username = "Anonymous"
+            // If the user is using multiple devices, username should match for all. So we check the server first to see if there is a given username.
+            getUsernameFromServer { usernameFromServer in
+                guard !usernameFromServer.isEmpty else {
+                    if let usernameTemp = AppGlobal.shared.username {
+                        label.text = "Your username: \(usernameTemp.isEmpty ? "Anonymous" : usernameTemp)"
+                    } else {
+                        label.text = "Your username: Anonymous"
+                    }
+                    return
+                }
+                label.text = "Your username: \(usernameFromServer)"
+                AppGlobal.shared.username = usernameFromServer
             }
-            label.text = "Your username: \(username)"
             label.numberOfLines = 0
             label.lineBreakMode = .byWordWrapping
             label.font = .systemFont(ofSize: 10)
@@ -139,6 +146,15 @@ class ChatRoomListViewController: UIViewController {
 
     private func updateLastMessages() {
         //
+    }
+
+    private func getUsernameFromServer(completion: @escaping (String) -> Void) {
+        COLLECTION_USERS.document(AppGlobal.shared.userID ?? "").getDocument { snapshot, error in
+            guard let snapshot else { return }
+            let dict = snapshot.data()
+            let username = dict?["username"] as? String
+            completion(username ?? "")
+        }
     }
 
     // MARK: - Actions

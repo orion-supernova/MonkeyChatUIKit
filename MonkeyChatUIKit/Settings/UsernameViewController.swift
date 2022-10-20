@@ -41,11 +41,11 @@ class UsernameViewController: UIViewController {
     }
 
     // MARK: - Setup
-    func setup() {
+    private func setup() {
         view.addSubview(usernameTextField)
     }
 
-    func layout() {
+    private func layout() {
         usernameTextField.snp.makeConstraints { make in
             make.center.equalToSuperview()
             make.width.equalToSuperview()
@@ -53,13 +53,14 @@ class UsernameViewController: UIViewController {
         }
     }
 
-    func setDelegates() {
+    private func setDelegates() {
         usernameTextField.delegate = self
     }
 
     // MARK: - Private Functions
-    func changeUsername() {
+    private func changeUsername() {
         AppGlobal.shared.username = usernameTextField.text
+        COLLECTION_USERS.document(AppGlobal.shared.userID ?? "").updateData(["username": usernameTextField.text ?? ""])
     }
 }
 
