@@ -81,6 +81,7 @@ class RoomSettingsViewController: UIViewController {
         button.setImage(UIImage(systemName: "eye.slash"), for: .normal)
         button.setImage(UIImage(systemName: "eye"), for: .selected)
         button.tintColor = .systemGray
+        button.addTarget(self, action: #selector(showHideRoomButtonAction(_:)), for: .touchUpInside)
         return button
     }()
 
@@ -139,7 +140,6 @@ class RoomSettingsViewController: UIViewController {
         layout()
         configureNavigationBar()
         addGestures()
-        checkForShowHidePasswordButton()
     }
 
     override func viewDidLayoutSubviews() {
@@ -321,13 +321,6 @@ class RoomSettingsViewController: UIViewController {
         return encoded
     }
 
-    private func checkForShowHidePasswordButton() {
-        guard let chatRoom else { return }
-        if chatRoom.password?.isEmpty == true {
-            showHideRoomPasswordButton.isHidden
-        }
-    }
-
     // MARK: - Actions
     @objc func deleteRoomButtonAction() {
         AlertHelper.alertMessage(viewController: self, title: "Delete This Room", message: "Do you want to delete this room and everything related to this room in our servers? This action will affect everyone in this room and can NOT be undone.", okButtonText: "Delete") {
@@ -373,6 +366,15 @@ class RoomSettingsViewController: UIViewController {
                 self.navigationController?.popViewController(animated: true)
                 self.delegate?.didDeleteOrBlockRoom()
             }
+        }
+    }
+    
+    @objc private func showHideRoomButtonAction(_ sender: UIButton) {
+        sender.isSelected.toggle()
+        if sender.isSelected {
+            roomPasswordLabel.text = self.roomPassword
+        } else {
+            roomPasswordLabel.text = self.roomPassword.replaceCharactersWithAsterisk()
         }
     }
 }
