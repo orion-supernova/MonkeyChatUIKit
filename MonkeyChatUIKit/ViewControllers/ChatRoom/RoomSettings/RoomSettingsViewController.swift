@@ -11,6 +11,7 @@ import Kingfisher
 
 protocol RoomSettingsViewControllerDelegate: AnyObject {
     func didDeleteOrBlockRoom()
+    func didChangeRoomName(with newName: String)
 }
 
 class RoomSettingsViewController: UIViewController {
@@ -31,6 +32,7 @@ class RoomSettingsViewController: UIViewController {
 
     private lazy var roomIDTitleLabel: UILabel = {
         let label = UILabel()
+        label.numberOfLines = 0
         label.font = .systemFont(ofSize: 14, weight: .bold)
         label.textColor = UIColor(named: "Black-White")
         label.text = "Room ID:"
@@ -67,6 +69,15 @@ class RoomSettingsViewController: UIViewController {
         label.textColor = UIColor(named: "Black-White")
         label.text = "Room Password:"
         return label
+    }()
+
+    private lazy var changeRoomNameButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("Change", for: .normal)
+        button.setTitleColor(UIColor(hexString: "9D9393"), for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 12, weight: .semibold)
+        button.addTarget(self, action: #selector(changeRoomNameButtonAction), for: .touchUpInside)
+        return button
     }()
 
     private lazy var roomPasswordLabel: UILabel = {
@@ -163,6 +174,7 @@ class RoomSettingsViewController: UIViewController {
         mainContainerView.addSubview(roomIDLabel)
         mainContainerView.addSubview(roomNameTitleLabel)
         mainContainerView.addSubview(roomNameLabel)
+        mainContainerView.addSubview(changeRoomNameButton)
         mainContainerView.addSubview(roomPasswordTitleLabel)
         mainContainerView.addSubview(roomPasswordLabel)
         mainContainerView.addSubview(showHideRoomPasswordButton)
@@ -196,7 +208,7 @@ class RoomSettingsViewController: UIViewController {
         roomIDLabel.snp.makeConstraints { make in
             make.top.equalTo(roomIDTitleLabel.snp.bottom).offset(1)
             make.left.right.equalToSuperview()
-            make.height.equalTo(15)
+            make.height.greaterThanOrEqualTo(15)
         }
 
         roomNameTitleLabel.snp.makeConstraints { make in
@@ -207,8 +219,17 @@ class RoomSettingsViewController: UIViewController {
 
         roomNameLabel.snp.makeConstraints { make in
             make.top.equalTo(roomNameTitleLabel.snp.bottom).offset(1)
-            make.left.right.equalToSuperview()
+            make.left.equalToSuperview()
+            make.right.equalTo(-50)
             make.height.greaterThanOrEqualTo(15)
+        }
+
+        changeRoomNameButton.snp.makeConstraints { make in
+            make.top.equalTo(roomNameLabel.snp.top)
+            make.bottom.equalTo(roomNameLabel.snp.bottom)
+            make.left.equalTo(roomNameLabel.snp.right)
+            make.right.equalToSuperview()
+
         }
 
         roomPasswordTitleLabel.snp.makeConstraints { make in
@@ -377,8 +398,42 @@ class RoomSettingsViewController: UIViewController {
             roomPasswordLabel.text = self.roomPassword.replaceCharactersWithAsterisk()
         }
     }
+
+    @objc private func changeRoomNameButtonAction() {
+        let alertController = UIAlertController(title: "New Room Name!", message: "Please Enter Below:", preferredStyle: .alert)
+        alertController.addTextField { textfield in
+            textfield.placeholder = "Choose something nice..."
+        }
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+        let okAction = UIAlertAction(title: "Enter", style: .default) { action in
+            guard let textfields = alertController.textFields else { return }
+            var roomName = ""
+            if let tempRoomName = textfields[0].text {
+                roomName = tempRoomName
+            }
+            guard let chatRoom = self.chatRoom else { return }
+            // Firstly, change the room name inside the collection of chatrooms
+            COLLECTION_CHATROOMS.document(chatRoom.id ?? "").getDocument { snapshot, error in
+                guard let snapshot else { return }
+                // Secondly, change the room name inside the collection of users so the user can see it in the chatRoomListViewController
+                snapshot.reference.updateData(["name": roomName])
+                COLLECTION_USERS.document(AppGlobal.shared.userID ?? "").collection("chatRooms").document(chatRoom.id ?? "").getDocument { snapshot, error in
+                    guard let snapshot else { return }
+                    snapshot.reference.updateData(["name": roomName])
+                    // Lastly, update the current view and the previous view
+                    self.roomNameLabel.text = roomName
+                    self.delegate?.didChangeRoomName(with: roomName)
+                }
+            }
+        }
+        alertController.addAction(cancelAction)
+        alertController.addAction(okAction)
+
+        self.present(alertController, animated: true, completion: nil)
+    }
 }
 
+// MARK: - RoomImageViewController Delegate
 extension RoomSettingsViewController: RoomImageViewControllerDelegate {
     func didChangeImage(with image: UIImage) {
         roomIconImageView.image = image
