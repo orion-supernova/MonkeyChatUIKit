@@ -12,6 +12,7 @@
 		540403412836796300FF58D8 /* CountryCodeHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 540403402836796300FF58D8 /* CountryCodeHelper.swift */; };
 		54040343283689AA00FF58D8 /* UIColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54040342283689AA00FF58D8 /* UIColorExtension.swift */; };
 		540403452836946500FF58D8 /* OTPStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 540403442836946500FF58D8 /* OTPStackView.swift */; };
+		540BEA6A290AF78E00238B65 /* SensitiveData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 540BEA69290AF78E00238B65 /* SensitiveData.swift */; };
 		541DBA6127DF772A00A3A920 /* MonkeyListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 541DBA6027DF772A00A3A920 /* MonkeyListViewController.swift */; };
 		541DBA6327DF7B1000A3A920 /* MonkeyListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 541DBA6227DF7B1000A3A920 /* MonkeyListViewModel.swift */; };
 		544D84A528DE357200C87D0D /* RoomImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544D84A428DE357200C87D0D /* RoomImageViewController.swift */; };
@@ -38,7 +39,6 @@
 		545FFC9E27BCFB05008CC1ED /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545FFC9D27BCFB05008CC1ED /* Message.swift */; };
 		545FFCA027BCFF9F008CC1ED /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545FFC9F27BCFF9F008CC1ED /* Constants.swift */; };
 		545FFCA327BD007F008CC1ED /* ChatRoomListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545FFCA227BD007F008CC1ED /* ChatRoomListViewModel.swift */; };
-		54664F4F27C2DC8300F94482 /* SensitiveData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54664F4E27C2DC8300F94482 /* SensitiveData.swift */; };
 		54664F5527C2E5DD00F94482 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 54664F5427C2E5DD00F94482 /* FirebaseAuth */; };
 		546851982860DFDC008670E4 /* RoomSettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 546851972860DFDC008670E4 /* RoomSettingsViewModel.swift */; };
 		547D252E27C2EADF005D98B8 /* AuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 547D252D27C2EADF005D98B8 /* AuthViewController.swift */; };
@@ -59,6 +59,7 @@
 		549FB85928201F68003E65E3 /* AccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 549FB85828201F68003E65E3 /* AccountViewController.swift */; };
 		549FB85F28202976003E65E3 /* PrivacySecurityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 549FB85E28202976003E65E3 /* PrivacySecurityViewController.swift */; };
 		54BAA68A28DE636C009DF815 /* Zoomy in Frameworks */ = {isa = PBXBuildFile; productRef = 54BAA68928DE636C009DF815 /* Zoomy */; };
+		54DA8AE3290BCCAD001BC075 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54DA8AE2290BCCAD001BC075 /* Extensions.swift */; };
 		54E3213A28BFA8140014F166 /* EULAViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54E3213928BFA8140014F166 /* EULAViewController.swift */; };
 		54F2336427BD337100E9FD28 /* ChatRoomListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F2336327BD337100E9FD28 /* ChatRoomListTableViewCell.swift */; };
 		54F2336A27BD3C7500E9FD28 /* ChatRoomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F2336927BD3C7500E9FD28 /* ChatRoomViewController.swift */; };
@@ -74,6 +75,7 @@
 		540403402836796300FF58D8 /* CountryCodeHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryCodeHelper.swift; sourceTree = "<group>"; };
 		54040342283689AA00FF58D8 /* UIColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorExtension.swift; sourceTree = "<group>"; };
 		540403442836946500FF58D8 /* OTPStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OTPStackView.swift; sourceTree = "<group>"; };
+		540BEA69290AF78E00238B65 /* SensitiveData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensitiveData.swift; sourceTree = "<group>"; };
 		541DBA6027DF772A00A3A920 /* MonkeyListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonkeyListViewController.swift; sourceTree = "<group>"; };
 		541DBA6227DF7B1000A3A920 /* MonkeyListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonkeyListViewModel.swift; sourceTree = "<group>"; };
 		544D84A428DE357200C87D0D /* RoomImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomImageViewController.swift; sourceTree = "<group>"; };
@@ -95,7 +97,6 @@
 		545FFC9D27BCFB05008CC1ED /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		545FFC9F27BCFF9F008CC1ED /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		545FFCA227BD007F008CC1ED /* ChatRoomListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomListViewModel.swift; sourceTree = "<group>"; };
-		54664F4E27C2DC8300F94482 /* SensitiveData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensitiveData.swift; sourceTree = "<group>"; };
 		546851972860DFDC008670E4 /* RoomSettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomSettingsViewModel.swift; sourceTree = "<group>"; };
 		547D252D27C2EADF005D98B8 /* AuthViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewController.swift; sourceTree = "<group>"; };
 		547D252F27C3DD92005D98B8 /* AuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
@@ -112,6 +113,7 @@
 		5499FCD8285E6E7A00BCE34D /* lights.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = lights.riv; sourceTree = "<group>"; };
 		549FB85828201F68003E65E3 /* AccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountViewController.swift; sourceTree = "<group>"; };
 		549FB85E28202976003E65E3 /* PrivacySecurityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacySecurityViewController.swift; sourceTree = "<group>"; };
+		54DA8AE2290BCCAD001BC075 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		54E3213928BFA8140014F166 /* EULAViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EULAViewController.swift; sourceTree = "<group>"; };
 		54F2336327BD337100E9FD28 /* ChatRoomListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomListTableViewCell.swift; sourceTree = "<group>"; };
 		54F2336927BD3C7500E9FD28 /* ChatRoomViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomViewController.swift; sourceTree = "<group>"; };
@@ -265,10 +267,11 @@
 				540403402836796300FF58D8 /* CountryCodeHelper.swift */,
 				545FFC8C27BC5B72008CC1ED /* AlertHelper.swift */,
 				545FFC9F27BCFF9F008CC1ED /* Constants.swift */,
-				54664F4E27C2DC8300F94482 /* SensitiveData.swift */,
+				540BEA69290AF78E00238B65 /* SensitiveData.swift */,
 				547D253327C3EF4D005D98B8 /* LottieHUD.swift */,
 				54040342283689AA00FF58D8 /* UIColorExtension.swift */,
 				544E9EBC2860CFB600F0B677 /* ImageUploader.swift */,
+				54DA8AE2290BCCAD001BC075 /* Extensions.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -482,7 +485,7 @@
 				547D254127C4EED2005D98B8 /* ChatRoomNotificationsManager.swift in Sources */,
 				548BC3B127C0120100CBC6EA /* PushNotificationManager.swift in Sources */,
 				545FFC7127BC4C17008CC1ED /* SceneDelegate.swift in Sources */,
-				54664F4F27C2DC8300F94482 /* SensitiveData.swift in Sources */,
+				54DA8AE3290BCCAD001BC075 /* Extensions.swift in Sources */,
 				545FFC9E27BCFB05008CC1ED /* Message.swift in Sources */,
 				541DBA6327DF7B1000A3A920 /* MonkeyListViewModel.swift in Sources */,
 				549FB85928201F68003E65E3 /* AccountViewController.swift in Sources */,
@@ -493,6 +496,7 @@
 				54F2336A27BD3C7500E9FD28 /* ChatRoomViewController.swift in Sources */,
 				547D253427C3EF4D005D98B8 /* LottieHUD.swift in Sources */,
 				5404033E2836768400FF58D8 /* Country.swift in Sources */,
+				540BEA6A290AF78E00238B65 /* SensitiveData.swift in Sources */,
 				547D253027C3DD92005D98B8 /* AuthManager.swift in Sources */,
 				544E9EB8285F80AD00F0B677 /* RoomSettingsViewController.swift in Sources */,
 				540403452836946500FF58D8 /* OTPStackView.swift in Sources */,

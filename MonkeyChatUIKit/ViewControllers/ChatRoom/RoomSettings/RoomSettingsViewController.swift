@@ -14,7 +14,7 @@ protocol RoomSettingsViewControllerDelegate: AnyObject {
 }
 
 class RoomSettingsViewController: UIViewController {
-    // MARK: - Elements
+    // MARK: - UI Elements
     private lazy var mainContainerView: UIView = {
         let view = UIView()
         view.backgroundColor = .systemBackground
@@ -29,22 +29,59 @@ class RoomSettingsViewController: UIViewController {
         return imageView
     }()
 
+    private lazy var roomIDTitleLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 14, weight: .bold)
+        label.textColor = UIColor(named: "Black-White")
+        label.text = "Room ID:"
+        return label
+    }()
+
     private lazy var roomIDLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 0
+        label.font = .systemFont(ofSize: 14, weight: .regular)
+        label.textColor = UIColor(hexString: "9D9393")
+        return label
+    }()
+
+    private lazy var roomNameTitleLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 14, weight: .bold)
+        label.textColor = UIColor(named: "Black-White")
+        label.text = "Room Name:"
         return label
     }()
 
     private lazy var roomNameLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 0
+        label.font = .systemFont(ofSize: 14, weight: .regular)
+        label.textColor = UIColor(hexString: "9D9393")
+        return label
+    }()
+
+    private lazy var roomPasswordTitleLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 14, weight: .bold)
+        label.textColor = UIColor(named: "Black-White")
+        label.text = "Room Password:"
         return label
     }()
 
     private lazy var roomPasswordLabel: UILabel = {
         let label = UILabel()
+        label.font = .systemFont(ofSize: 14, weight: .regular)
         label.numberOfLines = 0
         return label
+    }()
+
+    private lazy var showHideRoomPasswordButton: UIButton = {
+        let button = UIButton(type: .custom)
+        button.setImage(UIImage(systemName: "eye.slash"), for: .normal)
+        button.setImage(UIImage(systemName: "eye"), for: .selected)
+        button.tintColor = .systemGray
+        return button
     }()
 
     private lazy var seperatorOneView: UIView = {
@@ -76,6 +113,9 @@ class RoomSettingsViewController: UIViewController {
     var tabbarHeight: CGFloat = 0
     weak var delegate: RoomSettingsViewControllerDelegate?
 
+    // MARK: - Private Properties
+    private var roomPassword = ""
+
     // MARK: - Lifecycle
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?)   {
         super.init(nibName: nil, bundle: nil)
@@ -90,6 +130,7 @@ class RoomSettingsViewController: UIViewController {
         self.chatRoom = chatRoom
         fetchAndObserverGroupImage()
         setLabelTexts()
+        showHideRoomPasswordButton.isHidden = (chatRoom.password?.isEmpty ?? false)
     }
 
     override func viewDidLoad() {
@@ -98,11 +139,12 @@ class RoomSettingsViewController: UIViewController {
         layout()
         configureNavigationBar()
         addGestures()
+        checkForShowHidePasswordButton()
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        roomIconImageView.layer.cornerRadius = 50 // size'ın yarısı kadar olmalı ki daire olsun
+        roomIconImageView.layer.cornerRadius = 50 // It should be half of the size so it can be a cicle.
         roomIconImageView.clipsToBounds = true
         inviteButton.layer.cornerRadius = 5
         blockButton.layer.cornerRadius = 5
@@ -117,9 +159,13 @@ class RoomSettingsViewController: UIViewController {
     private func setup() {
         view.addSubview(mainContainerView)
         mainContainerView.addSubview(roomIconImageView)
+        mainContainerView.addSubview(roomIDTitleLabel)
         mainContainerView.addSubview(roomIDLabel)
+        mainContainerView.addSubview(roomNameTitleLabel)
         mainContainerView.addSubview(roomNameLabel)
+        mainContainerView.addSubview(roomPasswordTitleLabel)
         mainContainerView.addSubview(roomPasswordLabel)
+        mainContainerView.addSubview(showHideRoomPasswordButton)
         mainContainerView.addSubview(seperatorOneView)
         mainContainerView.addSubview(inviteButton)
         mainContainerView.addSubview(blockButton)
@@ -141,22 +187,49 @@ class RoomSettingsViewController: UIViewController {
             make.size.equalTo(100)
         }
 
-        roomIDLabel.snp.makeConstraints { make in
+        roomIDTitleLabel.snp.makeConstraints { make in
             make.top.equalTo(roomIconImageView.snp.bottom).offset(5)
             make.left.right.equalToSuperview()
-            make.height.greaterThanOrEqualTo(30)
+            make.height.equalTo(15)
+        }
+
+        roomIDLabel.snp.makeConstraints { make in
+            make.top.equalTo(roomIDTitleLabel.snp.bottom).offset(1)
+            make.left.right.equalToSuperview()
+            make.height.equalTo(15)
+        }
+
+        roomNameTitleLabel.snp.makeConstraints { make in
+            make.top.equalTo(roomIDLabel.snp.bottom).offset(5)
+            make.left.right.equalToSuperview()
+            make.height.equalTo(15)
         }
 
         roomNameLabel.snp.makeConstraints { make in
-            make.top.equalTo(roomIDLabel.snp.bottom).offset(5)
+            make.top.equalTo(roomNameTitleLabel.snp.bottom).offset(1)
             make.left.right.equalToSuperview()
-            make.height.greaterThanOrEqualTo(30)
+            make.height.greaterThanOrEqualTo(15)
+        }
+
+        roomPasswordTitleLabel.snp.makeConstraints { make in
+            make.top.equalTo(roomNameLabel.snp.bottom).offset(5)
+            make.left.equalToSuperview()
+            make.right.equalTo(-50)
+            make.height.equalTo(15)
         }
 
         roomPasswordLabel.snp.makeConstraints { make in
-            make.top.equalTo(roomNameLabel.snp.bottom).offset(5)
-            make.left.right.equalToSuperview()
-            make.height.greaterThanOrEqualTo(30)
+            make.top.equalTo(roomPasswordTitleLabel.snp.bottom).offset(1)
+            make.left.equalToSuperview()
+            make.right.equalTo(-50)
+            make.height.greaterThanOrEqualTo(15)
+        }
+
+        showHideRoomPasswordButton.snp.makeConstraints { make in
+            make.top.equalTo(roomPasswordLabel.snp.top)
+            make.bottom.equalTo(roomPasswordLabel.snp.bottom)
+            make.left.equalTo(roomPasswordLabel.snp.right)
+            make.right.equalToSuperview()
         }
 
         seperatorOneView.snp.makeConstraints { make in
@@ -216,28 +289,17 @@ class RoomSettingsViewController: UIViewController {
     private func setLabelTexts() {
         guard let chatRoom = chatRoom else { return }
 
-        let boldAttributes: [NSAttributedString.Key : Any] = [ .font: UIFont.systemFont(ofSize: 14, weight: .bold), .foregroundColor: UIColor(named: "Black-White") ?? .secondaryLabel]
-        let regularAttributes: [NSAttributedString.Key : Any] = [ .font: UIFont.systemFont(ofSize: 14, weight: .regular), .foregroundColor: UIColor(hexString: "9D9393")]
-        let redAttributes: [NSAttributedString.Key : Any] = [ .font: UIFont.systemFont(ofSize: 14, weight: .regular), .foregroundColor: UIColor(hexString: "CC3300")]
+        roomIDLabel.text = chatRoom.id ?? ""
+        roomNameLabel.text = chatRoom.name ?? ""
 
-        let roomIDAttributedString = NSMutableAttributedString()
-        roomIDAttributedString.append(NSAttributedString(string: "Room ID:\n", attributes: boldAttributes))
-        roomIDAttributedString.append(NSAttributedString(string: "\(chatRoom.id ?? "")", attributes: regularAttributes))
-        roomIDLabel.attributedText = roomIDAttributedString
-
-        let roomNameAttributedString = NSMutableAttributedString()
-        roomNameAttributedString.append(NSAttributedString(string: "Room Name:\n", attributes: boldAttributes))
-        roomNameAttributedString.append(NSAttributedString(string: "\(chatRoom.name ?? "")", attributes: regularAttributes))
-        roomNameLabel.attributedText = roomNameAttributedString
-
-        let roomPasswordAttributedString = NSMutableAttributedString()
-        roomPasswordAttributedString.append(NSAttributedString(string: "Room Password:\n", attributes: boldAttributes))
         if chatRoom.password?.isEmpty == true {
-            roomPasswordAttributedString.append(NSAttributedString(string: "Not Configured", attributes: redAttributes))
+            roomPasswordLabel.text = "Not Configured"
+            roomPasswordLabel.textColor = UIColor(hexString: "CC3300")
         } else {
-            roomPasswordAttributedString.append(NSAttributedString(string: "\(chatRoom.password ?? "")", attributes: regularAttributes))
+            self.roomPassword = chatRoom.password ?? ""
+            roomPasswordLabel.text = self.roomPassword.replaceCharactersWithAsterisk()
+            roomPasswordLabel.textColor = UIColor(hexString: "9D9393")
         }
-        roomPasswordLabel.attributedText = roomPasswordAttributedString
     }
 
     private func fetchAndObserverGroupImage() {
@@ -248,6 +310,21 @@ class RoomSettingsViewController: UIViewController {
             DispatchQueue.main.async {
                 self.setGroupIconImage()
             }
+        }
+    }
+
+    private func replaceStringWithAsterisk(string: String) -> String {
+        var encoded = ""
+        for _ in string {
+            encoded.append("*")
+        }
+        return encoded
+    }
+
+    private func checkForShowHidePasswordButton() {
+        guard let chatRoom else { return }
+        if chatRoom.password?.isEmpty == true {
+            showHideRoomPasswordButton.isHidden
         }
     }
 
