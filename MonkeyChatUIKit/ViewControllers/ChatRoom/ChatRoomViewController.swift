@@ -35,6 +35,29 @@ class ChatRoomViewController: UIViewController {
         return view
     }()
 
+    // Title View
+    private lazy var titleView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .red
+        return view
+    }()
+
+    private lazy var titleViewRoomNameLabel : UILabel = {
+        let label = UILabel()
+        label.text = chatRoom?.name ?? ""
+        label.font = .systemFont(ofSize: 18, weight: .bold)
+        return label
+    }()
+
+    private lazy var titleViewMemberCountLabel: UILabel = {
+        let label = UILabel()
+        label.text = ""
+        label.textColor = .systemGray
+        label.font = .systemFont(ofSize: 10, weight: .medium)
+        return label
+    }()
+
+
     // MARK: - Private Properties
     private var chatRoom: ChatRoom?
     private var activeTextView : UITextView? = nil
@@ -175,38 +198,17 @@ class ChatRoomViewController: UIViewController {
     }
 
     private func addTitleView() {
-        let titleView: UIView = {
-            let view = UIView()
-            view.backgroundColor = .red
-            return view
-        }()
+        titleView.addSubview(titleViewRoomNameLabel)
+        titleView.addSubview(titleViewMemberCountLabel)
 
-        let titleViewLabel : UILabel = {
-            let label = UILabel()
-            label.text = chatRoom?.name ?? ""
-            label.font = .systemFont(ofSize: 18, weight: .bold)
-            return label
-        }()
-
-        let memberCountLabel: UILabel = {
-            let label = UILabel()
-            label.text = ""
-            label.textColor = .systemGray
-            label.font = .systemFont(ofSize: 10, weight: .medium)
-            return label
-        }()
-
-        titleView.addSubview(titleViewLabel)
-        titleView.addSubview(memberCountLabel)
-
-        titleViewLabel.snp.makeConstraints { make in
+        titleViewRoomNameLabel.snp.makeConstraints { make in
             make.centerY.equalToSuperview().offset(-5)
             make.centerX.equalToSuperview()
             make.height.equalTo(20)
         }
 
-        memberCountLabel.snp.makeConstraints { make in
-            make.top.equalTo(titleViewLabel.snp.bottom).offset(1)
+        titleViewMemberCountLabel.snp.makeConstraints { make in
+            make.top.equalTo(titleViewRoomNameLabel.snp.bottom).offset(1)
             make.centerX.equalToSuperview()
             make.height.equalTo(12)
         }
@@ -214,7 +216,7 @@ class ChatRoomViewController: UIViewController {
         navigationItem.titleView = titleView
 
         getMemberCount { count in
-            memberCountLabel.text = "\(count == 1 ? "1 member" : " \(count) members")"
+            self.titleViewMemberCountLabel.text = "\(count == 1 ? "1 member" : " \(count) members")"
         }
     }
 
@@ -321,5 +323,8 @@ extension ChatRoomViewController: TextEntryViewDelegate {
 extension ChatRoomViewController: RoomSettingsViewControllerDelegate {
     func didDeleteOrBlockRoom() {
         self.navigationController?.popViewController(animated: true)
+    }
+    func didChangeRoomName(with newName: String) {
+        self.titleViewRoomNameLabel.text = newName
     }
 }
