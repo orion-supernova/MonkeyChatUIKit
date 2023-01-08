@@ -98,6 +98,7 @@ class ChatRoomListViewController: UIViewController {
 
         let userSessionLabel : UILabel = {
             let label = UILabel()
+            updateServerUsernameIfNeeded()
             // If the user is using multiple devices, username should match for all. So we check the server first to see if there is a given username.
             getUsernameFromServer { usernameFromServer in
                 guard !usernameFromServer.isEmpty else {
@@ -146,6 +147,14 @@ class ChatRoomListViewController: UIViewController {
 
     private func updateLastMessages() {
         //
+    }
+
+    /// Since the server control for username is added later, we are syncing the server data with the local username if its given.
+    private func updateServerUsernameIfNeeded() {
+        let username = AppGlobal.shared.username
+        if username != "Anonymous" || username?.isEmpty != true {
+            COLLECTION_USERS.document(AppGlobal.shared.userID ?? "").updateData(["username": username ?? ""])
+        }
     }
 
     private func getUsernameFromServer(completion: @escaping (String) -> Void) {

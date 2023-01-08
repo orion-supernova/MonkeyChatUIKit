@@ -119,6 +119,15 @@ class RoomSettingsViewController: UIViewController {
         return button
     }()
 
+    private lazy var membersButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("See The Members", for: .normal)
+        button.setTitleColor(UIColor.secondaryLabel, for: .normal)
+        button.backgroundColor = .secondarySystemBackground
+        button.addTarget(self, action: #selector(membersButtonAction), for: .touchUpInside)
+        return button
+    }()
+
     // MARK: - Public Properties
     var chatRoom: ChatRoom?
     var navigationBarHeight: CGFloat = 0
@@ -159,6 +168,7 @@ class RoomSettingsViewController: UIViewController {
         roomIconImageView.clipsToBounds = true
         inviteButton.layer.cornerRadius = 5
         blockButton.layer.cornerRadius = 5
+        membersButton.layer.cornerRadius = 5
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -181,6 +191,7 @@ class RoomSettingsViewController: UIViewController {
         mainContainerView.addSubview(seperatorOneView)
         mainContainerView.addSubview(inviteButton)
         mainContainerView.addSubview(blockButton)
+        mainContainerView.addSubview(membersButton)
     }
 
     private func layout() {
@@ -269,6 +280,13 @@ class RoomSettingsViewController: UIViewController {
         blockButton.snp.makeConstraints { make in
             make.top.equalTo(inviteButton.snp.top)
             make.right.equalToSuperview()
+            make.height.equalTo(30)
+            make.width.equalTo(180)
+        }
+
+        membersButton.snp.makeConstraints { make in
+            make.top.equalTo(inviteButton.snp.bottom).offset(10)
+            make.left.equalToSuperview()
             make.height.equalTo(30)
             make.width.equalTo(180)
         }
@@ -375,6 +393,12 @@ class RoomSettingsViewController: UIViewController {
         viewController.modalPresentationStyle = .fullScreen
         viewController.modalTransitionStyle = .crossDissolve
         self.navigationController?.pushViewController(viewController, animated: true)
+    }
+
+    @objc func membersButtonAction() {
+        guard let chatRoom else { return }
+        let viewController = RoomMembersViewController(chatRoom: chatRoom)
+        self.present(viewController, animated: true)
     }
 
     @objc func blockRoomAction() {

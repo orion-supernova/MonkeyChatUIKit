@@ -258,6 +258,17 @@ class ChatRoomViewController: UIViewController {
         }
     }
 
+    @objc func seeMembersAction() {
+        COLLECTION_CHATROOMS.document(chatRoom?.id ?? "").collection("userIDs").getDocuments { snapshot, error in
+            guard let snapshot else { return }
+            let documents = snapshot.documents
+            for item in documents {
+                let data = item.data()
+                print("DEBUG:-------------", data)
+            }
+        }
+    }
+
     @objc func keyboardWillHide(notification: NSNotification) {
         self.view.frame.origin.y = 0
         let contentInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0 , right: 0.0)
