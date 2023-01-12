@@ -45,4 +45,15 @@ class AuthManager {
         print("logout")
         completion()
     }
+
+    func deleteUser(completion: @escaping (Error?) -> Void) {
+        Auth.auth().currentUser?.delete(completion: { error in
+            if error != nil {
+                completion(error)
+                // Auth.auth().currentUser?.reauthenticate(with: <#T##AuthCredential#>)
+            } else {
+                completion(nil)
+            }
+        })
+    }
 }

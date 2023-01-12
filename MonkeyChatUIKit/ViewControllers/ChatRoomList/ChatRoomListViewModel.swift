@@ -162,8 +162,6 @@ class ChatRoomListViewModel {
         }
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
 
-        let group = DispatchGroup()
-        group.enter()
         let okAction = UIAlertAction(title: "Create my room!", style: .default) { (action: UIAlertAction) in
             guard let textFields = alertController.textFields else { return }
             var name = ""
@@ -198,18 +196,14 @@ class ChatRoomListViewModel {
                                                   "roomID": roomID] as [String: Any]
                     COLLECTION_USERS.document(userID).collection("chatRooms").document(roomID).setData(chatRoomdataInUserList) { error in
                         guard error == nil else { return }
-                        group.leave()
                     }
                 }
             }
         }
+        alertController.addAction(cancelAction)
+        alertController.addAction(okAction)
 
-        group.notify(queue: .main) {
-            alertController.addAction(cancelAction)
-            alertController.addAction(okAction)
-
-            target.present(alertController, animated: true, completion: nil)
-        }
+        target.present(alertController, animated: true, completion: nil)
     }
 
     func removeListeners() {
