@@ -13,8 +13,9 @@
 		54040343283689AA00FF58D8 /* UIColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54040342283689AA00FF58D8 /* UIColorExtension.swift */; };
 		540403452836946500FF58D8 /* OTPStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 540403442836946500FF58D8 /* OTPStackView.swift */; };
 		540BEA6A290AF78E00238B65 /* SensitiveData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 540BEA69290AF78E00238B65 /* SensitiveData.swift */; };
-		541DBA6127DF772A00A3A920 /* MonkeyListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 541DBA6027DF772A00A3A920 /* MonkeyListViewController.swift */; };
+		541DBA6127DF772A00A3A920 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 541DBA6027DF772A00A3A920 /* ProfileViewController.swift */; };
 		541DBA6327DF7B1000A3A920 /* MonkeyListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 541DBA6227DF7B1000A3A920 /* MonkeyListViewModel.swift */; };
+		54223861297AEAE8004C05E7 /* SideMenu in Frameworks */ = {isa = PBXBuildFile; productRef = 54223860297AEAE8004C05E7 /* SideMenu */; };
 		544D84A528DE357200C87D0D /* RoomImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544D84A428DE357200C87D0D /* RoomImageViewController.swift */; };
 		544E9EB2285F541700F0B677 /* safe_box_icon.riv in Resources */ = {isa = PBXBuildFile; fileRef = 544E9EB1285F541700F0B677 /* safe_box_icon.riv */; };
 		544E9EB8285F80AD00F0B677 /* RoomSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544E9EB7285F80AD00F0B677 /* RoomSettingsViewController.swift */; };
@@ -78,7 +79,7 @@
 		54040342283689AA00FF58D8 /* UIColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorExtension.swift; sourceTree = "<group>"; };
 		540403442836946500FF58D8 /* OTPStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OTPStackView.swift; sourceTree = "<group>"; };
 		540BEA69290AF78E00238B65 /* SensitiveData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensitiveData.swift; sourceTree = "<group>"; };
-		541DBA6027DF772A00A3A920 /* MonkeyListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonkeyListViewController.swift; sourceTree = "<group>"; };
+		541DBA6027DF772A00A3A920 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		541DBA6227DF7B1000A3A920 /* MonkeyListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonkeyListViewModel.swift; sourceTree = "<group>"; };
 		544D84A428DE357200C87D0D /* RoomImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomImageViewController.swift; sourceTree = "<group>"; };
 		544E9EB1285F541700F0B677 /* safe_box_icon.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = safe_box_icon.riv; sourceTree = "<group>"; };
@@ -143,6 +144,7 @@
 				545FFC8727BC4DBA008CC1ED /* SnapKit in Frameworks */,
 				54664F5527C2E5DD00F94482 /* FirebaseAuth in Frameworks */,
 				545FFC9827BCDCF2008CC1ED /* FirebaseStorageSwift-Beta in Frameworks */,
+				54223861297AEAE8004C05E7 /* SideMenu in Frameworks */,
 				547D253727C3F20A005D98B8 /* Lottie in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -161,7 +163,7 @@
 		541DBA5F27DF761500A3A920 /* MonkeyList */ = {
 			isa = PBXGroup;
 			children = (
-				541DBA6027DF772A00A3A920 /* MonkeyListViewController.swift */,
+				541DBA6027DF772A00A3A920 /* ProfileViewController.swift */,
 				541DBA6227DF7B1000A3A920 /* MonkeyListViewModel.swift */,
 			);
 			path = MonkeyList;
@@ -398,6 +400,7 @@
 				5499FC8F2857B2B400BCE34D /* RiveRuntime */,
 				544E9EBA285F862000F0B677 /* Kingfisher */,
 				54BAA68928DE636C009DF815 /* Zoomy */,
+				54223860297AEAE8004C05E7 /* SideMenu */,
 			);
 			productName = MonkeyChatUIKit;
 			productReference = 545FFC6B27BC4C17008CC1ED /* MonkeyChatUIKit.app */;
@@ -434,6 +437,7 @@
 				5499FC8E2857B2B300BCE34D /* XCRemoteSwiftPackageReference "rive-ios" */,
 				544E9EB9285F862000F0B677 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 				54BAA68828DE636C009DF815 /* XCRemoteSwiftPackageReference "Zoomy" */,
+				5422385F297AEAE8004C05E7 /* XCRemoteSwiftPackageReference "SideMenu" */,
 			);
 			productRefGroup = 545FFC6C27BC4C17008CC1ED /* Products */;
 			projectDirPath = "";
@@ -482,7 +486,7 @@
 				54F2336F27BD635900E9FD28 /* ChatRoomViewModel.swift in Sources */,
 				545FFC8A27BC5149008CC1ED /* ChatRoom.swift in Sources */,
 				547D252E27C2EADF005D98B8 /* AuthViewController.swift in Sources */,
-				541DBA6127DF772A00A3A920 /* MonkeyListViewController.swift in Sources */,
+				541DBA6127DF772A00A3A920 /* ProfileViewController.swift in Sources */,
 				544D84A528DE357200C87D0D /* RoomImageViewController.swift in Sources */,
 				54F2337227BD68C400E9FD28 /* MessageTableViewCell.swift in Sources */,
 				540403412836796300FF58D8 /* CountryCodeHelper.swift in Sources */,
@@ -660,7 +664,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = MonkeyChatUIKit/MonkeyChatUIKit.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 37TC2VKVJ6;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MonkeyChatUIKit/Info.plist;
@@ -670,14 +674,13 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.3.12;
+				MARKETING_VERSION = 1.3.13;
 				PRODUCT_BUNDLE_IDENTIFIER = com.walhallaa.MonkeyChatUIKit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = NO;
@@ -694,7 +697,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = MonkeyChatUIKit/MonkeyChatUIKit.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 37TC2VKVJ6;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MonkeyChatUIKit/Info.plist;
@@ -704,14 +707,13 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.3.12;
+				MARKETING_VERSION = 1.3.13;
 				PRODUCT_BUNDLE_IDENTIFIER = com.walhallaa.MonkeyChatUIKit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = NO;
@@ -745,6 +747,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		5422385F297AEAE8004C05E7 /* XCRemoteSwiftPackageReference "SideMenu" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/jonkykong/SideMenu.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 6.0.0;
+			};
+		};
 		544E9EB9285F862000F0B677 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
@@ -796,6 +806,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		54223860297AEAE8004C05E7 /* SideMenu */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5422385F297AEAE8004C05E7 /* XCRemoteSwiftPackageReference "SideMenu" */;
+			productName = SideMenu;
+		};
 		544E9EBA285F862000F0B677 /* Kingfisher */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 544E9EB9285F862000F0B677 /* XCRemoteSwiftPackageReference "Kingfisher" */;

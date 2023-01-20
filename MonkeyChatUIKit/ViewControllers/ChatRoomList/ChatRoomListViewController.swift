@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import SideMenu
 
 class ChatRoomListViewController: UIViewController {
 
@@ -29,6 +30,7 @@ class ChatRoomListViewController: UIViewController {
 
     // MARK: - Private Properties
     private var viewModel = ChatRoomListViewModel()
+    private var sideMenu: SideMenuNavigationController?
 
     // MARK: - Lifecycle
     init() {
@@ -53,7 +55,7 @@ class ChatRoomListViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         configureNavigationBar() // It is called from willAppear because username might be updated.
         updateLastMessages()
-        AppGlobal.shared.currentPage = .monkeyList
+        AppGlobal.shared.currentPage = .chatList
     }
 
     override func viewDidLayoutSubviews() {
@@ -65,6 +67,7 @@ class ChatRoomListViewController: UIViewController {
     private func setup() {
         view.addSubview(emptyLabel)
         view.addSubview(tableView)
+        setupSideMenu()
     }
 
     private func setDelegates() {
@@ -84,7 +87,15 @@ class ChatRoomListViewController: UIViewController {
         tableView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
+    }
 
+    private func setupSideMenu() {
+        sideMenu = SideMenuNavigationController(rootViewController: ProfileViewController())
+        sideMenu?.leftSide = true
+        sideMenu?.setNavigationBarHidden(true, animated: false)
+
+        SideMenuManager.default.leftMenuNavigationController = sideMenu
+        SideMenuManager.default.addPanGestureToPresent(toView: self.view)
     }
 
     // MARK: - Functions
@@ -119,7 +130,8 @@ class ChatRoomListViewController: UIViewController {
             return label
         }()
 
-        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: userSessionLabel)
+        navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "person.crop.circle"), style: .done, target: self, action: #selector(usernameAction))
+        navigationItem.leftBarButtonItem?.tintColor = .systemPink
 
         let titleViewLabel : UILabel = {
             let label = UILabel()
@@ -149,9 +161,15 @@ class ChatRoomListViewController: UIViewController {
         //
     }
 
+    @objc private func usernameAction() {
+        guard let sideMenu else { return }
+        self.present(sideMenu, animated: true)
+    }
+
     /// Since the server control for username is added later, we are syncing the server data with the local username if its given.
     private func updateServerUsernameIfNeeded() {
         let username = AppGlobal.shared.username
+        guard username != nil else { return }
         if username != "Anonymous" || username?.isEmpty != true {
             COLLECTION_USERS.document(AppGlobal.shared.userID ?? "").updateData(["username": username ?? ""])
         }

@@ -77,6 +77,7 @@ class ChatRoomListViewModel {
         actionSheetController.addAction(enterRoomAction)
         actionSheetController.addAction(createRoomAction)
         actionSheetController.addAction(cancelAction)
+        actionSheetController.view.tintColor = .systemPink
 
         target.present(actionSheetController, animated: true, completion: nil)
     }
@@ -145,6 +146,7 @@ class ChatRoomListViewModel {
         }
         alertController.addAction(cancelAction)
         alertController.addAction(okAction)
+        alertController.view.tintColor = .systemPink
 
 
         target.present(alertController, animated: true, completion: nil)
@@ -202,6 +204,7 @@ class ChatRoomListViewModel {
         }
         alertController.addAction(cancelAction)
         alertController.addAction(okAction)
+        alertController.view.tintColor = .systemPink
 
         target.present(alertController, animated: true, completion: nil)
     }

@@ -6,9 +6,26 @@
 //
 
 import UIKit
+import SnapKit
 
-class MonkeyListViewController: UIViewController {
+class ProfileViewController: UIViewController {
     // MARK: - UI Elements
+    private lazy var  usernameTitleLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Your username:"
+        label.font = .systemFont(ofSize: 15, weight: .semibold)
+        return label
+    }()
+
+    private lazy var usernameButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitleColor(.secondaryLabel, for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 13)
+        button.sizeToFit()
+        button.addTarget(self, action: #selector(usernameButtonAction), for: .touchUpInside)
+        return button
+    }()
+
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "MonkeyListCell")
@@ -24,7 +41,6 @@ class MonkeyListViewController: UIViewController {
         super.viewDidLoad()
         setup()
         layout()
-        setDelegates()
         customizeNavigationBar()
     }
 
@@ -35,17 +51,27 @@ class MonkeyListViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-
+        getUsername()
     }
 
     // MARK: - Setup
-    func setup() {
-        view.addSubview(tableView)
+    private func setup() {
+        setDelegates()
+        view.addSubview(usernameTitleLabel)
+        view.addSubview(usernameButton)
     }
 
-    func layout() {
-        tableView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+    private func layout() {
+        usernameTitleLabel.snp.makeConstraints { make in
+            make.top.equalTo(self.view.safeAreaLayoutGuide.snp.top)
+            make.left.equalTo(2)
+            make.right.equalToSuperview()
+            make.height.equalTo(20)
+        }
+        usernameButton.snp.makeConstraints { make in
+            make.top.equalTo(usernameTitleLabel.snp.bottom).offset(2)
+            make.left.equalTo(2)
+            make.height.equalTo(15)
         }
     }
 
@@ -75,14 +101,33 @@ class MonkeyListViewController: UIViewController {
         navigationItem.titleView = titleViewLabel
     }
 
+    private func getUsername() {
+        COLLECTION_USERS.document(AppGlobal.shared.userID ?? "").getDocument { [weak self] snapshot, error in
+            guard let self = self else { return }
+            guard let snapshot else { return }
+            let dict = snapshot.data()
+            let username = dict?["username"] as? String
+            self.usernameButton.setTitle("@" + (username ?? ""), for: .normal)
+        }
+    }
+
     // MARK: - Actions
     @objc func addFriendButtonAction() {
         print("HEDE")
     }
+
+    @objc private func usernameButtonAction() {
+        AlertHelper.alertMessage(viewController: self, title: "Username", message: "Do you want to change your username?") { [weak self] in
+            guard let self = self else { return }
+            let viewController = UsernameViewController()
+            self.present(viewController, animated: true)
+        }
+
+    }
     
 }
 //MARK: - UITableView Delegate
-extension MonkeyListViewController: UITableViewDataSource {
+extension ProfileViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "MonkeyListCell", for: indexPath)
         cell.textLabel?.text = "hmmm"
@@ -94,7 +139,7 @@ extension MonkeyListViewController: UITableViewDataSource {
 }
 
 //MARK: - UITableViewDataSource
-extension MonkeyListViewController: UITableViewDelegate {
+extension ProfileViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
     }

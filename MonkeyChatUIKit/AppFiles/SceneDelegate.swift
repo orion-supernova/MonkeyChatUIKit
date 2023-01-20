@@ -22,7 +22,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         //MARK: Setup Logged In UI
         let tabController = UITabBarController()
-        let vc0 = UINavigationController(rootViewController: MonkeyListViewController())
+        let vc0 = UINavigationController(rootViewController: ProfileViewController())
         let vc1 = UINavigationController(rootViewController: ChatRoomListViewController())
         let vc2 = UINavigationController(rootViewController: SettingsViewController())
         tabController.viewControllers = [/*vc0,*/ vc1, vc2]

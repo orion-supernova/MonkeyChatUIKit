@@ -42,6 +42,7 @@ class UsernameViewController: UIViewController {
 
     // MARK: - Setup
     private func setup() {
+        self.view.backgroundColor = UIColor(named: "White-Black")
         view.addSubview(usernameTextField)
     }
 

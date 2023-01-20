@@ -14,6 +14,7 @@ class AlertHelper {
         let okAction = UIAlertAction(title: okButtonText, style: .default) { (action: UIAlertAction) in
         }
         alertVC.addAction(okAction)
+        alertVC.view.tintColor = .systemPink
 
         let viewController = UIApplication.shared.windows.first!.rootViewController!
         viewController.present(alertVC, animated: true, completion: nil)
@@ -27,6 +28,7 @@ class AlertHelper {
         }
         alertVC.addAction(cancelAction)
         alertVC.addAction(okAction)
+        alertVC.view.tintColor = .systemPink
 
         viewController.present(alertVC, animated: true, completion: nil)
     }
@@ -39,6 +41,7 @@ class AlertHelper {
         }
         alertVC.addAction(cancelAction)
         alertVC.addAction(okAction)
+        alertVC.view.tintColor = .systemPink
 
         viewController.present(alertVC, animated: true, completion: nil)
     }
@@ -49,6 +52,7 @@ class AlertHelper {
             completion?()
         }
         alertVC.addAction(okAction)
+        alertVC.view.tintColor = .systemPink
         viewController.present(alertVC, animated: true, completion: nil)
     }
 }

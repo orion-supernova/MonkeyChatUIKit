@@ -5,7 +5,7 @@
 //  Created by Murat Can KOÇ on 21.02.2022.
 //
 
-import Foundation
+import UIKit
 
 class AppGlobal {
     static let shared: AppGlobal = {
@@ -46,13 +46,13 @@ class AppGlobal {
     }
 
     enum CurrentPage {
-        case monkeyList
+        case chatList
         case settings
         case chatRoom
         case roomSettings
     }
 
-    var currentPage: CurrentPage = .monkeyList
+    var currentPage: CurrentPage = .chatList
 
     var lastEnteredChatRoomID = ""
 }

@@ -402,7 +402,7 @@ class RoomSettingsViewController: UIViewController {
     }
 
     @objc func blockRoomAction() {
-        AlertHelper.alertMessage(viewController: self, title: "Warning", message: "You will not be able to get new messages from this room and the room will be deleted. Proceed?", okButtonText: "Block") {
+        AlertHelper.alertMessage(viewController: self, title: "Warning", message: "Do you want to delete this room and everything related to this room in our servers? This action will affect everyone in this room and can NOT be undone. Proceed?", okButtonText: "Delete") {
             guard let chatRoom = self.chatRoom else { return }
             LottieHUD.shared.show()
             let viewmodel = RoomSettingsViewModel(chatRoom: chatRoom)
