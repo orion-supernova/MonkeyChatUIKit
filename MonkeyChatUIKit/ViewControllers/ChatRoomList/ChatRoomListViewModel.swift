@@ -213,4 +213,21 @@ class ChatRoomListViewModel {
 //        COLLECTION_CHATROOMS.order(by: "timestamp", descending: true).remo
 //        }
     }
+
+    func sendNudge(to indexPath: IndexPath) {
+        let sender = PushNotificationSender()
+        let chatroom = self.chatRooms[indexPath.row]
+        let chatroomID = chatroom.id ?? ""
+        let room = COLLECTION_CHATROOMS.document(chatroomID)
+        room.collection("userIDs").getDocuments { snapshot, error in
+            guard let documents = snapshot?.documents else { return }
+            var fcmTokenForThisChatRoom = [String]()
+            for document in documents {
+                fcmTokenForThisChatRoom.append(document.get("fcmToken") as? String ?? "")
+            }
+            for token in fcmTokenForThisChatRoom {
+                sender.sendPushNotification(to: token, title: "DDDRRRTTTTT", body: "\(AppGlobal.shared.username ?? "") has sent you a nudge in \(chatroom.name ?? "")!", chatRoomID: chatroomID)
+            }
+        }
+    }
 }

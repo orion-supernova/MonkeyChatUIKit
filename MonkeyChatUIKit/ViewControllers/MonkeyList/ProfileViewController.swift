@@ -120,6 +120,7 @@ class ProfileViewController: UIViewController {
         AlertHelper.alertMessage(viewController: self, title: "Username", message: "Do you want to change your username?") { [weak self] in
             guard let self = self else { return }
             let viewController = UsernameViewController()
+            viewController.delegate = self
             self.present(viewController, animated: true)
         }
 
@@ -142,5 +143,11 @@ extension ProfileViewController: UITableViewDataSource {
 extension ProfileViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+    }
+}
+
+extension ProfileViewController: UsernameViewControllerDelegate {
+    func didChangeUsername(with username: String) {
+        usernameButton.setTitle("@" + username, for: .normal)
     }
 }

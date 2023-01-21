@@ -7,6 +7,10 @@
 
 import UIKit
 
+protocol UsernameViewControllerDelegate: AnyObject {
+    func didChangeUsername(with username: String)
+}
+
 class UsernameViewController: UIViewController {
 
     // MARK: - UI Elements
@@ -25,6 +29,9 @@ class UsernameViewController: UIViewController {
         textField.becomeFirstResponder()
         return textField
     }()
+
+    // MARK: - Public Properties
+    weak var delegate: UsernameViewControllerDelegate?
 
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -62,6 +69,7 @@ class UsernameViewController: UIViewController {
     private func changeUsername() {
         AppGlobal.shared.username = usernameTextField.text
         COLLECTION_USERS.document(AppGlobal.shared.userID ?? "").updateData(["username": usernameTextField.text ?? ""])
+
     }
 }
 
@@ -73,6 +81,10 @@ extension UsernameViewController: UITextFieldDelegate {
             changeUsername()
             navigationController?.popViewController(animated: true)
             NotificationCenter.default.post(name: NSNotification.Name("reloadTableView"), object: nil)
+            self.dismiss(animated: true) { [weak self] in
+                guard let self = self else { return }
+                self.delegate?.didChangeUsername(with: self.usernameTextField.text ?? "")
+            }
         }
         return true
     }

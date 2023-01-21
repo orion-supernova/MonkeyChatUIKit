@@ -28,6 +28,12 @@ class ChatRoomListViewController: UIViewController {
         return tableView
     }()
 
+    private let swipeLeftView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .clear
+        return view
+    }()
+
     // MARK: - Private Properties
     private var viewModel = ChatRoomListViewModel()
     private var sideMenu: SideMenuNavigationController?
@@ -67,6 +73,7 @@ class ChatRoomListViewController: UIViewController {
     private func setup() {
         view.addSubview(emptyLabel)
         view.addSubview(tableView)
+        view.addSubview(swipeLeftView)
         setupSideMenu()
     }
 
@@ -87,6 +94,11 @@ class ChatRoomListViewController: UIViewController {
         tableView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
+
+        swipeLeftView.snp.makeConstraints { make in
+            make.top.bottom.left.equalToSuperview()
+            make.width.equalTo(20)
+        }
     }
 
     private func setupSideMenu() {
@@ -95,7 +107,7 @@ class ChatRoomListViewController: UIViewController {
         sideMenu?.setNavigationBarHidden(true, animated: false)
 
         SideMenuManager.default.leftMenuNavigationController = sideMenu
-        SideMenuManager.default.addPanGestureToPresent(toView: self.view)
+        SideMenuManager.default.addPanGestureToPresent(toView: swipeLeftView)
     }
 
     // MARK: - Functions
@@ -210,6 +222,45 @@ extension ChatRoomListViewController: UITableViewDelegate {
         let viewController = ChatRoomViewController(chatRoom: viewModel.chatRooms[indexPath.row])
         AppGlobal.shared.lastEnteredChatRoomID = viewModel.chatRooms[indexPath.row].id ?? ""
         self.navigationController?.pushViewController(viewController, animated: true)
+    }
+
+    func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let action = UIContextualAction(style: .normal,
+                                        title: "") { [weak self] (action, view, completionHandler) in
+            self?.nudgeAction(indexPath: indexPath)
+            completionHandler(true)
+        }
+        action.image = getNudgeTitleWithImage()
+        action.backgroundColor = .systemPink
+        return UISwipeActionsConfiguration(actions: [action])
+    }
+
+    private func nudgeAction(indexPath: IndexPath) {
+        AlertHelper.alertMessage(viewController: self, title: "Send a Nudge", message: "Do you want to send a nudge to this room?", okButtonText: "Yeap") {[weak self] in
+            guard let self = self else { return }
+            self.viewModel.sendNudge(to: indexPath)
+        }
+    }
+
+    private func getNudgeTitleWithImage() -> UIImage? {
+        let text = NSMutableAttributedString()
+        let attachment = NSTextAttachment()
+        attachment.image = UIImage(systemName: "bolt")
+        attachment.image?.withTintColor(.systemPink)
+        text.append(NSAttributedString(attachment: attachment))
+        text.append(NSAttributedString(string: "Nudge"))
+        let label = UILabel(frame: CGRect(x: 0, y: 0, width: 50, height: 50))
+        label.textAlignment = .center
+        label.numberOfLines = 2
+        label.attributedText = text
+        label.font = .systemFont(ofSize: 13)
+        label.textColor = .black
+        let renderer = UIGraphicsImageRenderer(bounds: label.bounds)
+        let image = renderer.image { context in
+            label.layer.render(in: context.cgContext)
+        }
+        guard let cgImage = image.cgImage else { return nil }
+        return UIImage(cgImage: cgImage, scale: UIScreen.main.scale, orientation: .up)
     }
 }
 // MARK: ChatRoomListViewModel Delegate
