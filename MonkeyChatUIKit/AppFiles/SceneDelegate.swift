@@ -12,6 +12,7 @@ import FirebaseAuth
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
+    var tabController: UITabBarController?
 
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
@@ -21,13 +22,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         UNUserNotificationCenter.current().delegate = self
 
         //MARK: Setup Logged In UI
-        let tabController = UITabBarController()
+        self.tabController = UITabBarController()
+        let tabController = self.tabController
         let vc0 = UINavigationController(rootViewController: ProfileViewController())
         let vc1 = UINavigationController(rootViewController: ChatRoomListViewController())
         let vc2 = UINavigationController(rootViewController: SettingsViewController())
-        tabController.viewControllers = [/*vc0,*/ vc1, vc2]
-        tabController.selectedIndex = 0
-        tabController.tabBar.tintColor = .systemPink
+        tabController?.viewControllers = [/*vc0,*/ vc1, vc2]
+        tabController?.selectedIndex = 0
+        tabController?.tabBar.tintColor = .systemPink
 
         vc0.tabBarItem.image = UIImage(systemName: "person.crop.circle")
         vc1.tabBarItem.image = UIImage(systemName: "list.bullet")
@@ -64,6 +66,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func sceneDidBecomeActive(_ scene: UIScene) {
         // Called when the scene has moved from an inactive state to an active state.
         // Use this method to restart any tasks that were paused (or not yet started) when the scene was inactive.
+        print("DEBUG: -----------APPLICATIONDIDBECOMEACTIVE")
+        let application = UIApplication.shared
+        if application.applicationIconBadgeNumber != 0 {
+            application.applicationIconBadgeNumber = 0
+        }
     }
 
     func sceneWillResignActive(_ scene: UIScene) {
@@ -90,43 +97,66 @@ extension SceneDelegate: UNUserNotificationCenterDelegate {
     // If the user opens the app via notification, this function will be triggered.
     func userNotificationCenter(_ center: UNUserNotificationCenter,didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
 
+        guard let tabController else { return }
         let userInfo = response.notification.request.content.userInfo
 
-        if let aps = userInfo["aps"] as? [String: AnyObject] {
-//            (window?.rootViewController as? UITabBarController)?.selectedIndex = 1
-            UIApplication.shared.applicationIconBadgeNumber = 0
+        guard let aps = userInfo["aps"] as? [String: AnyObject] else { return }
 
-            if response.actionIdentifier == Identifiers.viewAction,
-               let url = URL(string: aps["link_url"] as! String) {
-                let safari = SFSafariViewController(url: url)
-                window?.rootViewController?.present(safari, animated: true, completion: nil)
+        guard let identifier = PushNotificationIdentifiers.Action(rawValue: response.actionIdentifier) else {
+            viewAction()
+            return
+        }
+        switch identifier {
+            case .viewAction:
+                viewAction()
+            case .nudgeAction:
+                guard let chatRoomID = userInfo["chatRoomID"] as? String else { return }
+                guard let fcmToken = userInfo["fcmToken"] as? String else { return }
+                guard let chatRoomName = userInfo["chatRoomName"] as? String else { return }
+                let sender = PushNotificationSender()
+                sender.sendPushNotification(to: fcmToken , title: "DDDDRRRRTTTTT", body: "\(AppGlobal.shared.username ?? "") has sent a nudge back in \(chatRoomName)!", chatRoomID: chatRoomID, chatRoomName: chatRoomName, category: .nudgeCategory)
+            case .dismissAction:
+                break
+        }
+        func viewAction() {
+            if let chatRoomID = userInfo["chatRoomID"] as? String {
+                self.tabController?.selectedIndex = 0
+                if let navigations = self.tabController?.viewControllers {
+                    for item in navigations {
+                        if let navigation = item as? UINavigationController {
+                            navigation.popToRootViewController(animated: false)
+                        }
+                    }
+                }
+                tabController.navigationController?.present(ChatRoomListViewController(), animated: false)
+                NotificationCenter.default.post(name: .openedChatRoomFromNotification, object: chatRoomID)
             }
         }
-
         completionHandler()
     }
 
     //MARK: - Foreground Notifications
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification) async -> UNNotificationPresentationOptions {
-        guard let apnsDict = notification.request.content.userInfo as? [String: Any] else { return [.badge] }
-        let state: UIApplication.State = UIApplication.shared.applicationState
-        guard apnsDict["user"] as? String != AppGlobal.shared.userID else {
+        guard let userInfoDict = notification.request.content.userInfo as? [String: Any] else { return [.badge] }
+        guard userInfoDict["userID"] as? String != AppGlobal.shared.userID else {
             return [.badge]
         }
-        if state == .active {
-            let currentPage = AppGlobal.shared.currentPage
-            if currentPage != .chatRoom {
-                return [.alert, .sound]
-            } else {
-                guard apnsDict["chatRoomID"] as? String != AppGlobal.shared.lastEnteredChatRoomID else {
-                    return [.badge]
-                }
-                return [.alert, .sound]
+        let currentPage = AppGlobal.shared.currentPage
 
-            }
+        if currentPage != .chatRoom {
+            return [.alert, .sound]
         } else {
-            UIApplication.shared.applicationIconBadgeNumber += 1
-            return [.alert, .badge, .sound]
+            guard userInfoDict["chatRoomID"] as? String == AppGlobal.shared.lastEnteredChatRoomID else { return [.alert, .sound] }
+            guard let apsDict = userInfoDict["aps"] as? [String: Any] else { return .badge }
+            guard let categoryString = apsDict["category"] as? String, let category = PushNotificationIdentifiers.Category(rawValue: categoryString) else { return .badge}
+            switch category {
+                case .messageCategory:
+                    return .badge
+                case .nudgeCategory:
+                    let username = userInfoDict["username"] as? String ?? ""
+                    NotificationCenter.default.post(name: .nudgeReceivedInsideChatRoom, object: username.isEmpty ? "Anonymous" : username)
+                    return .badge
+            }
         }
     }
 }

@@ -8,7 +8,7 @@
 import Foundation
 import Firebase
 
-class MonkeyListViewModel {
+final class MonkeyListViewModel {
 
     var friends = [User]()
 

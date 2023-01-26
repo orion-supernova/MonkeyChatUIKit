@@ -13,7 +13,7 @@ protocol ChatRoomListViewModelDelegate: AnyObject {
     func didChangeDataSource()
 }
 
-class ChatRoomListViewModel {
+final class ChatRoomListViewModel {
     typealias AlertCompletion = ((Bool) -> Void)?
 
     // MARK: - Public Properties
@@ -226,7 +226,7 @@ class ChatRoomListViewModel {
                 fcmTokenForThisChatRoom.append(document.get("fcmToken") as? String ?? "")
             }
             for token in fcmTokenForThisChatRoom {
-                sender.sendPushNotification(to: token, title: "DDDRRRTTTTT", body: "\(AppGlobal.shared.username ?? "") has sent you a nudge in \(chatroom.name ?? "")!", chatRoomID: chatroomID)
+                sender.sendPushNotification(to: token, title: "DDDDRRRRRTTTT", body: "\(AppGlobal.shared.username ?? "Anonymous") has sent you a nudge in \(chatroom.name ?? "")!", chatRoomID: chatroomID, chatRoomName: chatroom.name ?? "", category: .nudgeCategory)
             }
         }
     }

@@ -16,6 +16,7 @@ class AccountViewController: UIViewController {
         tableView.tableFooterView = UIView()
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Username")
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Logout")
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "DeleteMyAccount")
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 44
         return tableView
@@ -128,14 +129,31 @@ extension AccountViewController: UITableViewDelegate {
             navigationController?.pushViewController(vc, animated: true)
         } else if indexPath.row == 1 {
             logoutAction()
+        } else {
+            AlertHelper.alertMessage(viewController: self, title: "Delete My Account", message: "We are sorry to hear that you want to delete your account. If  you proceed, your account will be deleted and you will be removed from all the rooms you're currently in. But your messages will not be affected. Remember that this action can NOT be undone.") {
+                let viewModel = AccountViewModel()
+                viewModel.startDeleteUserAccount {[weak self] result in
+                    guard let self = self else { return }
+                    switch result {
+                        case .success(_):
+                            let viewController = AuthViewController()
+                            viewController.modalPresentationStyle = .fullScreen
+                            self.present(viewController, animated: true, completion: nil)
+                        case .failure(let error):
+                            AlertHelper.alertMessage(viewController: self, title: "Couldn't Delete Account", message: error.localizedDescription) {
+                                //
+                            }
+                    }
+                }
+            }
         }
     }
 }
 
-    // MARK: - UITableView DataSource
+// MARK: - UITableView DataSource
 extension AccountViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 2
+        return 3
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -150,12 +168,14 @@ extension AccountViewController: UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(withIdentifier: "Logout", for: indexPath)
             cell.textLabel?.text = "Logout"
             cell.textLabel?.textAlignment = .center
-            cell.textLabel?.textColor = .red
+            cell.textLabel?.textColor = .systemGray
             return cell
         } else {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "Logout", for: indexPath)
+            let cell = tableView.dequeueReusableCell(withIdentifier: "DeleteMyAccount", for: indexPath)
+            cell.textLabel?.text = "Delete My Account"
+            cell.textLabel?.textAlignment = .center
+            cell.textLabel?.textColor = .systemRed
             return cell
         }
-
     }
 }

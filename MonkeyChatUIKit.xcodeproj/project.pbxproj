@@ -16,6 +16,7 @@
 		541DBA6127DF772A00A3A920 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 541DBA6027DF772A00A3A920 /* ProfileViewController.swift */; };
 		541DBA6327DF7B1000A3A920 /* MonkeyListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 541DBA6227DF7B1000A3A920 /* MonkeyListViewModel.swift */; };
 		54223861297AEAE8004C05E7 /* SideMenu in Frameworks */ = {isa = PBXBuildFile; productRef = 54223860297AEAE8004C05E7 /* SideMenu */; };
+		54223869297C2CE0004C05E7 /* NotificationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54223868297C2CE0004C05E7 /* NotificationExtension.swift */; };
 		544D84A528DE357200C87D0D /* RoomImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544D84A428DE357200C87D0D /* RoomImageViewController.swift */; };
 		544E9EB2285F541700F0B677 /* safe_box_icon.riv in Resources */ = {isa = PBXBuildFile; fileRef = 544E9EB1285F541700F0B677 /* safe_box_icon.riv */; };
 		544E9EB8285F80AD00F0B677 /* RoomSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544E9EB7285F80AD00F0B677 /* RoomSettingsViewController.swift */; };
@@ -35,7 +36,6 @@
 		545FFC9427BCDCF2008CC1ED /* FirebaseInAppMessagingSwift-Beta in Frameworks */ = {isa = PBXBuildFile; productRef = 545FFC9327BCDCF2008CC1ED /* FirebaseInAppMessagingSwift-Beta */; };
 		545FFC9627BCDCF2008CC1ED /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 545FFC9527BCDCF2008CC1ED /* FirebaseMessaging */; };
 		545FFC9827BCDCF2008CC1ED /* FirebaseStorageSwift-Beta in Frameworks */ = {isa = PBXBuildFile; productRef = 545FFC9727BCDCF2008CC1ED /* FirebaseStorageSwift-Beta */; };
-		545FFC9A27BCDDA1008CC1ED /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 545FFC9927BCDDA1008CC1ED /* GoogleService-Info.plist */; };
 		545FFC9C27BCDEDB008CC1ED /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545FFC9B27BCDEDB008CC1ED /* User.swift */; };
 		545FFC9E27BCFB05008CC1ED /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545FFC9D27BCFB05008CC1ED /* Message.swift */; };
 		545FFCA027BCFF9F008CC1ED /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545FFC9F27BCFF9F008CC1ED /* Constants.swift */; };
@@ -55,6 +55,7 @@
 		548BC3B327C042A500CBC6EA /* PushNotificationSender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 548BC3B227C042A500CBC6EA /* PushNotificationSender.swift */; };
 		548BC3B527C04F8400CBC6EA /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 548BC3B427C04F8400CBC6EA /* SettingsViewModel.swift */; };
 		548BC3B927C069D400CBC6EA /* apns-sound.wav in Resources */ = {isa = PBXBuildFile; fileRef = 548BC3B827C069D400CBC6EA /* apns-sound.wav */; };
+		5493DF0B298054D000090282 /* AccountViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5493DF0A298054D000090282 /* AccountViewModel.swift */; };
 		5499FC902857B2B400BCE34D /* RiveRuntime in Frameworks */ = {isa = PBXBuildFile; productRef = 5499FC8F2857B2B400BCE34D /* RiveRuntime */; };
 		5499FCD9285E6E7A00BCE34D /* lights.riv in Resources */ = {isa = PBXBuildFile; fileRef = 5499FCD8285E6E7A00BCE34D /* lights.riv */; };
 		549FB85928201F68003E65E3 /* AccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 549FB85828201F68003E65E3 /* AccountViewController.swift */; };
@@ -70,6 +71,10 @@
 		54F2336F27BD635900E9FD28 /* ChatRoomViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F2336E27BD635900E9FD28 /* ChatRoomViewModel.swift */; };
 		54F2337227BD68C400E9FD28 /* MessageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F2337127BD68C400E9FD28 /* MessageTableViewCell.swift */; };
 		54F2337427BD7BB000E9FD28 /* TextEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F2337327BD7BB000E9FD28 /* TextEntryView.swift */; };
+		54F253182981DAC400E6B198 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 54F253172981DAC400E6B198 /* GoogleService-Info.plist */; };
+		54F2531A2981E2BA00E6B198 /* FirebaseDynamicLinks in Frameworks */ = {isa = PBXBuildFile; productRef = 54F253192981E2BA00E6B198 /* FirebaseDynamicLinks */; };
+		54F2531F2982F44000E6B198 /* PrivacySecurityViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F2531E2982F44000E6B198 /* PrivacySecurityViewModel.swift */; };
+		54F253212982FFA200E6B198 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F253202982FFA200E6B198 /* WebViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -81,6 +86,7 @@
 		540BEA69290AF78E00238B65 /* SensitiveData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensitiveData.swift; sourceTree = "<group>"; };
 		541DBA6027DF772A00A3A920 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		541DBA6227DF7B1000A3A920 /* MonkeyListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonkeyListViewModel.swift; sourceTree = "<group>"; };
+		54223868297C2CE0004C05E7 /* NotificationExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationExtension.swift; sourceTree = "<group>"; };
 		544D84A428DE357200C87D0D /* RoomImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomImageViewController.swift; sourceTree = "<group>"; };
 		544E9EB1285F541700F0B677 /* safe_box_icon.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = safe_box_icon.riv; sourceTree = "<group>"; };
 		544E9EB7285F80AD00F0B677 /* RoomSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomSettingsViewController.swift; sourceTree = "<group>"; };
@@ -95,7 +101,6 @@
 		545FFC7C27BC4C18008CC1ED /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		545FFC8927BC5149008CC1ED /* ChatRoom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoom.swift; sourceTree = "<group>"; };
 		545FFC8C27BC5B72008CC1ED /* AlertHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertHelper.swift; sourceTree = "<group>"; };
-		545FFC9927BCDDA1008CC1ED /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		545FFC9B27BCDEDB008CC1ED /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		545FFC9D27BCFB05008CC1ED /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		545FFC9F27BCFF9F008CC1ED /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
@@ -113,6 +118,7 @@
 		548BC3B227C042A500CBC6EA /* PushNotificationSender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushNotificationSender.swift; sourceTree = "<group>"; };
 		548BC3B427C04F8400CBC6EA /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
 		548BC3B827C069D400CBC6EA /* apns-sound.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "apns-sound.wav"; sourceTree = "<group>"; };
+		5493DF0A298054D000090282 /* AccountViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountViewModel.swift; sourceTree = "<group>"; };
 		5499FCD8285E6E7A00BCE34D /* lights.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = lights.riv; sourceTree = "<group>"; };
 		549FB85828201F68003E65E3 /* AccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountViewController.swift; sourceTree = "<group>"; };
 		549FB85E28202976003E65E3 /* PrivacySecurityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacySecurityViewController.swift; sourceTree = "<group>"; };
@@ -127,6 +133,9 @@
 		54F2337127BD68C400E9FD28 /* MessageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageTableViewCell.swift; sourceTree = "<group>"; };
 		54F2337327BD7BB000E9FD28 /* TextEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextEntryView.swift; sourceTree = "<group>"; };
 		54F2337527BE588200E9FD28 /* MonkeyChatUIKit.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MonkeyChatUIKit.entitlements; sourceTree = "<group>"; };
+		54F253172981DAC400E6B198 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		54F2531E2982F44000E6B198 /* PrivacySecurityViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacySecurityViewModel.swift; sourceTree = "<group>"; };
+		54F253202982FFA200E6B198 /* WebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -146,6 +155,7 @@
 				545FFC9827BCDCF2008CC1ED /* FirebaseStorageSwift-Beta in Frameworks */,
 				54223861297AEAE8004C05E7 /* SideMenu in Frameworks */,
 				547D253727C3F20A005D98B8 /* Lottie in Frameworks */,
+				54F2531A2981E2BA00E6B198 /* FirebaseDynamicLinks in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -224,7 +234,7 @@
 				544E9EB3285F662600F0B677 /* Rive_Assets */,
 				547D253A27C40206005D98B8 /* loading.json */,
 				545FFC7C27BC4C18008CC1ED /* Info.plist */,
-				545FFC9927BCDDA1008CC1ED /* GoogleService-Info.plist */,
+				54F253172981DAC400E6B198 /* GoogleService-Info.plist */,
 			);
 			path = MonkeyChatUIKit;
 			sourceTree = "<group>";
@@ -280,6 +290,8 @@
 				54040342283689AA00FF58D8 /* UIColorExtension.swift */,
 				544E9EBC2860CFB600F0B677 /* ImageUploader.swift */,
 				54DA8AE2290BCCAD001BC075 /* Extensions.swift */,
+				54223868297C2CE0004C05E7 /* NotificationExtension.swift */,
+				54F253202982FFA200E6B198 /* WebViewController.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -356,10 +368,8 @@
 			isa = PBXGroup;
 			children = (
 				54F2336B27BD44F900E9FD28 /* SettingsViewController.swift */,
-				549FB85828201F68003E65E3 /* AccountViewController.swift */,
-				549FB85E28202976003E65E3 /* PrivacySecurityViewController.swift */,
-				547D253E27C43459005D98B8 /* UsernameViewController.swift */,
 				548BC3B427C04F8400CBC6EA /* SettingsViewModel.swift */,
+				54F2531B2982F35F00E6B198 /* Content */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -370,6 +380,34 @@
 				54F2337127BD68C400E9FD28 /* MessageTableViewCell.swift */,
 			);
 			path = MessageCell;
+			sourceTree = "<group>";
+		};
+		54F2531B2982F35F00E6B198 /* Content */ = {
+			isa = PBXGroup;
+			children = (
+				54F2531C2982F37D00E6B198 /* Account */,
+				54F2531D2982F38600E6B198 /* PrivacySecurity */,
+			);
+			path = Content;
+			sourceTree = "<group>";
+		};
+		54F2531C2982F37D00E6B198 /* Account */ = {
+			isa = PBXGroup;
+			children = (
+				549FB85828201F68003E65E3 /* AccountViewController.swift */,
+				5493DF0A298054D000090282 /* AccountViewModel.swift */,
+				547D253E27C43459005D98B8 /* UsernameViewController.swift */,
+			);
+			path = Account;
+			sourceTree = "<group>";
+		};
+		54F2531D2982F38600E6B198 /* PrivacySecurity */ = {
+			isa = PBXGroup;
+			children = (
+				549FB85E28202976003E65E3 /* PrivacySecurityViewController.swift */,
+				54F2531E2982F44000E6B198 /* PrivacySecurityViewModel.swift */,
+			);
+			path = PrivacySecurity;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -401,6 +439,7 @@
 				544E9EBA285F862000F0B677 /* Kingfisher */,
 				54BAA68928DE636C009DF815 /* Zoomy */,
 				54223860297AEAE8004C05E7 /* SideMenu */,
+				54F253192981E2BA00E6B198 /* FirebaseDynamicLinks */,
 			);
 			productName = MonkeyChatUIKit;
 			productReference = 545FFC6B27BC4C17008CC1ED /* MonkeyChatUIKit.app */;
@@ -454,10 +493,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				545FFC7B27BC4C18008CC1ED /* LaunchScreen.storyboard in Resources */,
+				54F253182981DAC400E6B198 /* GoogleService-Info.plist in Resources */,
 				548BC3B927C069D400CBC6EA /* apns-sound.wav in Resources */,
 				547D253B27C40206005D98B8 /* loading.json in Resources */,
 				5499FCD9285E6E7A00BCE34D /* lights.riv in Resources */,
-				545FFC9A27BCDDA1008CC1ED /* GoogleService-Info.plist in Resources */,
 				545FFC7827BC4C18008CC1ED /* Assets.xcassets in Resources */,
 				545FFC7627BC4C17008CC1ED /* Main.storyboard in Resources */,
 				544E9EB2285F541700F0B677 /* safe_box_icon.riv in Resources */,
@@ -494,6 +533,8 @@
 				5404033C28366BD300FF58D8 /* CountryCodeSelectionView.swift in Sources */,
 				54040343283689AA00FF58D8 /* UIColorExtension.swift in Sources */,
 				547D254127C4EED2005D98B8 /* ChatRoomNotificationsManager.swift in Sources */,
+				54F2531F2982F44000E6B198 /* PrivacySecurityViewModel.swift in Sources */,
+				54F253212982FFA200E6B198 /* WebViewController.swift in Sources */,
 				548BC3B127C0120100CBC6EA /* PushNotificationManager.swift in Sources */,
 				545FFC7127BC4C17008CC1ED /* SceneDelegate.swift in Sources */,
 				54DA8AE3290BCCAD001BC075 /* Extensions.swift in Sources */,
@@ -502,9 +543,11 @@
 				549FB85928201F68003E65E3 /* AccountViewController.swift in Sources */,
 				54E3213A28BFA8140014F166 /* EULAViewController.swift in Sources */,
 				545FFCA027BCFF9F008CC1ED /* Constants.swift in Sources */,
+				5493DF0B298054D000090282 /* AccountViewModel.swift in Sources */,
 				547D253D27C42F2D005D98B8 /* AppGlobal.swift in Sources */,
 				547D253F27C43459005D98B8 /* UsernameViewController.swift in Sources */,
 				54F2336A27BD3C7500E9FD28 /* ChatRoomViewController.swift in Sources */,
+				54223869297C2CE0004C05E7 /* NotificationExtension.swift in Sources */,
 				547D253427C3EF4D005D98B8 /* LottieHUD.swift in Sources */,
 				5404033E2836768400FF58D8 /* Country.swift in Sources */,
 				540BEA6A290AF78E00238B65 /* SensitiveData.swift in Sources */,
@@ -664,7 +707,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = MonkeyChatUIKit/MonkeyChatUIKit.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 37TC2VKVJ6;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MonkeyChatUIKit/Info.plist;
@@ -680,7 +723,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.3.13;
+				MARKETING_VERSION = 1.3.15;
 				PRODUCT_BUNDLE_IDENTIFIER = com.walhallaa.MonkeyChatUIKit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = NO;
@@ -697,7 +740,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = MonkeyChatUIKit/MonkeyChatUIKit.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 37TC2VKVJ6;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MonkeyChatUIKit/Info.plist;
@@ -713,7 +756,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.3.13;
+				MARKETING_VERSION = 1.3.15;
 				PRODUCT_BUNDLE_IDENTIFIER = com.walhallaa.MonkeyChatUIKit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = NO;
@@ -865,6 +908,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 54BAA68828DE636C009DF815 /* XCRemoteSwiftPackageReference "Zoomy" */;
 			productName = Zoomy;
+		};
+		54F253192981E2BA00E6B198 /* FirebaseDynamicLinks */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 545FFC8E27BCDCF2008CC1ED /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseDynamicLinks;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

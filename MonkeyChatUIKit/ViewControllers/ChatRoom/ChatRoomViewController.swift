@@ -162,11 +162,18 @@ class ChatRoomViewController: UIViewController {
         self.navigationController?.pushViewController(vc, animated: true)
     }
 
+    // MARK: - Public Methods
+    func changeRoomDataSource(with chatRoom: ChatRoom) {
+        self.chatRoom = chatRoom
+        self.viewmodel = ChatRoomViewModel(chatroom: chatRoom)
+    }
+
     // MARK: - Private Functions
     private func addObservers() {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(appEnteredBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(nudgeReceivedAction(_:)), name: .nudgeReceivedInsideChatRoom, object: nil)
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(backgroundTap))
         self.view.addGestureRecognizer(tapGestureRecognizer)
     }
@@ -283,6 +290,11 @@ class ChatRoomViewController: UIViewController {
 
     @objc func appEnteredBackground() {
         view.endEditing(true)
+    }
+
+    @objc private func nudgeReceivedAction(_ sender: Notification?) {
+        guard let sender = sender?.object as? String else { return }
+        AlertHelper.simpleAlertMessage(viewController: self, title: "Nudge Received!", message: "\(sender) has sent you a nudge!")
     }
 }
 

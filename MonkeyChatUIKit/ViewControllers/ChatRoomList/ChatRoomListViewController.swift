@@ -53,6 +53,7 @@ class ChatRoomListViewController: UIViewController {
         setDelegates()
         layout()
         fetchAndObserveChatRooms()
+        addObservers()
     }
 
     deinit {
@@ -155,6 +156,10 @@ class ChatRoomListViewController: UIViewController {
     }
 
     // MARK: - Private Methods
+    private func addObservers() {
+        NotificationCenter.default.addObserver(self, selector: #selector(openChatRoomFromNotification(_:)), name: .openedChatRoomFromNotification, object: nil)
+    }
+
     private func toggleEmptyView() {
         if viewModel.chatRooms.count == 0 {
             emptyLabel.isHidden = false
@@ -180,15 +185,15 @@ class ChatRoomListViewController: UIViewController {
 
     /// Since the server control for username is added later, we are syncing the server data with the local username if its given.
     private func updateServerUsernameIfNeeded() {
-        let username = AppGlobal.shared.username
-        guard username != nil else { return }
-        if username != "Anonymous" || username?.isEmpty != true {
-            COLLECTION_USERS.document(AppGlobal.shared.userID ?? "").updateData(["username": username ?? ""])
+        guard let username = AppGlobal.shared.username else { return }
+        if username != "Anonymous" || username.isEmpty != true {
+            COLLECTION_USERS.document(AppGlobal.shared.userID ?? "").updateData(["username": username])
         }
     }
 
     private func getUsernameFromServer(completion: @escaping (String) -> Void) {
-        COLLECTION_USERS.document(AppGlobal.shared.userID ?? "").getDocument { snapshot, error in
+        guard let userID = AppGlobal.shared.userID else { return }
+        COLLECTION_USERS.document(userID).getDocument { snapshot, error in
             guard let snapshot else { return }
             let dict = snapshot.data()
             let username = dict?["username"] as? String
@@ -199,6 +204,14 @@ class ChatRoomListViewController: UIViewController {
     // MARK: - Actions
     @objc func createChatRoomAction() {
         viewModel.createRoomOrEnterRoomAction(target: self)
+    }
+
+    @objc private func openChatRoomFromNotification(_ sender: Notification?) {
+        guard let chatRoomID = sender?.object as? String else { return }
+        guard let chatRoom = viewModel.chatRooms.first(where: { $0.id == chatRoomID }) else { return }
+        let viewController = ChatRoomViewController(chatRoom: chatRoom)
+        AppGlobal.shared.lastEnteredChatRoomID = chatRoomID
+        self.navigationController?.pushViewController(viewController, animated: false)
     }
 }
 

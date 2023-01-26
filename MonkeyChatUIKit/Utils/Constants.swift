@@ -7,5 +7,6 @@
 
 import Firebase
 
-let COLLECTION_USERS = Firestore.firestore().collection("users")
+let COLLECTION_USERS     = Firestore.firestore().collection("users")
 let COLLECTION_CHATROOMS = Firestore.firestore().collection("chatrooms")
+let COLLECTION_WEBLINKS  = Firestore.firestore().collection("weblinks")

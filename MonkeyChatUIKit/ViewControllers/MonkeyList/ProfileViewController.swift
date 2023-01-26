@@ -102,12 +102,13 @@ class ProfileViewController: UIViewController {
     }
 
     private func getUsername() {
-        COLLECTION_USERS.document(AppGlobal.shared.userID ?? "").getDocument { [weak self] snapshot, error in
+        guard let userID = AppGlobal.shared.userID else { return }
+        COLLECTION_USERS.document(userID).getDocument { [weak self] snapshot, error in
             guard let self = self else { return }
             guard let snapshot else { return }
             let dict = snapshot.data()
-            let username = dict?["username"] as? String
-            self.usernameButton.setTitle("@" + (username ?? ""), for: .normal)
+            let username = dict?["username"] as? String ?? ""
+            self.usernameButton.setTitle("@" + (username.isEmpty ? "Anonymous" : username ), for: .normal)
         }
     }
 

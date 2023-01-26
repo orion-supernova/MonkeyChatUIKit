@@ -30,13 +30,21 @@ class AuthManager {
             guard result != nil, error == nil else { completion(false); return}
             AppGlobal.shared.userID = Auth.auth().currentUser?.uid
             guard let id = AppGlobal.shared.userID else { return }
-
-            let data = ["username": "",
-                        "uid": id]
-            COLLECTION_USERS.document(id).setData(data) { error in
-                print("Sucessfully uploaded user data!")
+            var usernameToBe = ""
+            COLLECTION_USERS.document(id).getDocument { snapshot, error in
+                guard let snapshot else { return }
+                let dict = snapshot.data()
+                if let username = dict?["username"] as? String {
+                    usernameToBe = username
+                }
+                let data = ["username": usernameToBe,
+                            "uid": id,
+                            "fcmToken": AppGlobal.shared.fcmToken ?? ""] as [String: Any]
+                COLLECTION_USERS.document(id).setData(data) { error in
+                    print("Sucessfully uploaded user data!")
+                }
+                completion(true)
             }
-            completion(true)
         }
     }
 

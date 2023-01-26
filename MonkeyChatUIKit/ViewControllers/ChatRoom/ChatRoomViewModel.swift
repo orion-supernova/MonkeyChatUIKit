@@ -12,7 +12,7 @@ protocol ChatRoomViewModelDelegate: AnyObject {
     func didChangeDataSource()
 }
 
-class ChatRoomViewModel {
+final class ChatRoomViewModel {
 
     // MARK: - Stored Properties
     var chatroom: ChatRoom
@@ -53,6 +53,7 @@ class ChatRoomViewModel {
     func uploadMessage(message: String) {
         let sender = PushNotificationSender()
         guard let chatroomID = chatroom.id else { return }
+        guard let chatRoomName = chatroom.name else { return }
 
         let data = ["senderName": AppGlobal.shared.username ?? "",
                     "senderUID": AppGlobal.shared.userID ?? "",
@@ -79,7 +80,7 @@ class ChatRoomViewModel {
                         fcmTokenForThisChatRoom.append(document.get("fcmToken") as? String ?? "")
                     }
                     for token in fcmTokenForThisChatRoom {
-                        sender.sendPushNotification(to: token, title: "\(self?.chatroom.name ?? "")", body: "\(message)", chatRoomID: chatroomID)
+                        sender.sendPushNotification(to: token, title: "\(self?.chatroom.name ?? "")", body: "\(message)", chatRoomID: chatroomID, chatRoomName: chatRoomName, category: .messageCategory)
                     }
                 }
             }

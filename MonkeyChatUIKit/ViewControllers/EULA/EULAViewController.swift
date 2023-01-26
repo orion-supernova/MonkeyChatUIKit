@@ -88,8 +88,12 @@ class EULAViewController: UIViewController {
 
     // MARK: - Private Methods
     private func loadWebView() {
-        let url = URL(string: "https://muratcankoc.wixsite.com/ammckproductions/monkeychat-eula")!
-        webView.load(URLRequest(url: url))
+        COLLECTION_WEBLINKS.document("weblinks").getDocument { snapshot, error in
+            guard let snapshot, error == nil else { return }
+            guard let dict = snapshot.data() else { return }
+            let url = URL(string: dict["eula"] as? String ?? "")!
+            self.webView.load(URLRequest(url: url))
+        }
     }
 
     func configureLoginView(completion: @escaping (UITabBarController) -> Void) {

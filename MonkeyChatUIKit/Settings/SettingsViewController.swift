@@ -17,6 +17,7 @@ class SettingsViewController: UIViewController {
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Account")
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "PrivacySecurity")
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Hehe")
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Help")
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 44
         return tableView
@@ -90,6 +91,8 @@ extension SettingsViewController: UITableViewDelegate {
             AlertHelper.alertMessage(viewController: self, title: "Hehe", message: "Hehe") {
                 //
             }
+        } else {
+            AlertHelper.simpleAlertMessage(viewController: self, title: "Contact Us!", message: "For any report or question, you can contact us at muratcankoc@walhallaa.com!")
         }
     }
 }
@@ -98,7 +101,7 @@ extension SettingsViewController: UITableViewDelegate {
 // MARK: - UITableViewDelegate
 extension SettingsViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3
+        return 4
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -116,12 +119,16 @@ extension SettingsViewController: UITableViewDataSource {
             return cell
         }else if indexPath.row == 2 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "Hehe", for: indexPath)
-            cell.textLabel?.text = "Hehe"
+            cell.textLabel?.text = "Tap Tap"
             cell.textLabel?.textAlignment = .center
             cell.textLabel?.textColor = .systemGray
             return cell
         } else {
-            return UITableViewCell()
+            let cell = tableView.dequeueReusableCell(withIdentifier: "Help", for: indexPath)
+            cell.textLabel?.text = "Help"
+            cell.textLabel?.textAlignment = .center
+            cell.textLabel?.textColor = .systemGray
+            return cell
         }
     }
 }

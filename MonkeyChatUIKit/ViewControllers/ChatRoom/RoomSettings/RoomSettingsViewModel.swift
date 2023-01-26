@@ -8,7 +8,7 @@
 import UIKit
 import Firebase
 
-class RoomSettingsViewModel {
+final class RoomSettingsViewModel {
 
     // MARK: - Public Properties
     var chatRoom: ChatRoom?

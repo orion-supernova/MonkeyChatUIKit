@@ -8,7 +8,7 @@
 import Foundation
 import FirebaseMessaging
 
-class SettingsViewModel {
+final class SettingsViewModel {
 
     // MARK: - Stored Properties
     let defaults = UserDefaults.standard
