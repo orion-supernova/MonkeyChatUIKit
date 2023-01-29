@@ -75,6 +75,9 @@
 		54F2531A2981E2BA00E6B198 /* FirebaseDynamicLinks in Frameworks */ = {isa = PBXBuildFile; productRef = 54F253192981E2BA00E6B198 /* FirebaseDynamicLinks */; };
 		54F2531F2982F44000E6B198 /* PrivacySecurityViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F2531E2982F44000E6B198 /* PrivacySecurityViewModel.swift */; };
 		54F253212982FFA200E6B198 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F253202982FFA200E6B198 /* WebViewController.swift */; };
+		54F2532529858F0100E6B198 /* MessageOptionsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F2532429858F0000E6B198 /* MessageOptionsTableViewCell.swift */; };
+		54F25329298590D300E6B198 /* MessageOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F25328298590D300E6B198 /* MessageOption.swift */; };
+		54F2532B2985991E00E6B198 /* MessageOptionsTableViewCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F2532A2985991E00E6B198 /* MessageOptionsTableViewCellViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -136,6 +139,9 @@
 		54F253172981DAC400E6B198 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		54F2531E2982F44000E6B198 /* PrivacySecurityViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacySecurityViewModel.swift; sourceTree = "<group>"; };
 		54F253202982FFA200E6B198 /* WebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
+		54F2532429858F0000E6B198 /* MessageOptionsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageOptionsTableViewCell.swift; sourceTree = "<group>"; };
+		54F25328298590D300E6B198 /* MessageOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageOption.swift; sourceTree = "<group>"; };
+		54F2532A2985991E00E6B198 /* MessageOptionsTableViewCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageOptionsTableViewCellViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -275,6 +281,7 @@
 				545FFC8927BC5149008CC1ED /* ChatRoom.swift */,
 				545FFC9B27BCDEDB008CC1ED /* User.swift */,
 				545FFC9D27BCFB05008CC1ED /* Message.swift */,
+				54F25328298590D300E6B198 /* MessageOption.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -359,6 +366,7 @@
 				54F2336E27BD635900E9FD28 /* ChatRoomViewModel.swift */,
 				54F2337327BD7BB000E9FD28 /* TextEntryView.swift */,
 				54F2337027BD68B200E9FD28 /* MessageCell */,
+				54F2532329858EE400E6B198 /* MessageOptionsCell */,
 				544E9EB6285F809100F0B677 /* RoomSettings */,
 			);
 			path = ChatRoom;
@@ -408,6 +416,15 @@
 				54F2531E2982F44000E6B198 /* PrivacySecurityViewModel.swift */,
 			);
 			path = PrivacySecurity;
+			sourceTree = "<group>";
+		};
+		54F2532329858EE400E6B198 /* MessageOptionsCell */ = {
+			isa = PBXGroup;
+			children = (
+				54F2532429858F0000E6B198 /* MessageOptionsTableViewCell.swift */,
+				54F2532A2985991E00E6B198 /* MessageOptionsTableViewCellViewModel.swift */,
+			);
+			path = MessageOptionsCell;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -525,7 +542,9 @@
 				54F2336F27BD635900E9FD28 /* ChatRoomViewModel.swift in Sources */,
 				545FFC8A27BC5149008CC1ED /* ChatRoom.swift in Sources */,
 				547D252E27C2EADF005D98B8 /* AuthViewController.swift in Sources */,
+				54F2532B2985991E00E6B198 /* MessageOptionsTableViewCellViewModel.swift in Sources */,
 				541DBA6127DF772A00A3A920 /* ProfileViewController.swift in Sources */,
+				54F2532529858F0100E6B198 /* MessageOptionsTableViewCell.swift in Sources */,
 				544D84A528DE357200C87D0D /* RoomImageViewController.swift in Sources */,
 				54F2337227BD68C400E9FD28 /* MessageTableViewCell.swift in Sources */,
 				540403412836796300FF58D8 /* CountryCodeHelper.swift in Sources */,
@@ -539,6 +558,7 @@
 				545FFC7127BC4C17008CC1ED /* SceneDelegate.swift in Sources */,
 				54DA8AE3290BCCAD001BC075 /* Extensions.swift in Sources */,
 				545FFC9E27BCFB05008CC1ED /* Message.swift in Sources */,
+				54F25329298590D300E6B198 /* MessageOption.swift in Sources */,
 				541DBA6327DF7B1000A3A920 /* MonkeyListViewModel.swift in Sources */,
 				549FB85928201F68003E65E3 /* AccountViewController.swift in Sources */,
 				54E3213A28BFA8140014F166 /* EULAViewController.swift in Sources */,
@@ -707,7 +727,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = MonkeyChatUIKit/MonkeyChatUIKit.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = 37TC2VKVJ6;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MonkeyChatUIKit/Info.plist;
@@ -740,7 +760,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = MonkeyChatUIKit/MonkeyChatUIKit.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = 37TC2VKVJ6;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MonkeyChatUIKit/Info.plist;

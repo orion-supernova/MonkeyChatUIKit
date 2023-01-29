@@ -99,6 +99,11 @@ class TextEntryView: UIView {
         }
     }
 
+    // MARK: - Public Methods
+    func firstResponderAction() {
+        self.textView.becomeFirstResponder()
+    }
+
     // MARK: - Private Methods
     private func setSendButtonState(state: SendButtonState) {
         switch state {

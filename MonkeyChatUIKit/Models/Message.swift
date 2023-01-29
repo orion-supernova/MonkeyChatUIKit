@@ -16,6 +16,7 @@ struct Message: Identifiable, Decodable {
     let timestamp: Timestamp
     var senderName: String?
     var senderUID: String?
+    let chatRoomID: String?
 
     var timestampString: String? {
         var calendar = Calendar.current

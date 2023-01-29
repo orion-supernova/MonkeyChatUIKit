@@ -10,6 +10,7 @@ import SnapKit
 
 class MessageTableViewCell: UITableViewCell {
 
+    // MARK: - UI Elements
     private lazy var usernameLabel: UILabel = {
         let label = UILabel()
         label.text = "username"
@@ -23,7 +24,7 @@ class MessageTableViewCell: UITableViewCell {
         return view
     }()
 
-    private lazy var messageLabel: UILabel = {
+    lazy var messageLabel: UILabel = {
         let label = UILabel()
         label.text = "message"
         label.numberOfLines = 0
@@ -38,6 +39,11 @@ class MessageTableViewCell: UITableViewCell {
         label.font = .systemFont(ofSize: 8, weight: .regular)
         return label
     }()
+
+    // MARK: - Public Properties
+    static let cellIdentifier = "MessageTableViewCell"
+    var isBubbleSideLeft = true
+    var message: Message?
 
 
     // MARK: - Lifecycle
@@ -73,6 +79,7 @@ class MessageTableViewCell: UITableViewCell {
 
     // MARK: - Public Methods
     func configureCell(message: Message) {
+        self.message = message
         if message.senderName == "" || message.senderName == nil{
             usernameLabel.text = "Anonymous"
         } else {
@@ -97,6 +104,7 @@ class MessageTableViewCell: UITableViewCell {
 
     // MARK: - Private Methods
     private func configureLeftBubble() {
+        self.isBubbleSideLeft = true
         usernameLabel.textAlignment = .left
         messageLabel.textColor = UIColor(named: "Black-White")
         messageBubble.backgroundColor = .secondarySystemFill
@@ -123,6 +131,7 @@ class MessageTableViewCell: UITableViewCell {
     }
 
     private func configureRightBubble() {
+        self.isBubbleSideLeft = false
         usernameLabel.textAlignment = .right
         messageBubble.backgroundColor = .monkeyBlue
         messageLabel.textColor = .white

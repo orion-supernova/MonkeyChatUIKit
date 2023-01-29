@@ -19,6 +19,7 @@ final class ChatRoomViewModel {
     var messages = [Message]()
     var lastMessage: Message?
     weak var delegate: ChatRoomViewModelDelegate?
+    var selectedMessage: Message?
 
     // MARK: - Lifecycle
     init(chatroom: ChatRoom) {
@@ -58,6 +59,7 @@ final class ChatRoomViewModel {
         let data = ["senderName": AppGlobal.shared.username ?? "",
                     "senderUID": AppGlobal.shared.userID ?? "",
                     "message": message,
+                    "chatRoomID": chatroomID,
                     "timestamp": Timestamp(date: Date())] as [String: Any]
 
         let room = COLLECTION_CHATROOMS.document(chatroomID)
@@ -85,5 +87,48 @@ final class ChatRoomViewModel {
                 }
             }
         }
+    }
+
+    func reportMessage() {
+        guard let selectedMessage else { return }
+        let data = ["message": selectedMessage.message,
+                    "senderUID": selectedMessage.senderUID ?? "",
+                    "senderName": selectedMessage.senderName ?? "",
+                    "chatRoomID":selectedMessage.chatRoomID ?? "",
+                    "reportedMessageID": selectedMessage.id ?? "",
+                    "reportedMessageTimestamp": selectedMessage.timestamp ,
+                    "reportTime": Date()] as [String: Any]
+        COLLECTION_REPORTS.addDocument(data: data) { [weak self] error in
+            guard let self = self else { return }
+            guard error == nil else { self.gotError(error: error); return }
+            print("DEBUG: --- Reported Message is \(selectedMessage)")
+        }
+    }
+
+    func removeUserFromChatRoom() {
+        guard let selectedMessage else { return }
+        guard let senderUID = selectedMessage.senderUID else { return }
+        guard let chatRoomID = selectedMessage.chatRoomID else { return }
+        COLLECTION_USERS.document(senderUID).collection("chatRooms").document(chatRoomID).getDocument { [weak self] snapshot, error in
+            guard let self = self else { return }
+            guard let snapshot, error == nil else { self.gotError(error: error); return }
+            snapshot.reference.delete { error in
+                guard error == nil else {
+                    self.gotError(error: error)
+                    return
+                }
+                COLLECTION_CHATROOMS.document(chatRoomID).collection("userIDs").document(senderUID).getDocument { snapshot, error in
+                    guard let snapshot, error == nil else { self.gotError(error: error); return }
+                    snapshot.reference.delete { error in
+                        guard error == nil else { self.gotError(error: error); return }
+                        print("DEBUG: --- Removed user is \(selectedMessage.senderName ?? "Anonymous") with id \(senderUID)")
+                    }
+                }
+            }
+        }
+    }
+
+    private func gotError(error: Error?) {
+        AlertHelper.alertMessage(title: "Error", message: error?.localizedDescription ?? "Something went wrong.", okButtonText: "OK")
     }
 }
