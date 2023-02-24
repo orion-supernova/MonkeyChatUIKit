@@ -107,7 +107,9 @@ class ChatRoomListTableViewCell: UITableViewCell {
         }
         guard let viewModel = viewModel else { return }
         self.chatRoomNameLabel.text = chatRoom.name
-        let firstCharacterOfTheChatRoomName = chatRoom.name?.first ?? String.Element("")
+        guard let name = chatRoom.name else { return }
+        guard !name.isEmpty else { return }
+        let firstCharacterOfTheChatRoomName = name.first ?? String.Element("")
         if let icon = UIImage(systemName: "\(firstCharacterOfTheChatRoomName).circle") {
             guard chatRoomIconImageView.image != icon else { return }
             chatRoomIconImageView.image = icon

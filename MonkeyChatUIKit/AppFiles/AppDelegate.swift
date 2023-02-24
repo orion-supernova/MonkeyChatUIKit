@@ -116,7 +116,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate {
     func getNotificationSettings() {
         UNUserNotificationCenter.current().getNotificationSettings { settings in
             print("Notification settings: \(settings)")
-            guard settings.authorizationStatus == .authorized else { return }
+            guard settings.authorizationStatus == .authorized else {
+                AlertHelper.alertMessage(title: "Push Notifications Problem", message: "Please enable push notifications from your settins to improve the apps usability.", okButtonText: "OK")
+                return
+            }
             DispatchQueue.main.async {
                 UIApplication.shared.registerForRemoteNotifications()
             }

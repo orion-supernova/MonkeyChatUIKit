@@ -78,12 +78,8 @@ final class ChatRoomViewModel {
                 room.collection("userIDs").getDocuments { snapshot, error in
                     guard let documents = snapshot?.documents else { return }
                     var fcmTokenForThisChatRoom = [String]()
-                    for document in documents {
-                        fcmTokenForThisChatRoom.append(document.get("fcmToken") as? String ?? "")
-                    }
-                    for token in fcmTokenForThisChatRoom {
-                        sender.sendPushNotification(to: token, title: "\(self?.chatroom.name ?? "")", body: "\(message)", chatRoomID: chatroomID, chatRoomName: chatRoomName, category: .messageCategory)
-                    }
+                    documents.forEach({ fcmTokenForThisChatRoom.append($0.get("fcmToken") as? String ?? "")})
+                    fcmTokenForThisChatRoom.forEach({ sender.sendPushNotification(to: $0, title: "\(self?.chatroom.name ?? "")", body: "\(message)", chatRoomID: chatroomID, chatRoomName: chatRoomName, category: .messageCategory) })
                 }
             }
         }
