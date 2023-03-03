@@ -203,7 +203,7 @@ class ChatRoomListViewController: UIViewController {
 
     // MARK: - Actions
     @objc func createChatRoomAction() {
-        viewModel.createRoomOrEnterRoomAction(target: self)
+        viewModel.createRoomOrEnterRoomAction()
     }
 
     @objc private func openChatRoomFromNotification(_ sender: Notification?) {
@@ -278,6 +278,10 @@ extension ChatRoomListViewController: UITableViewDelegate {
 }
 // MARK: ChatRoomListViewModel Delegate
 extension ChatRoomListViewController: ChatRoomListViewModelDelegate {
+    func presentAlertController(_ alertController: UIAlertController, animated: Bool, completion: (() -> Void)?) {
+        self.present(alertController, animated: animated, completion: completion)
+    }
+
     func didChangeDataSource() {
         DispatchQueue.main.async {
             self.toggleEmptyView()

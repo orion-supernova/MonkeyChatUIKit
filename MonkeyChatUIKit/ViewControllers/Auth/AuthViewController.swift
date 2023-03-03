@@ -63,7 +63,7 @@ class AuthViewController: UIViewController {
         let button = UIButton(type: .system)
         button.setTitle("Fire Up", for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 14)
-        button.setTitleColor(UIColor.monkeyOrange, for: .normal)
+        button.setTitleColor(UIColor.systemPink, for: .normal)
         button.layer.cornerRadius = 4
         button.addTarget(self, action: #selector(signIn), for: .touchUpInside)
         return button

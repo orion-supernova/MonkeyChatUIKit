@@ -92,7 +92,7 @@ extension SettingsViewController: UITableViewDelegate {
                 //
             }
         } else {
-            AlertHelper.simpleAlertMessage(viewController: self, title: "Contact Us!", message: "For any report or question, you can contact us at muratcankoc@walhallaa.com!")
+            AlertHelper.simpleAlertMessage(viewController: self, title: "Contact Us!", message: "For any report or question, you can contact us at info@walhallaa.com!")
         }
     }
 }

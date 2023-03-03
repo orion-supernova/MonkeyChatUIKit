@@ -11,6 +11,7 @@ import FirebaseFirestoreSwift
 
 protocol ChatRoomListViewModelDelegate: AnyObject {
     func didChangeDataSource()
+    func presentAlertController(_ alertController: UIAlertController, animated: Bool, completion: (() -> Void)?)
 }
 
 final class ChatRoomListViewModel {
@@ -20,10 +21,16 @@ final class ChatRoomListViewModel {
     var chatRooms = [ChatRoom]()
     weak var delegate: ChatRoomListViewModelDelegate?
 
+    // MARK: - Private Enums
+    private enum EmptyFieldType {
+        case roomName
+        case roomID
+    }
+
     func fetchChatRooms() {
         guard let userID = AppGlobal.shared.userID else { return }
 
-        COLLECTION_USERS.document(userID).collection("chatRooms").addSnapshotListener {[weak self] snapshot, error in
+        COLLECTION_USERS.document(userID).collection("chatRooms").addSnapshotListener { [weak self] snapshot, error in
             guard let self = self else { return }
             var count = 0
             var chatRoomDocuments = [DocumentSnapshot]()
@@ -65,13 +72,13 @@ final class ChatRoomListViewModel {
     }
 
     // MARK: - Create Or Enter Room Action
-    func createRoomOrEnterRoomAction(target: UIViewController) {
+    func createRoomOrEnterRoomAction() {
         let actionSheetController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        let enterRoomAction = UIAlertAction(title: "Enter Room", style: .default) { [weak self] action in
-            self?.enterRoom(target: target)
+        let enterRoomAction = UIAlertAction(title: "Enter Room", style: .default) { action in
+            self.enterRoom()
         }
-        let createRoomAction = UIAlertAction(title: "Create Room", style: .default) { [weak self] action in
-            self?.createRoom(target: target)
+        let createRoomAction = UIAlertAction(title: "Create Room", style: .default) { action in
+            self.createRoom()
         }
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
         actionSheetController.addAction(enterRoomAction)
@@ -79,11 +86,11 @@ final class ChatRoomListViewModel {
         actionSheetController.addAction(cancelAction)
         actionSheetController.view.tintColor = .systemPink
 
-        target.present(actionSheetController, animated: true, completion: nil)
+        delegate?.presentAlertController(actionSheetController, animated: true, completion: nil)
     }
 
     // MARK: - Enter Room Action
-    func enterRoom(target: UIViewController) {
+    func enterRoom() {
         let alertController = UIAlertController(title: "Enter Room", message: "Please Enter The Room ID:", preferredStyle: .alert)
         alertController.addTextField { textfield in
             textfield.placeholder = "Room ID"
@@ -103,6 +110,7 @@ final class ChatRoomListViewModel {
             if let tempPassword = textfields[1].text {
                 roomPassword = tempPassword
             }
+            guard !roomID.isEmpty else { return self.presentEmptyFieldAlert(type: .roomID) }
             guard let userID = AppGlobal.shared.userID else { return }
             COLLECTION_CHATROOMS.document(roomID).getDocument { snapshot, error in
                 guard error == nil else {
@@ -148,12 +156,11 @@ final class ChatRoomListViewModel {
         alertController.addAction(okAction)
         alertController.view.tintColor = .systemPink
 
-
-        target.present(alertController, animated: true, completion: nil)
+        delegate?.presentAlertController(alertController, animated: true, completion: nil)
     }
 
     // MARK: - Create Room Action
-    func createRoom(target: UIViewController) {
+    func createRoom() {
         let alertController = UIAlertController(title: "This will be your Chat Room", message: "Please configure as you like.", preferredStyle: .alert)
         alertController.addTextField { textfield in
             textfield.placeholder = "Booth name"
@@ -174,6 +181,7 @@ final class ChatRoomListViewModel {
             if let boothPassword = textFields[1].text {
                 password = boothPassword
             }
+            guard !name.isEmpty else { return self.presentEmptyFieldAlert(type: .roomName)}
             let roomID = UUID().uuidString
             let dataForChatRoom = ["name": name,
                         "password": password,
@@ -206,12 +214,7 @@ final class ChatRoomListViewModel {
         alertController.addAction(okAction)
         alertController.view.tintColor = .systemPink
 
-        target.present(alertController, animated: true, completion: nil)
-    }
-
-    func removeListeners() {
-//        COLLECTION_CHATROOMS.order(by: "timestamp", descending: true).remo
-//        }
+        delegate?.presentAlertController(alertController, animated: true, completion: nil)
     }
 
     func sendNudge(to indexPath: IndexPath) {
@@ -229,5 +232,17 @@ final class ChatRoomListViewModel {
                 sender.sendPushNotification(to: token, title: "DDDDRRRRRTTTT", body: "\(AppGlobal.shared.username ?? "Anonymous") has sent you a nudge in \(chatroom.name ?? "")!", chatRoomID: chatroomID, chatRoomName: chatroom.name ?? "", category: .nudgeCategory)
             }
         }
+    }
+
+    // MARK: - Private Methods
+    private func presentEmptyFieldAlert(type: EmptyFieldType) {
+        let type = (type == .roomID) ? "ID" : "name"
+        let alertController = UIAlertController(title: "ERROR!", message: "Room \(type) can NOT be empty!", preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .default)
+
+        alertController.addAction(okAction)
+        alertController.view.tintColor = .systemPink
+
+        delegate?.presentAlertController(alertController, animated: true, completion: nil)
     }
 }
