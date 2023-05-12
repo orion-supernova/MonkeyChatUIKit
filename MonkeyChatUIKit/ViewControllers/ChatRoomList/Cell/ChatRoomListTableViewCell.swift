@@ -11,6 +11,11 @@ import SnapKit
 class ChatRoomListTableViewCell: UITableViewCell {
 
     // MARK: - UI Elements
+    private lazy var emptyView: UIView = {
+        let view = UIView()
+        return view
+    }()
+
     private lazy var chatRoomIconImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
@@ -62,6 +67,7 @@ class ChatRoomListTableViewCell: UITableViewCell {
 
     // MARK: - Setup
     func setup() {
+        contentView.addSubview(emptyView)
         contentView.addSubview(chatRoomIconImageView)
         contentView.addSubview(chatRoomNameLabel)
         contentView.addSubview(chatRoomLastMessageSenderNameLabel)
@@ -69,6 +75,11 @@ class ChatRoomListTableViewCell: UITableViewCell {
     }
 
     func layout() {
+        emptyView.snp.makeConstraints { make in
+            make.top.left.right.equalToSuperview()
+            make.height.equalTo(5)
+        }
+
         chatRoomIconImageView.snp.makeConstraints { make in
             make.left.equalToSuperview()
             make.centerY.equalToSuperview()
@@ -76,7 +87,7 @@ class ChatRoomListTableViewCell: UITableViewCell {
         }
 
         chatRoomNameLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview()
+            make.top.equalTo(emptyView.snp.bottom)
             make.left.equalTo(chatRoomIconImageView.snp.right).offset(5)
             make.right.equalTo(-5)
             make.height.greaterThanOrEqualTo(20)

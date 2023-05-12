@@ -93,7 +93,8 @@ class ChatRoomListViewController: UIViewController {
         }
 
         tableView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(5)
+            make.left.right.bottom.equalToSuperview()
         }
 
         swipeLeftView.snp.makeConstraints { make in
