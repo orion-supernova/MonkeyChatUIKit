@@ -78,6 +78,7 @@
 		54F2532529858F0100E6B198 /* MessageOptionsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F2532429858F0000E6B198 /* MessageOptionsTableViewCell.swift */; };
 		54F25329298590D300E6B198 /* MessageOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F25328298590D300E6B198 /* MessageOption.swift */; };
 		54F2532B2985991E00E6B198 /* MessageOptionsTableViewCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F2532A2985991E00E6B198 /* MessageOptionsTableViewCellViewModel.swift */; };
+		54FE475F2A0F867000F3811B /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54FE475E2A0F867000F3811B /* ProfileViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -142,6 +143,7 @@
 		54F2532429858F0000E6B198 /* MessageOptionsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageOptionsTableViewCell.swift; sourceTree = "<group>"; };
 		54F25328298590D300E6B198 /* MessageOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageOption.swift; sourceTree = "<group>"; };
 		54F2532A2985991E00E6B198 /* MessageOptionsTableViewCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageOptionsTableViewCellViewModel.swift; sourceTree = "<group>"; };
+		54FE475E2A0F867000F3811B /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -180,6 +182,7 @@
 			isa = PBXGroup;
 			children = (
 				541DBA6027DF772A00A3A920 /* ProfileViewController.swift */,
+				54FE475E2A0F867000F3811B /* ProfileViewModel.swift */,
 				541DBA6227DF7B1000A3A920 /* MonkeyListViewModel.swift */,
 			);
 			path = MonkeyList;
@@ -557,6 +560,7 @@
 				548BC3B127C0120100CBC6EA /* PushNotificationManager.swift in Sources */,
 				545FFC7127BC4C17008CC1ED /* SceneDelegate.swift in Sources */,
 				54DA8AE3290BCCAD001BC075 /* Extensions.swift in Sources */,
+				54FE475F2A0F867000F3811B /* ProfileViewModel.swift in Sources */,
 				545FFC9E27BCFB05008CC1ED /* Message.swift in Sources */,
 				54F25329298590D300E6B198 /* MessageOption.swift in Sources */,
 				541DBA6327DF7B1000A3A920 /* MonkeyListViewModel.swift in Sources */,

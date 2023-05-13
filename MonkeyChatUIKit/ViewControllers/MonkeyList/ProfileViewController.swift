@@ -10,17 +10,27 @@ import SnapKit
 
 class ProfileViewController: UIViewController {
     // MARK: - UI Elements
+    private lazy var profileIconImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = UIImage(systemName: "person.crop.circle.fill")
+        imageView.tintColor = .systemPink
+        imageView.contentMode = .scaleAspectFit
+        imageView.isUserInteractionEnabled = true
+        imageView.clipsToBounds = true
+        return imageView
+    }()
+
     private lazy var  usernameTitleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Your username:"
-        label.font = .systemFont(ofSize: 15, weight: .semibold)
+        label.text = ""
+        label.font = .systemFont(ofSize: 13, weight: .semibold)
         return label
     }()
 
     private lazy var usernameButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitleColor(.secondaryLabel, for: .normal)
-        button.titleLabel?.font = .systemFont(ofSize: 13)
+        button.titleLabel?.font = .systemFont(ofSize: 15)
         button.sizeToFit()
         button.addTarget(self, action: #selector(usernameButtonAction), for: .touchUpInside)
         return button
@@ -52,30 +62,43 @@ class ProfileViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         getUsername()
+        getProfilePicture()
+    }
+
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        profileIconImageView.layer.cornerRadius = 50
     }
 
     // MARK: - Setup
     private func setup() {
         setDelegates()
-        view.addSubview(usernameTitleLabel)
+        setGestureRecognizers()
+        view.addSubview(profileIconImageView)
         view.addSubview(usernameButton)
     }
 
+    // MARK: - Layout
     private func layout() {
-        usernameTitleLabel.snp.makeConstraints { make in
+        profileIconImageView.snp.makeConstraints { make in
             make.top.equalTo(self.view.safeAreaLayoutGuide.snp.top)
-            make.left.equalTo(2)
-            make.right.equalToSuperview()
-            make.height.equalTo(20)
+            make.centerX.equalToSuperview()
+            make.size.equalTo(100)
         }
+
         usernameButton.snp.makeConstraints { make in
-            make.top.equalTo(usernameTitleLabel.snp.bottom).offset(2)
+            make.top.equalTo(profileIconImageView.snp.bottom).offset(2)
             make.left.equalTo(2)
             make.height.equalTo(15)
         }
     }
 
     // MARK: - Private Functions
+    private func setGestureRecognizers() {
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(profileImageIconAction))
+        profileIconImageView.addGestureRecognizer(gesture)
+    }
+
     private func setDelegates() {
         tableView.delegate = self
         tableView.dataSource = self
@@ -112,7 +135,30 @@ class ProfileViewController: UIViewController {
         }
     }
 
+    private func getProfilePicture() {
+        let profilePictureExists = UserDefaults.standard.bool(forKey: "ProfilePictureExists")
+        guard profilePictureExists else { return }
+        let viewModel = ProfileViewModel()
+        viewModel.getProfilePictureFromDisk { [weak self] (success, image) in
+            guard let self = self else { return }
+            guard success else {
+                AlertHelper.simpleAlertMessage(viewController: self, title: "Error", message: "Something went wrong while fetching profile picture.")
+                self.profileIconImageView.image = UIImage(systemName: "person")
+                return
+            }
+            self.profileIconImageView.image = image
+        }
+    }
+
     // MARK: - Actions
+    @objc private func profileImageIconAction() {
+        let imagePickerController = UIImagePickerController()
+        imagePickerController.delegate = self
+        imagePickerController.sourceType = .photoLibrary
+        imagePickerController.allowsEditing = true
+        present(imagePickerController, animated: true)
+    }
+
     @objc func addFriendButtonAction() {
         print("HEDE")
     }
@@ -150,5 +196,29 @@ extension ProfileViewController: UITableViewDelegate {
 extension ProfileViewController: UsernameViewControllerDelegate {
     func didChangeUsername(with username: String) {
         usernameButton.setTitle("@" + username, for: .normal)
+    }
+}
+
+// MARK: - ImagePicker Delegate
+extension ProfileViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        let image = info[.editedImage] as? UIImage
+        picker.dismiss(animated: true)
+        guard let image = image else { return }
+        LottieHUD.shared.show()
+        let viewModel = ProfileViewModel()
+        viewModel.saveProfilePictureToDisk(image: image) { [weak self] success in
+            guard let self = self else { return }
+            guard success else {
+                AlertHelper.simpleAlertMessage(viewController: self, title: "Error", message: "Something went wrong.")
+                return
+            }
+            self.profileIconImageView.image = image
+            LottieHUD.shared.dismiss()
+        }
+    }
+
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        picker.dismiss(animated: true)
     }
 }
