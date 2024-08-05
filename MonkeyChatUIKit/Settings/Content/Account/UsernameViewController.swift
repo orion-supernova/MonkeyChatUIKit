@@ -14,7 +14,7 @@ protocol UsernameViewControllerDelegate: AnyObject {
 class UsernameViewController: UIViewController {
 
     // MARK: - UI Elements
-    private let usernameTextField: UITextField = {
+    private lazy var usernameTextField: UITextField = {
         let textField = UITextField()
         textField.autocorrectionType = .no
         if AppGlobal.shared.username == "" {

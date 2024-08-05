@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import FirebaseStorage
 
 final class ProfileViewModel {
 
@@ -47,6 +48,57 @@ final class ProfileViewModel {
             completion((true, image))
         } else {
             completion((false, nil))
+        }
+    }
+
+    func getProfilePictureFromServer(completion: @escaping (String) -> Void) {
+        guard let userID = AppGlobal.shared.userID else { return }
+
+        COLLECTION_USERS.document(userID).getDocument { snapshot, error in
+            guard error == nil else { return }
+            guard let snapshot = snapshot else { return }
+
+            let dict = snapshot.data()
+            let imageURL = dict?["imageURL"] as? String
+            completion(imageURL ?? "")
+        }
+    }
+
+    func uploadProfilePictureToServer(image: UIImage, completion: @escaping((Bool) -> Void))  {
+        guard let userID = AppGlobal.shared.userID else { return }
+        let user = COLLECTION_USERS.document(userID)
+        user.getDocument { snapshot, error in
+            guard error == nil, snapshot != nil else {
+                completion(false)
+                return
+            }
+            guard let dict = snapshot?.data() else { return completion(false) }
+            let imageURL = dict["imageURL"] as? String ?? ""
+            if imageURL.isEmpty == false {
+                self.deletePreviousImageFromStorage(url: imageURL)
+            }
+
+            ImageUploader.uploadImage(image: image, type: .profilePicture) { imageURL in
+                let imageURLData = ["imageURL": imageURL] as [String: Any]
+                user.updateData(imageURLData) { error in
+                    guard error == nil else {
+                        print(error?.localizedDescription ?? "")
+                        completion(false)
+                        return
+                    }
+                    completion(true)
+                }
+            }
+        }
+    }
+
+    func deletePreviousImageFromStorage(url: String) {
+        let storage = Storage.storage()
+        storage.reference(forURL: url).delete { error in
+            guard error == nil else {
+                print(error?.localizedDescription ?? "")
+                return
+            }
         }
     }
 }

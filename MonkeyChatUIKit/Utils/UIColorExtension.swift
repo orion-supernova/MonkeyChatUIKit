@@ -53,4 +53,11 @@ extension UIColor {
     static var monkeyOrange: UIColor {
         return UIColor.init(hexString: "e74e35")
     }
+    
+    static var monkeyDarkPurple: UIColor {
+        return UIColor.init(hexString: "240F2C")
+    }
+    static var monkeyLightPurple: UIColor {
+        return UIColor.init(hexString: "401D56")
+    }
 }

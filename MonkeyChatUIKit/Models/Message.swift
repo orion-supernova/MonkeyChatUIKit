@@ -6,7 +6,7 @@
 //
 
 import Firebase
-import FirebaseFirestoreSwift
+import FirebaseFirestore
 
 struct Message: Identifiable, Decodable {
 

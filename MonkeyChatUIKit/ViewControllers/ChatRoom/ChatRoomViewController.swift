@@ -363,10 +363,27 @@ class ChatRoomViewController: UIViewController {
 
     @objc private func addCellOptionsTableView(for cell: MessageTableViewCell, under cellCopy: UIView, touchPoint: CGPoint) {
         blurEffectView.contentView.addSubview(messageOptionsTableView)
+        
+        // Get the cell's frame in the window coordinate system
+        guard let window = UIApplication.shared.windows.first else { return }
+        let cellFrameInWindow = cell.convert(cell.bounds, to: window)
+        
+        // Determine if the cell is in the bottom half of the screen
+        let screenHeight = window.bounds.height
+        let isInBottomHalf = cellFrameInWindow.midY > screenHeight / 2
+        
         messageOptionsTableView.snp.makeConstraints { make in
-            make.top.equalTo(cellCopy.snp.bottom).offset(10)
-            make.height.equalTo(80)
+            make.height.equalTo(200)
             make.width.equalTo(100)
+            
+            if isInBottomHalf {
+                // If the cell is in the bottom half, position the table view above the cell
+                make.bottom.equalTo(cellCopy.snp.top).offset(-10)
+            } else {
+                // If the cell is in the top half, position the table view below the cell
+                make.top.equalTo(cellCopy.snp.bottom).offset(10)
+            }
+            
             if cell.isBubbleSideLeft {
                 make.left.equalTo(cellCopy.snp.left).offset(5)
             } else {
@@ -396,7 +413,7 @@ extension ChatRoomViewController: UITableViewDataSource {
         if tableView == messagesTableView {
             return viewmodel?.messages.count ?? 0
         } else {
-            return 2
+            return 5
         }
     }
 }
@@ -408,11 +425,11 @@ extension ChatRoomViewController: UITableViewDelegate {
         if tableView == messageOptionsTableView {
             let cell = tableView.cellForRow(at: indexPath) as? MessageTableViewCell
             switch indexPath.row {
-                case 0:
+                case 1:
                     guard let message = viewmodel?.selectedMessage else { return }
                     UIPasteboard.general.string = message.message
                     removeBlurEffectView()
-                case 1:
+                case 2:
                     guard viewmodel?.selectedMessage?.senderUID != AppGlobal.shared.userID else {
                         AlertHelper.alertMessage(title: "Error", message: "You can't report yourself.", okButtonText: "OK")
                         return

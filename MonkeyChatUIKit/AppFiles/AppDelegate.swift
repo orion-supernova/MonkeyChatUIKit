@@ -10,11 +10,13 @@ import Firebase
 import FirebaseMessaging
 import UserNotifications
 import FirebaseDynamicLinks
+import FirebaseAuth
 
 enum PushNotificationIdentifiers {
     enum Category: String {
         case messageCategory = "MESSAGE_CATEGORY"
         case nudgeCategory   = "NUDGE_CATEGORY"
+        case friendCategory  = "FRIEND_CATEGORY"
     }
     enum Action: String {
         case viewAction    = "VIEW_ACTION"
@@ -90,6 +92,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate {
             let nudgeCategory = UNNotificationCategory(
                 identifier: PushNotificationIdentifiers.Category.nudgeCategory.rawValue,
                 actions: [nudgeAction, dismissAction],
+                intentIdentifiers: [],
+                options: [])
+
+            let friendCategory = UNNotificationCategory(
+                identifier: PushNotificationIdentifiers.Category.friendCategory.rawValue,
+                actions: [viewAction, dismissAction],
                 intentIdentifiers: [],
                 options: [])
 
@@ -203,4 +211,3 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate {
         // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
     }
 }
-

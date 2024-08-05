@@ -22,7 +22,7 @@ class AccountViewController: UIViewController {
         return tableView
     }()
 
-    private let usernameTextField: UITextField = {
+    private lazy var usernameTextField: UITextField = {
         let textField = UITextField()
         textField.placeholder = "Username"
         textField.textAlignment = .center
@@ -30,7 +30,7 @@ class AccountViewController: UIViewController {
         return textField
     }()
 
-    private let logoutButton: UIButton = {
+    private lazy var logoutButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Logout", for: .normal)
         button.tintColor = .systemPink

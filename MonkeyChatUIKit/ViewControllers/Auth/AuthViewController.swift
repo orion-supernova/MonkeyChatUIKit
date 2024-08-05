@@ -15,7 +15,7 @@ class AuthViewController: UIViewController {
     private lazy var animationBackgroundView: RiveView = {
         let view = RiveView()
         riveViewModel.setView(view)
-        riveViewModel.fit = Fit.fitCover
+        riveViewModel.fit = RiveFit.fitWidth
         return view
     }()
 
@@ -47,7 +47,7 @@ class AuthViewController: UIViewController {
     private lazy var phoneTextField: UITextField = {
         let textField = UITextField()
         textField.keyboardType = .phonePad
-        textField.placeholder = " Phone Number"
+        textField.placeholder = "Phone Number"
         textField.font = .systemFont(ofSize: 14)
         textField.delegate = self
         return textField

@@ -19,3 +19,18 @@ extension String {
         return temp
     }
 }
+
+extension UIViewController {
+    /// Returns the viewController presented on the screen.
+    var topController: UIViewController? {
+        if let controller = self as? UINavigationController {
+            return controller.topViewController?.topController
+        } else if let controller = self as? UITabBarController {
+            return controller.selectedViewController?.topController
+        } else if let controller = presentedViewController {
+            return controller.topController
+        } else {
+            return self
+        }
+    }
+}

@@ -8,6 +8,7 @@
 import UIKit
 import SnapKit
 import Kingfisher
+import WebRTC
 
 protocol RoomSettingsViewControllerDelegate: AnyObject {
     func didDeleteOrBlockRoom()
@@ -128,6 +129,15 @@ class RoomSettingsViewController: UIViewController {
         return button
     }()
 
+    private lazy var voiceCallButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("Voice Call", for: .normal)
+        button.setTitleColor(UIColor.secondaryLabel, for: .normal)
+        button.backgroundColor = .secondarySystemBackground
+        button.addTarget(self, action: #selector(voiceCallButtonAction), for: .touchUpInside)
+        return button
+    }()
+
     // MARK: - Public Properties
     var chatRoom: ChatRoom?
     var navigationBarHeight: CGFloat = 0
@@ -136,6 +146,8 @@ class RoomSettingsViewController: UIViewController {
 
     // MARK: - Private Properties
     private var roomPassword = ""
+    private var socket: SocketClientProtocol?
+    private var webRTCClient: WebRTCClientProtocol?
 
     // MARK: - Lifecycle
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?)   {
@@ -169,6 +181,7 @@ class RoomSettingsViewController: UIViewController {
         inviteButton.layer.cornerRadius = 5
         blockButton.layer.cornerRadius = 5
         membersButton.layer.cornerRadius = 5
+        voiceCallButton.layer.cornerRadius = 5
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -176,7 +189,7 @@ class RoomSettingsViewController: UIViewController {
         AppGlobal.shared.currentPage = .roomSettings
     }
 
-    // MARK: - Seyup & Layout
+    // MARK: - Setup
     private func setup() {
         view.addSubview(mainContainerView)
         mainContainerView.addSubview(roomIconImageView)
@@ -192,8 +205,10 @@ class RoomSettingsViewController: UIViewController {
         mainContainerView.addSubview(inviteButton)
         mainContainerView.addSubview(blockButton)
         mainContainerView.addSubview(membersButton)
+        mainContainerView.addSubview(voiceCallButton)
     }
 
+    // MARK: - Layout
     private func layout() {
         navigationBarHeight = (navigationController?.navigationBar.frame.size.height)!
         tabbarHeight = (tabBarController?.tabBar.frame.size.height)!
@@ -290,8 +305,16 @@ class RoomSettingsViewController: UIViewController {
             make.height.equalTo(30)
             make.width.equalTo(180)
         }
+
+        voiceCallButton.snp.makeConstraints { make in
+            make.top.equalTo(inviteButton.snp.bottom).offset(10)
+            make.right.equalToSuperview()
+            make.height.equalTo(30)
+            make.width.equalTo(180)
+        }
     }
 
+    // MARK: - Navigation Bar
     private func configureNavigationBar() {
         let deleteRoomButton = UIBarButtonItem(image: UIImage(systemName: "minus.circle"),
                                    style: .plain,
@@ -358,6 +381,16 @@ class RoomSettingsViewController: UIViewController {
             encoded.append("*")
         }
         return encoded
+    }
+
+    private func configureSocket() {
+        socket = SocketClient()
+        socket?.delegate = self
+    }
+
+    private func configureWebRTCClient() {
+        webRTCClient = WebRTCClient()
+        webRTCClient?.delegate = self
     }
 
     // MARK: - Actions
@@ -455,11 +488,209 @@ class RoomSettingsViewController: UIViewController {
 
         self.present(alertController, animated: true, completion: nil)
     }
+
+    @objc private func voiceCallButtonAction() {
+        let actionSheetController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        let startAction = UIAlertAction(title: "Start A Voice Call", style: .default) { action in
+            self.sendOffer()
+        }
+        let joinAction = UIAlertAction(title: "Join Voice Call", style: .default) { action in
+            self.sendAnswer()
+        }
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+        actionSheetController.addAction(startAction)
+        actionSheetController.addAction(joinAction)
+        actionSheetController.addAction(cancelAction)
+        actionSheetController.view.tintColor = .systemPink
+
+        self.present(actionSheetController, animated: true) { [weak self] in
+            guard let self = self else { return }
+            self.configureSocket()
+            self.configureWebRTCClient()
+            self.listenSdp()
+            self.listenCandidate()
+        }
+    }
+
+    private func sendOffer() {
+        debugPrint("DEBUG: ----- sendOffer")
+        webRTCClient?.offer(completion: { sdp in
+            let data = SocketMessage.generateMessageData(from: sdp)
+//            socket?.send(data: data)
+            do {
+                let dataMessage = try JSONEncoder().encode(sdp)
+                let dict = try JSONSerialization.jsonObject(with: dataMessage, options: .allowFragments) as! [String: Any]
+                guard let chatRoomID = self.chatRoom?.id else { return }
+                COLLECTION_CHATROOMS
+                    .document(chatRoomID)
+                    .collection("webRTC")
+                    .document("sdp").setData(dict) { (err) in
+                    if let err = err {
+                        print("Error send sdp: \(err)")
+                    } else {
+                        print("Sdp sent!")
+                    }
+                }
+            }
+            catch {
+                debugPrint("Warning: Could not encode sdp: \(error)")
+            }
+            debugPrint("DEBUG: ----- Offer sdp: \(sdp)")
+        })
+    }
+
+    private func sendAnswer() {
+        debugPrint("sendAnswer")
+        webRTCClient?.answer(completion: { [weak self] sdp in
+            guard let self = self else { return }
+            let data = SocketMessage.generateMessageData(from: sdp)
+//            self.socket?.send(data: data)
+            do {
+                let dataMessage = try JSONEncoder().encode(sdp)
+                let dict = try JSONSerialization.jsonObject(with: dataMessage, options: .allowFragments) as! [String: Any]
+                guard let chatRoomID = chatRoom?.id else { return }
+                COLLECTION_CHATROOMS
+                    .document(chatRoomID)
+                    .collection("webRTC")
+                    .document("sdp").setData(dict) { (err) in
+                    if let err = err {
+                        print("Error send sdp: \(err)")
+                    } else {
+                        print("Sdp sent!")
+                    }
+                }
+            }
+            catch {
+                debugPrint("Warning: Could not encode sdp: \(error)")
+            }
+        })
+    }
+
+    private func changeSocketStatus(with status: SocketStatus) {
+        var socketStatusText = "Socket Status: "
+        switch status {
+            case .connected:
+                socketStatusText.append("🟢")
+            case .disconnected:
+                socketStatusText.append("🔴")
+        }
+    }
 }
 
 // MARK: - RoomImageViewController Delegate
 extension RoomSettingsViewController: RoomImageViewControllerDelegate {
     func didChangeImage(with image: UIImage) {
         roomIconImageView.image = image
+    }
+}
+
+// MARK: - SocketClientDelegate
+extension RoomSettingsViewController: SocketClientDelegate {
+    func changedSocketStatus(with status: SocketStatus) {
+        changeSocketStatus(with: status)
+    }
+
+    func handleSocketMessage(with message: SocketMessage) {
+        switch message {
+            case .sdp(let sdp):
+                webRTCClient?.setRemoteSDP(with: sdp, completion: { error in
+                    guard error == nil else { return }
+                })
+            case .candidate(let candidate):
+                webRTCClient?.setRemoteCandidate(with: candidate, completion: { error in
+                    guard error == nil else { return }
+                    debugPrint("Remote candidate added: \(candidate)")
+                })
+        }
+    }
+}
+
+// MARK: - WebRTCClientDelegate
+extension RoomSettingsViewController: WebRTCClientDelegate {
+    func peerConnection(didGenerate candidate: IceCandidate) {
+        let data = SocketMessage.generateMessageData(from: candidate)
+//        socket?.send(data: data)
+        do {
+            let dataMessage = try JSONEncoder().encode(data)
+            let dict = try JSONSerialization.jsonObject(with: dataMessage, options: .allowFragments) as! [String: Any]
+            guard let chatRoomID = chatRoom?.id else { return }
+            COLLECTION_CHATROOMS
+                .document(chatRoomID)
+                .collection("candidates")
+                .addDocument(data: dict) { (err) in
+                    if let err = err {
+                        print("Error send candidate: \(err)")
+                    } else {
+                        print("Candidate sent!")
+                    }
+                }
+        }
+        catch {
+            debugPrint("Warning: Could not encode candidate: \(error)")
+        }
+    }
+}
+
+// MARK: - Another Method for werbRTC
+extension RoomSettingsViewController {
+    func listenSdp() {
+        guard let chatRoomID = chatRoom?.id else { return }
+        COLLECTION_CHATROOMS
+            .document(chatRoomID)
+            .collection("webRTC")
+            .document("sdp")
+            .addSnapshotListener { documentSnapshot, error in
+                guard let document = documentSnapshot else {
+                    print("Error fetching sdp: \(error!)")
+                    return
+                }
+                guard let data = document.data() else {
+                    print("Firestore sdp data was empty.")
+                    return
+                }
+                print("Firestore sdp data: \(data)")
+                do {
+                    let jsonData = try JSONSerialization.data(withJSONObject: data, options: .prettyPrinted)
+                    let sessionDescription = try JSONDecoder().decode(SessionDescription.self, from: jsonData)
+                    self.webRTCClient?.setRemoteSDP(with: sessionDescription, completion: { error in
+                        guard error == nil else { return }
+                    })
+//                    self.delegate?.signalClient(self, didReceiveRemoteSdp: sessionDescription.rtcSessionDescription)
+                }
+                catch {
+                    debugPrint("Warning: Could not decode sdp data: \(error)")
+                    return
+                }
+            }
+    }
+
+    func listenCandidate() {
+        guard let chatRoomID = chatRoom?.id else { return }
+        COLLECTION_CHATROOMS
+            .document(chatRoomID)
+            .collection("candidates")
+            .addSnapshotListener { (querySnapshot, err) in
+                guard let documents = querySnapshot?.documents else {
+                    print("Error fetching documents: \(err!)")
+                    return
+                }
+
+                querySnapshot!.documentChanges.forEach { diff in
+                    if (diff.type == .added) {
+                        do {
+                            let jsonData = try JSONSerialization.data(withJSONObject: documents.first!.data(), options: .prettyPrinted)
+                            let iceCandidate = try JSONDecoder().decode(IceCandidate.self, from: jsonData)
+//                            self.delegate?.signalClient(self, didReceiveCandidate: iceCandidate.rtcIceCandidate)
+                            self.webRTCClient?.setRemoteCandidate(with: iceCandidate, completion: { error in
+                                guard error == nil else { return }
+                            })
+                        }
+                        catch {
+                            debugPrint("Warning: Could not decode candidate data: \(error)")
+                            return
+                        }
+                    }
+                }
+            }
     }
 }

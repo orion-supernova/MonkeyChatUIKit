@@ -65,3 +65,7 @@ class AuthManager {
         })
     }
 }
+
+struct ErrorMessage: Error {
+    let errorMessage: String
+}

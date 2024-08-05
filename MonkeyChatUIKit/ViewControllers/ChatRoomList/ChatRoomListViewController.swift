@@ -11,7 +11,7 @@ import SideMenu
 
 class ChatRoomListViewController: UIViewController {
 
-    private let emptyLabel: UILabel = {
+    private lazy var emptyLabel: UILabel = {
         let emptyLabel = UILabel()
         emptyLabel.text = "You don't have any private room yet."
         emptyLabel.textAlignment = .center
@@ -21,14 +21,14 @@ class ChatRoomListViewController: UIViewController {
         return emptyLabel
     }()
 
-    private let tableView: UITableView = {
+    private lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.register(ChatRoomListTableViewCell.self, forCellReuseIdentifier: "ChatRoomListTableViewCell")
         tableView.rowHeight = 60
         return tableView
     }()
 
-    private let swipeLeftView: UIView = {
+    private lazy var swipeLeftView: UIView = {
         let view = UIView()
         view.backgroundColor = .clear
         return view
@@ -199,6 +199,15 @@ class ChatRoomListViewController: UIViewController {
             let dict = snapshot.data()
             let username = dict?["username"] as? String
             completion(username ?? "")
+        }
+    }
+
+    private func getProfilePictureFromDisk(completion: @escaping (UIImage) -> Void) {
+        let viewModel = ProfileViewModel()
+        viewModel.getProfilePictureFromDisk { success, image in
+            guard success else { return }
+            guard let image else { return }
+            completion(image)
         }
     }
 

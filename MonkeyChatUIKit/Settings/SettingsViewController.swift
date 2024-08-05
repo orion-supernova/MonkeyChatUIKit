@@ -11,7 +11,7 @@ import Firebase
 class SettingsViewController: UIViewController {
 
     // MARK: - UI Elements
-    private let tableView: UITableView = {
+    private lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.tableFooterView = UIView()
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Account")
@@ -23,7 +23,7 @@ class SettingsViewController: UIViewController {
         return tableView
     }()
 
-    private let profilePictureView: UIImageView = {
+    private lazy var profilePictureView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(systemName: "person")
         return imageView

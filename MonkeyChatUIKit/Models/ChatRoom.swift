@@ -6,7 +6,7 @@
 //
 
 import Firebase
-import FirebaseFirestoreSwift
+import FirebaseFirestore
 
 struct ChatRoom: Identifiable, Decodable {
     @DocumentID var id: String?

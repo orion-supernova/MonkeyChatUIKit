@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import Firebase
+import FirebaseStorage
 
 enum UploadType {
 
@@ -32,7 +32,7 @@ struct ImageUploader {
 
         let ref = type.filePath
 
-        ref.putData(imageData, metadata: nil) { _, error in
+        ref.putData(imageData) { _, error in
             if error != nil {
                 print("Failed to upload image. \(error!.localizedDescription)")
                 return

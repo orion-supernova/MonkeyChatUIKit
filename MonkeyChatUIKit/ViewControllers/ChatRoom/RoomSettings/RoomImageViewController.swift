@@ -33,6 +33,7 @@ class RoomImageViewController: UIViewController {
 
     // MARK: - Private Properties
     private var chatRoom: ChatRoom?
+    private var profileImage: UIImage?
 
     // MARK: - Public Properties
     weak var delegate: RoomImageViewControllerDelegate?
@@ -49,6 +50,11 @@ class RoomImageViewController: UIViewController {
     init(chatRoom: ChatRoom) {
         super.init(nibName: nil, bundle: nil)
         self.chatRoom = chatRoom
+    }
+
+    convenience init(profileImage: UIImage) {
+        self.init()
+        self.profileImage = profileImage
     }
 
     override func viewDidLoad() {
@@ -84,7 +90,7 @@ class RoomImageViewController: UIViewController {
 
     // MARK: - Private Methods
     private func setRoomImage() {
-        guard let chatRoom = chatRoom else { return }
+        guard let chatRoom = chatRoom else { return getProfilePictureImage() }
         imageView.kf.setImage(with: URL(string: chatRoom.imageURL ?? ""), placeholder: nil, options: nil, progressBlock: nil, completionHandler: { [weak self] result in
             guard let self = self else { return }
             switch result {
@@ -99,6 +105,42 @@ class RoomImageViewController: UIViewController {
                     }
             }
         })
+    }
+
+    private func getProfilePictureImage() {
+//        let viewModel = ProfileViewModel()
+//        viewModel.getProfilePictureFromDisk { [weak self ]success, image in
+//            guard let self = self else { return }
+//            guard success else { return }
+//            self.imageView.image = image
+//        }
+        self.imageView.image = self.profileImage
+    }
+
+    private func setProfileImage(image: UIImage) {
+
+        LottieHUD.shared.show()
+        let viewModel = ProfileViewModel()
+        viewModel.uploadProfilePictureToServer(image: image) { success in
+            LottieHUD.shared.dismiss()
+            guard success else {
+                AlertHelper.simpleAlertMessage(viewController: self, title: "Error", message: "Something went wrong.")
+                return
+            }
+            self.dismiss(animated: true) {
+                self.delegate?.didChangeImage(with: image)
+            }
+        }
+
+
+//        viewModel.saveProfilePictureToDisk(image: image) { [weak self] success in
+//            guard let self = self else { return }
+//            guard success else { return }
+//            LottieHUD.shared.dismiss()
+//            self.dismiss(animated: true) {
+//                self.delegate?.didChangeImage(with: image)
+//            }
+//        }
     }
 
     // MARK: - Actions
@@ -118,7 +160,7 @@ extension RoomImageViewController: UIImagePickerControllerDelegate, UINavigation
         picker.dismiss(animated: true)
         guard let image = image else { return }
         LottieHUD.shared.show()
-        guard let chatRoom = chatRoom else { return }
+        guard let chatRoom = chatRoom else { return setProfileImage(image: image) }
         let viewModel = RoomSettingsViewModel(chatRoom: chatRoom)
         viewModel.uploadPicture(image: image) { [weak self] in
             guard let self = self else { return }

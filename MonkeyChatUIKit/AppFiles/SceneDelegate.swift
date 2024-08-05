@@ -92,7 +92,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 }
 
-// MARK: - UNUserNotificationCenterDelegate
+// MARK: - UNUserNotificationCenter Delegate
 extension SceneDelegate: UNUserNotificationCenterDelegate {
     // If the user opens the app via notification, this function will be triggered.
     func userNotificationCenter(_ center: UNUserNotificationCenter,didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
@@ -103,12 +103,12 @@ extension SceneDelegate: UNUserNotificationCenterDelegate {
         guard let aps = userInfo["aps"] as? [String: AnyObject] else { return }
 
         guard let identifier = PushNotificationIdentifiers.Action(rawValue: response.actionIdentifier) else {
-            viewAction()
+            viewActionForChatRoom()
             return
         }
         switch identifier {
             case .viewAction:
-                viewAction()
+                viewActionForChatRoom()
             case .nudgeAction:
                 guard let chatRoomID = userInfo["chatRoomID"] as? String else { return }
                 guard let fcmToken = userInfo["fcmToken"] as? String else { return }
@@ -118,7 +118,9 @@ extension SceneDelegate: UNUserNotificationCenterDelegate {
             case .dismissAction:
                 break
         }
-        func viewAction() {
+
+        // MARK: - Custom Methods Start
+        func viewActionForChatRoom() {
             if let chatRoomID = userInfo["chatRoomID"] as? String {
                 self.tabController?.selectedIndex = 0
                 if let navigations = self.tabController?.viewControllers {
@@ -132,6 +134,12 @@ extension SceneDelegate: UNUserNotificationCenterDelegate {
                 NotificationCenter.default.post(name: .openedChatRoomFromNotification, object: chatRoomID)
             }
         }
+
+        func viewActionForFriendRequest() {
+            //
+        }
+
+        // MARK: - Custom Methods End
         completionHandler()
     }
 
@@ -141,22 +149,38 @@ extension SceneDelegate: UNUserNotificationCenterDelegate {
         guard userInfoDict["userID"] as? String != AppGlobal.shared.userID else {
             return [.badge]
         }
-        let currentPage = AppGlobal.shared.currentPage
+        guard let apsDict = userInfoDict["aps"] as? [String: Any] else { return .badge }
+//        guard let categoryString = apsDict["category"] as? String, let category = PushNotificationIdentifiers.Category(rawValue: categoryString) else { return .badge}
+        let categoryIdentifier = notification.request.content.categoryIdentifier
+        let category = PushNotificationIdentifiers.Category(rawValue: categoryIdentifier)
 
-        if currentPage != .chatRoom {
-            return [.alert, .sound]
-        } else {
-            guard userInfoDict["chatRoomID"] as? String == AppGlobal.shared.lastEnteredChatRoomID else { return [.alert, .sound] }
-            guard let apsDict = userInfoDict["aps"] as? [String: Any] else { return .badge }
-            guard let categoryString = apsDict["category"] as? String, let category = PushNotificationIdentifiers.Category(rawValue: categoryString) else { return .badge}
-            switch category {
-                case .messageCategory:
+        switch category {
+            case .messageCategory:
+                let currentPage = AppGlobal.shared.currentPage
+                if currentPage != .chatRoom {
+                    return [.alert, .sound]
+                } else {
+                    guard userInfoDict["chatRoomID"] as? String == AppGlobal.shared.lastEnteredChatRoomID else { return [.alert, .sound] }
                     return .badge
-                case .nudgeCategory:
-                    let username = userInfoDict["username"] as? String ?? ""
-                    NotificationCenter.default.post(name: .nudgeReceivedInsideChatRoom, object: username.isEmpty ? "Anonymous" : username)
-                    return .badge
-            }
+                }
+            case .nudgeCategory:
+                let rootViewController = UIApplication.shared.windows.first!.rootViewController!
+                if let topViewController = rootViewController.topController {
+                    let alert = apsDict["alert"] as? [String : Any] ?? [:]
+                    let title = alert["title"] as? String ?? ""
+                    let body = alert["body"] as? String ?? ""
+                    print("hmm")
+                    AlertHelper.simpleAlertMessage(viewController: topViewController, title: title, message: body)
+                }
+//                NotificationCenter.default.post(name: .nudgeReceivedInsideChatRoom, object: username.isEmpty ? "Anonymous" : username)
+                return .badge
+            case .friendCategory:
+                guard let viewController = UIApplication.shared.windows.first!.rootViewController!.topController else { return .badge }
+                let username = userInfoDict["username"] as? String ?? ""
+                AlertHelper.simpleAlertMessage(viewController: viewController, title: "WOW", message: "\(username) added you as a friend!")
+                return .badge
+            default:
+                return .badge
         }
     }
 }

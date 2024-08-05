@@ -14,7 +14,7 @@ class VerificationCodeViewController: UIViewController {
     private lazy var animationBackgroundView: RiveView = {
         let view = RiveView()
         riveViewModel.setView(view)
-        riveViewModel.fit = Fit.fitCover
+        riveViewModel.fit = RiveFit.fitWidth
         return view
     }()
     

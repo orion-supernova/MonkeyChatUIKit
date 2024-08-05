@@ -7,7 +7,6 @@
 
 import UIKit
 import Firebase
-import FirebaseFirestoreSwift
 
 protocol ChatRoomListViewModelDelegate: AnyObject {
     func didChangeDataSource()
@@ -222,14 +221,18 @@ final class ChatRoomListViewModel {
         let chatroom = self.chatRooms[indexPath.row]
         let chatroomID = chatroom.id ?? ""
         let room = COLLECTION_CHATROOMS.document(chatroomID)
+
         room.collection("userIDs").getDocuments { snapshot, error in
             guard let documents = snapshot?.documents else { return }
-            var fcmTokenForThisChatRoom = [String]()
-            for document in documents {
-                fcmTokenForThisChatRoom.append(document.get("fcmToken") as? String ?? "")
-            }
-            for token in fcmTokenForThisChatRoom {
-                sender.sendPushNotification(to: token, title: "DDDDRRRRRTTTT", body: "\(AppGlobal.shared.username ?? "Anonymous") has sent you a nudge in \(chatroom.name ?? "")!", chatRoomID: chatroomID, chatRoomName: chatroom.name ?? "", category: .nudgeCategory)
+            var userIDs = [String]()
+            documents.forEach({ userIDs.append($0.get("userID") as? String ?? "")})
+
+            for id in userIDs {
+                COLLECTION_USERS.document(id).getDocument { snapshot, error in
+                    guard error == nil, let snapshot else { return }
+                    let fcmToken = snapshot.get("fcmToken") as? String ?? ""
+                    sender.sendPushNotification(to: fcmToken, title: "DDDDRRRRRTTTT", body: "\(AppGlobal.shared.username ?? "Anonymous") has sent you a nudge in \(chatroom.name ?? "")!", chatRoomID: chatroomID, chatRoomName: chatroom.name ?? "", category: .nudgeCategory)
+                }
             }
         }
     }
